@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Meeting_Outcome__c</fullName>
+    <description>Overall assessment of how productive or successful the meeting was</description>
+    <inlineHelpText>Rate the overall outcome of the meeting. Very Productive: Exceeded expectations. Productive: Met objectives. Neutral: Standard meeting. Needs Follow-up: Requires additional action. Unsuccessful: Did not meet objectives.</inlineHelpText>
     <label>Meeting Outcome</label>
     <required>false</required>
     <type>Picklist</type>

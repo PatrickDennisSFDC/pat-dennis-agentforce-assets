@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Samples_Dropped_Off__c</fullName>
+    <description>Indicates whether product samples were left with the contact during the meeting</description>
+    <inlineHelpText>Select Yes if you left product samples (medications, medical devices, etc.) with the healthcare professional during this meeting. Select No if no samples were provided.</inlineHelpText>
     <label>Samples Dropped Off</label>
     <required>false</required>
     <type>Picklist</type>

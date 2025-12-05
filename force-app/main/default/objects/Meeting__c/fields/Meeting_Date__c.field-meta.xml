@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Meeting_Date__c</fullName>
+    <description>Date when the meeting took place or is scheduled to occur</description>
+    <inlineHelpText>Select the date when this meeting occurred or will occur.</inlineHelpText>
     <label>Meeting Date</label>
     <required>true</required>
     <type>Date</type>

@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Meeting_Type__c</fullName>
+    <description>Format or type of the meeting interaction</description>
+    <inlineHelpText>Select the format of this meeting: In-Person Visit for face-to-face meetings, Virtual Meeting for video calls, Phone Call for voice-only, or Conference for large group events.</inlineHelpText>
     <label>Meeting Type</label>
     <required>false</required>
     <type>Picklist</type>

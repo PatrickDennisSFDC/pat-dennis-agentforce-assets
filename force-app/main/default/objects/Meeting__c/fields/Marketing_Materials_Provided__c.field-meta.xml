@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Marketing_Materials_Provided__c</fullName>
+    <description>Indicates whether marketing materials or literature were provided during the meeting</description>
+    <inlineHelpText>Select Yes if you provided brochures, pamphlets, clinical studies, or other marketing materials during this meeting. Select No if no materials were provided.</inlineHelpText>
     <label>Marketing Materials Provided</label>
     <required>false</required>
     <type>Picklist</type>

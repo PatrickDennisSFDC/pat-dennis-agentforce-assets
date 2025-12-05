@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Contact__c</fullName>
+    <description>Primary contact person who attended or will attend the meeting</description>
+    <inlineHelpText>Select the primary contact you met with. Typically the healthcare professional, decision maker, or key stakeholder for this meeting.</inlineHelpText>
     <label>Contact</label>
     <referenceTo>Contact</referenceTo>
     <relationshipLabel>Meetings</relationshipLabel>

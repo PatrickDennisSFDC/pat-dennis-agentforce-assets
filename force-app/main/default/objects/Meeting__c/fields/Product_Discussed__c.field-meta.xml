@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Product_Discussed__c</fullName>
+    <description>Name or description of the product(s) or service(s) discussed during the meeting</description>
+    <inlineHelpText>Enter the name of the product, drug, medical device, or service that was discussed during this meeting. For multiple products, separate with commas.</inlineHelpText>
     <label>Product Discussed</label>
     <length>255</length>
     <required>false</required>

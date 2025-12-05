@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Description__c</fullName>
+    <description>Detailed notes about the meeting discussion, key points, and observations</description>
+    <inlineHelpText>Enter detailed notes about what was discussed during the meeting, key points raised, questions asked, and any important observations or context.</inlineHelpText>
     <label>Description</label>
     <length>32000</length>
     <type>LongTextArea</type>

@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Meeting_Status__c</fullName>
+    <description>Current status of the meeting (Scheduled, Completed, Cancelled)</description>
+    <inlineHelpText>Select the current status of this meeting. Use Scheduled for upcoming meetings, Completed for finished meetings, and Cancelled if the meeting did not occur.</inlineHelpText>
     <label>Meeting Status</label>
     <required>false</required>
     <type>Picklist</type>

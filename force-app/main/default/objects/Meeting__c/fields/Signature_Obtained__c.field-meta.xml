@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Signature_Obtained__c</fullName>
+    <description>Indicates whether a signature was obtained during the meeting</description>
+    <inlineHelpText>Check this box if you obtained a signature on any documents, forms, or agreements during this meeting (e.g., sample acknowledgment forms, consent forms).</inlineHelpText>
     <label>Signature Obtained</label>
     <type>Checkbox</type>
     <defaultValue>false</defaultValue>
