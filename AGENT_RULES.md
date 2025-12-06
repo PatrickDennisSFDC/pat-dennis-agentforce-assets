@@ -138,7 +138,7 @@ Custom exception for multiple matching records. Contains:
 4. Update `getRequiredFields()` and `getSuggestedFields()`
 5. Update `resolveRelatedRecords()` if object has lookups
 6. Create 5 action classes: Create, Read, Update, Delete, Find
-7. Add to `Agentforce_SDO_CustomAssetPermissions` permission set
+7. Add to `AgentCourseSDOCustomAssetPermissions` permission set
 8. Update README.md
 
 ## Important Notes

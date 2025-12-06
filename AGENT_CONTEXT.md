@@ -241,7 +241,7 @@ Agents don't need to lookup IDs first:
    - Add comprehensive labels/descriptions
 
 4. **Update Permissions**:
-   - Add class access to `Agentforce_SDO_CustomAssetPermissions` permission set
+   - Add class access to `AgentCourseSDOCustomAssetPermissions` permission set
    - Add object permissions
    - Add field permissions (except required fields)
 

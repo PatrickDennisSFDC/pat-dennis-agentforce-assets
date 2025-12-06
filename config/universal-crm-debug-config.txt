@@ -1,0 +1,11 @@
+Universal CRM Record Action - Debug Configuration
+
+Configuration Details:
+- Debug email is hardcoded to: patrick.dennis@salesforce.com
+- This is set for demo purposes only
+- In production environments, this should be configurable via org settings or feature flags
+
+File modified: force-app/main/default/classes/UniversalCrmRecordAction.cls
+Method updated: sendDebugEmail()
+
+This configuration ensures all debug information from the UniversalCrmRecordAction class is sent directly to the designated email address for monitoring and troubleshooting in this demo environment.

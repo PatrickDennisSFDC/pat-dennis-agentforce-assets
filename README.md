@@ -135,7 +135,7 @@ sf project deploy start --source-dir force-app/main/default --target-org myorg
 
 4. **Assign the permission set:**
 ```bash
-sf org assign permset --name Agentforce_SDO_CustomAssetPermissions --target-org myorg
+sf org assign permset --name AgentCourseSDOCustomAssetPermissions --target-org myorg
 ```
 
 5. **Configure Agentforce:**
