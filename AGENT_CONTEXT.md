@@ -367,6 +367,25 @@ genAiPlannerBundles/{AgentName}/localActions/{TopicName}/{ActionName}/
 - ✅ Use "IMPORTANT" or "BEFORE calling" in descriptions to emphasize critical guidance
 - ✅ Provide conversational templates in descriptions
 
+### User Experience Best Practices
+
+**Key Principle:** Users don't need to see technical implementation details like record IDs, internal flags, or raw data structures. The agent should use these internally but present information conversationally.
+
+**Record IDs:**
+- Record IDs are for internal use only (follow-up operations, references)
+- Never include record IDs in success messages
+- Never mention record IDs in conversational responses
+- Users care about business information (account name, contact name), not technical IDs
+
+**Implementation:**
+- Apex success messages should be user-friendly: "Account created successfully" not "Account created successfully with ID: 001xx000003DGbYAAW"
+- Output schema descriptions should explicitly state: "DO NOT mention or display this ID to users"
+- The `recordId` output variable should have `copilotAction:isDisplayable: false` (already done)
+
+**Example:**
+- ❌ **Bad:** "I've created the account. The record ID is 001xx000003DGbYAAW."
+- ✅ **Good:** "I've created the account Acme Corp successfully."
+
 ### Writing Effective Agent Guidance in Apex
 
 **Best Practices:**
