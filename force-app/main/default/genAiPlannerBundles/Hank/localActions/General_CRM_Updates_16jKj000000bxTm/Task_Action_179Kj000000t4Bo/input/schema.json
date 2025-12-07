@@ -10,28 +10,28 @@
     },
     "fieldDataJson" : {
       "title" : "Field Data JSON",
-      "description" : "JSON string containing Account field data. For create: {\"Name\":\"Acme Corp\",\"Industry\":\"Technology\"}. For update: {\"Industry\":\"Technology\",\"BillingCity\":\"San Francisco\"}. For bulk operations: [{\"Name\":\"Acme\"},{\"Name\":\"Globex\"}]. Required for create/update operations. The agent should construct this JSON from natural language user input (e.g., \"create an account called Acme Corp in the Technology industry\" becomes {\"Name\":\"Acme Corp\",\"Industry\":\"Technology\"}).",
+      "description" : "JSON string containing Task field data. For create: {\"Subject\":\"Follow up with client\",\"Status\":\"Not Started\",\"Priority\":\"Normal\",\"ActivityDate\":\"2024-12-31\"}. For update: {\"Status\":\"Completed\",\"Priority\":\"High\"}. For bulk operations: [{\"Subject\":\"Task 1\"},{\"Subject\":\"Task 2\"}]. Required for create/update operations. The agent should construct this JSON from natural language user input.",
       "lightning:type" : "lightning__multilineTextType",
       "lightning:isPII" : false,
       "copilotAction:isUserInput" : false
     },
     "recordId" : {
       "title" : "Record ID",
-      "description" : "The Salesforce record ID (15 or 18 character) of the Account. Required for read/update/delete operations. Format: 18-character ID like \"001xx000003DGbYAAW\". For update, can be omitted if Name is provided in fieldDataJson for automatic resolution. The agent should resolve this from account name when possible rather than asking the user for an ID.",
+      "description" : "The Salesforce record ID (15 or 18 character) of the Task. Required for read/update/delete operations. Format: 18-character ID like \"00Txx000003DGbYAAW\". For update, can be omitted if Subject is provided in fieldDataJson for automatic resolution. The agent should resolve this from task subject when possible rather than asking the user for an ID.",
       "lightning:type" : "lightning__recordIdType",
       "lightning:isPII" : false,
       "copilotAction:isUserInput" : false
     },
     "searchTerm" : {
       "title" : "Search Term",
-      "description" : "Text to search for in Account fields (Name, BillingCity, BillingState, etc.). Used for find operations. Example: \"Acme\" or \"San Francisco\". IMPORTANT: If the user wants to find an account but hasn't provided a search term, ask them for the account name or other identifying information BEFORE calling this action. Do not call find operation without a searchTerm or filtersJson.",
+      "description" : "Text to search for in Task fields (Subject, Description, etc.). Used for find operations. Example: \"Follow up\" or \"meeting\". IMPORTANT: If the user wants to find a task but hasn't provided a search term, ask them for the task subject, related account/contact, or other identifying information BEFORE calling this action. Do not call find operation without a searchTerm or filtersJson.",
       "lightning:type" : "lightning__textType",
       "lightning:isPII" : false,
       "copilotAction:isUserInput" : false
     },
     "filtersJson" : {
       "title" : "Filters JSON",
-      "description" : "JSON string of exact-match filters for find operations. Can be single object {\"fieldApiName\":\"Industry\",\"value\":\"Technology\"} or array [{\"fieldApiName\":\"Industry\",\"value\":\"Technology\"}]. IMPORTANT: If the user wants to find an account but hasn't provided specific filters, ask them for details like industry, city, state, or phone number BEFORE calling this action. Do not call find operation without a searchTerm or filtersJson.",
+      "description" : "JSON string of exact-match filters for find operations. Can be single object {\"fieldApiName\":\"Status\",\"value\":\"Completed\"} or array [{\"fieldApiName\":\"Status\",\"value\":\"Completed\"}]. IMPORTANT: If the user wants to find a task but hasn't provided specific filters, ask them for details like related account/contact, status, or due date BEFORE calling this action. Do not call find operation without a searchTerm or filtersJson.",
       "lightning:type" : "lightning__multilineTextType",
       "lightning:isPII" : false,
       "copilotAction:isUserInput" : false
@@ -45,7 +45,14 @@
     },
     "accountName" : {
       "title" : "Account Name",
-      "description" : "Account name to resolve to AccountId for related records (not typically used for Account operations, but available for consistency)",
+      "description" : "Account name to resolve to WhatId for the Task. Links task to Account via WhatId. If provided, the system will search for an Account with this name and link the Task to it.",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : false
+    },
+    "contactNameOrEmail" : {
+      "title" : "Contact Name or Email",
+      "description" : "Contact name or email to resolve to WhoId for the Task. Links task to Contact via WhoId. If provided, the system will search for a Contact and link the Task to them.",
       "lightning:type" : "lightning__textType",
       "lightning:isPII" : false,
       "copilotAction:isUserInput" : false
@@ -60,3 +67,5 @@
   },
   "lightning:type" : "lightning__objectType"
 }
+
+

@@ -1,0 +1,176 @@
+{
+  "unevaluatedProperties" : false,
+  "properties" : {
+    "success" : {
+      "title" : "Success",
+      "description" : "True if operation completed successfully, false if an error occurred. Check this before using other output variables.",
+      "lightning:type" : "lightning__booleanType",
+      "lightning:isPII" : false,
+      "copilotAction:isDisplayable" : false,
+      "copilotAction:isUsedByPlanner" : true
+    },
+    "record" : {
+      "title" : "Record",
+      "description" : "The Task record (for single record operations: create, read, update). Use the record.Id field from this record for follow-up operations. This is null for bulk operations or when multiple records are found.",
+      "lightning:type" : "@apexClassType/Task",
+      "lightning:isPII" : false,
+      "copilotAction:isDisplayable" : false,
+      "copilotAction:isUsedByPlanner" : true
+    },
+    "records" : {
+      "title" : "Records",
+      "description" : "List of Task records (for bulk operations or find operations with multiple results). Use record.Id from each record for subsequent operations.",
+      "maxItems" : 2000,
+      "items" : {
+        "lightning:type" : "@apexClassType/Task"
+      },
+      "lightning:type" : "lightning__listType",
+      "lightning:isPII" : false,
+      "copilotAction:isDisplayable" : false,
+      "copilotAction:isUsedByPlanner" : true
+    },
+    "recordId" : {
+      "title" : "Record ID",
+      "description" : "The Salesforce ID of the record (18-character format like \"00Txx000003DGbYAAW\"). Use this ID internally for subsequent operations. DO NOT mention or display this ID to users - it is for internal use only. Users don't need to see record IDs in conversational responses.",
+      "lightning:type" : "lightning__recordIdType",
+      "lightning:isPII" : false,
+      "copilotAction:isDisplayable" : false,
+      "copilotAction:isUsedByPlanner" : true
+    },
+    "message" : {
+      "title" : "Message",
+      "description" : "Human-readable message describing the operation result. Use this message to inform the user conversationally. Examples: \"Task created successfully\", \"Found 3 matching Task records\", \"Task deleted successfully\". Incorporate this into your natural response rather than displaying it directly.",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isDisplayable" : false,
+      "copilotAction:isUsedByPlanner" : true
+    },
+    "errorMessage" : {
+      "title" : "Error Message",
+      "description" : "If success is false, this contains a user-friendly error message. Relay this to the user conversationally. Example: \"To create a Task, the Status field is required.\"",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isDisplayable" : false,
+      "copilotAction:isUsedByPlanner" : true
+    },
+    "objectType" : {
+      "title" : "Object Type",
+      "description" : "The Salesforce object type, always \"Task\" for Task operations. Useful for agent context and logging.",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isDisplayable" : false,
+      "copilotAction:isUsedByPlanner" : true
+    },
+    "operation" : {
+      "title" : "Operation",
+      "description" : "The operation that was performed: \"create\", \"read\", \"update\", \"delete\", or \"find\". Useful for agent context and logging.",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isDisplayable" : false,
+      "copilotAction:isUsedByPlanner" : true
+    },
+    "previewOnly" : {
+      "title" : "Preview Only",
+      "description" : "True if this is a preview response (confirm=false for create/update). The record has not been committed yet. The agent should present the preview to the user, then call again with confirm=true to commit.",
+      "lightning:type" : "lightning__booleanType",
+      "lightning:isPII" : false,
+      "copilotAction:isDisplayable" : false,
+      "copilotAction:isUsedByPlanner" : true
+    },
+    "enrichmentSuggested" : {
+      "title" : "Enrichment Suggested",
+      "description" : "True if the provided data is minimal and additional fields are suggested (for create operations). When true, check suggestedFields for commonly-used fields that could be populated.",
+      "lightning:type" : "lightning__booleanType",
+      "lightning:isPII" : false,
+      "copilotAction:isDisplayable" : false,
+      "copilotAction:isUsedByPlanner" : true
+    },
+    "suggestedFields" : {
+      "title" : "Suggested Fields",
+      "description" : "List of commonly-used field API names that could be populated to enrich this Task. Examples: Subject, Priority, ActivityDate, Description. The agent should ask the user about these fields and add them to fieldDataJson before calling again with confirm=true.",
+      "maxItems" : 2000,
+      "items" : {
+        "lightning:type" : "lightning__textType"
+      },
+      "lightning:type" : "lightning__listType",
+      "lightning:isPII" : false,
+      "copilotAction:isDisplayable" : false,
+      "copilotAction:isUsedByPlanner" : true
+    },
+    "previewData" : {
+      "title" : "Preview Data",
+      "description" : "A JSON string representation of what would be created/updated. Use this to show the user a preview before committing. Format: {\"Subject\":\"Task\",\"Status\":null,\"Priority\":null,...}",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isDisplayable" : false,
+      "copilotAction:isUsedByPlanner" : true
+    },
+    "availableFieldsJson" : {
+      "title" : "Available Fields JSON",
+      "description" : "JSON string containing metadata for all available fields that can be set on Task records. Includes API name, label, type, required status, picklist values, help text, and more. Use this to understand what fields are available and their constraints.",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isDisplayable" : false,
+      "copilotAction:isUsedByPlanner" : true
+    },
+    "ambiguousRelationship" : {
+      "title" : "Ambiguous Relationship",
+      "description" : "True if a parent Account or Contact lookup found multiple matches (2+). When true, DO NOT tell the user the Task was created/updated. Instead, you MUST present the candidates from relationshipCandidatesJson to the user and ask which Account/Contact they meant.",
+      "lightning:type" : "lightning__booleanType",
+      "lightning:isPII" : false,
+      "copilotAction:isDisplayable" : false,
+      "copilotAction:isUsedByPlanner" : true
+    },
+    "ambiguousRelationshipType" : {
+      "title" : "Ambiguous Relationship Type",
+      "description" : "The type of relationship that has multiple matches, typically \"Account\" or \"Contact\" for parent lookups. Use this to know what kind of candidates are provided in relationshipCandidatesJson.",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isDisplayable" : false,
+      "copilotAction:isUsedByPlanner" : true
+    },
+    "relationshipCandidatesJson" : {
+      "title" : "Relationship Candidates JSON",
+      "description" : "JSON array of candidate Account or Contact records when ambiguousRelationship is true. Each candidate includes disambiguating details. Present these options to the user in a clear, numbered list with the distinguishing details, then ask them to clarify which one they meant.",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isDisplayable" : false,
+      "copilotAction:isUsedByPlanner" : true
+    },
+    "ambiguous" : {
+      "title" : "Ambiguous Result",
+      "description" : "True if multiple records were found in a find/search operation. When true, present all records to the user and ask for clarification using additional identifying fields like Status, Priority, or related Account/Contact to narrow down the selection.",
+      "lightning:type" : "lightning__booleanType",
+      "lightning:isPII" : false,
+      "copilotAction:isDisplayable" : false,
+      "copilotAction:isUsedByPlanner" : true
+    },
+    "totalMatches" : {
+      "title" : "Total Matches",
+      "description" : "Number of Task records found in a find/search operation. Use this to inform the user: \"Found X matching tasks\" or \"No tasks found matching your criteria\".",
+      "lightning:type" : "lightning__integerType",
+      "lightning:isPII" : false,
+      "copilotAction:isDisplayable" : false,
+      "copilotAction:isUsedByPlanner" : true
+    },
+    "moreResultsAvailable" : {
+      "title" : "More Results Available",
+      "description" : "True if the search returned the maximum number of results (searchLimit) but there are more matching records available. When true, suggest the user provide more specific search criteria or increase the searchLimit.",
+      "lightning:type" : "lightning__booleanType",
+      "lightning:isPII" : false,
+      "copilotAction:isDisplayable" : false,
+      "copilotAction:isUsedByPlanner" : true
+    },
+    "confirmationRequired" : {
+      "title" : "Confirmation Required",
+      "description" : "True if this is a confirmation request for delete operation (confirm=false). The agent should present the message to the user and call again with confirm=true if the user confirms the deletion.",
+      "lightning:type" : "lightning__booleanType",
+      "lightning:isPII" : false,
+      "copilotAction:isDisplayable" : false,
+      "copilotAction:isUsedByPlanner" : true
+    }
+  },
+  "lightning:type" : "lightning__objectType"
+}
+
+

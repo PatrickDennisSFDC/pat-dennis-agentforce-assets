@@ -26,9 +26,27 @@
         <localActionLinks>
             <functionName>Account_Action_179Kj000000t4Bk</functionName>
         </localActionLinks>
+        <localActionLinks>
+            <functionName>Contact_Action_179Kj000000t4Bl</functionName>
+        </localActionLinks>
+        <localActionLinks>
+            <functionName>Case_Action_179Kj000000t4Bm</functionName>
+        </localActionLinks>
+        <localActionLinks>
+            <functionName>Opportunity_Action_179Kj000000t4Bn</functionName>
+        </localActionLinks>
+        <localActionLinks>
+            <functionName>Task_Action_179Kj000000t4Bo</functionName>
+        </localActionLinks>
+        <localActionLinks>
+            <functionName>Meeting_Action_179Kj000000t4Bp</functionName>
+        </localActionLinks>
+        <localActionLinks>
+            <functionName>Customer_Order_Action_179Kj000000t4Bq</functionName>
+        </localActionLinks>
         <localActions>
             <fullName>Account_Action_179Kj000000t4Bk</fullName>
-            <description>Performs CRUD operations on Account records. Operation can be explicitly specified (create, read, update, delete, find) or inferred from context. CREATE: Provide fieldDataJson. READ: Provide recordId. UPDATE: Provide recordId + fieldDataJson. DELETE: Provide recordId + confirm=true (first call with confirm=false for confirmation). FIND: Provide searchTerm and/or filtersJson. The agent should intelligently infer the operation from user intent, but can explicitly specify if needed. Supports bulk operations for create/update by providing JSON array in fieldDataJson.</description>
+            <description>Performs CRUD operations on Account records. Operation can be explicitly specified (create, read, update, delete, find) or inferred from context. CREATE: Provide fieldDataJson. READ: Provide recordId. UPDATE: Provide recordId + fieldDataJson. DELETE: Provide recordId + confirm=true (first call with confirm=false for confirmation). FIND: IMPORTANT - Before calling find operation, ensure you have search criteria. If the user asks to "find" or "look up" an account without providing specific details (account name, industry, city, state, phone, etc.), you MUST ask the user for these details FIRST before calling this action. Only call this action with find operation when you have at least a searchTerm (account name or partial name) or filtersJson (specific field filters). If the user says "look up an account" or "find an account" without details, respond conversationally: "I'd be happy to help you find an account. Could you provide some details like the account name, industry, city, state, or phone number?" Do NOT call the action with empty search criteria. The agent should intelligently infer the operation from user intent, but can explicitly specify if needed. Supports bulk operations for create/update by providing JSON array in fieldDataJson.</description>
             <developerName>Account_Action_179Kj000000t4Bk</developerName>
             <invocationTarget>AFAccountAction</invocationTarget>
             <invocationTargetType>apex</invocationTargetType>
@@ -36,6 +54,72 @@
             <isIncludeInProgressIndicator>false</isIncludeInProgressIndicator>
             <localDeveloperName>Account_Action</localDeveloperName>
             <masterLabel>Account Action</masterLabel>
+        </localActions>
+        <localActions>
+            <fullName>Contact_Action_179Kj000000t4Bl</fullName>
+            <description>Performs CRUD operations on Contact records. Operation can be explicitly specified (create, read, update, delete, find) or inferred from context. CREATE: Provide fieldDataJson. READ: Provide recordId. UPDATE: Provide recordId + fieldDataJson. DELETE: Provide recordId + confirm=true (first call with confirm=false for confirmation). FIND: IMPORTANT - Before calling find operation, ensure you have search criteria. If the user asks to "find" or "look up" a contact without providing specific details (contact name, email, account name, phone, etc.), you MUST ask the user for these details FIRST before calling this action. Only call this action with find operation when you have at least a searchTerm (contact name or email) or filtersJson (specific field filters). If the user says "look up a contact" or "find a contact" without details, respond conversationally: "I'd be happy to help you find a contact. Could you provide some details like the contact name, email, account name, or phone number?" Do NOT call the action with empty search criteria. Supports accountName parameter to link Contact to Account. Supports bulk operations for create/update by providing JSON array in fieldDataJson.</description>
+            <developerName>Contact_Action_179Kj000000t4Bl</developerName>
+            <invocationTarget>AFContactAction</invocationTarget>
+            <invocationTargetType>apex</invocationTargetType>
+            <isConfirmationRequired>false</isConfirmationRequired>
+            <isIncludeInProgressIndicator>false</isIncludeInProgressIndicator>
+            <localDeveloperName>Contact_Action</localDeveloperName>
+            <masterLabel>Contact Action</masterLabel>
+        </localActions>
+        <localActions>
+            <fullName>Case_Action_179Kj000000t4Bm</fullName>
+            <description>Performs CRUD operations on Case records. Operation can be explicitly specified (create, read, update, delete, find) or inferred from context. CREATE: Provide fieldDataJson. READ: Provide recordId. UPDATE: Provide recordId + fieldDataJson. DELETE: Provide recordId + confirm=true. FIND: IMPORTANT - Before calling find operation, ensure you have search criteria. If the user asks to "find" or "look up" a case without providing specific details (case subject, case number, account name, status, etc.), you MUST ask the user for these details FIRST before calling this action. Only call this action with find operation when you have at least a searchTerm (case subject or partial subject) or filtersJson (specific field filters). If the user says "look up a case" or "find a case" without details, respond conversationally: "I'd be happy to help you find a case. Could you provide some details like the case subject, case number, account name, or status?" Do NOT call the action with empty search criteria. Supports accountName and contactNameOrEmail parameters to link Case to Account/Contact. Supports bulk operations.</description>
+            <developerName>Case_Action_179Kj000000t4Bm</developerName>
+            <invocationTarget>AFCaseAction</invocationTarget>
+            <invocationTargetType>apex</invocationTargetType>
+            <isConfirmationRequired>false</isConfirmationRequired>
+            <isIncludeInProgressIndicator>false</isIncludeInProgressIndicator>
+            <localDeveloperName>Case_Action</localDeveloperName>
+            <masterLabel>Case Action</masterLabel>
+        </localActions>
+        <localActions>
+            <fullName>Opportunity_Action_179Kj000000t4Bn</fullName>
+            <description>Performs CRUD operations on Opportunity records. Operation can be explicitly specified (create, read, update, delete, find) or inferred from context. CREATE: Provide fieldDataJson. READ: Provide recordId. UPDATE: Provide recordId + fieldDataJson. DELETE: Provide recordId + confirm=true. FIND: IMPORTANT - Before calling find operation, ensure you have search criteria. If the user asks to "find" or "look up" an opportunity without providing specific details (opportunity name, account name, stage, amount range, etc.), you MUST ask the user for these details FIRST before calling this action. Only call this action with find operation when you have at least a searchTerm (opportunity name or partial name) or filtersJson (specific field filters). If the user says "look up an opportunity" or "find an opportunity" without details, respond conversationally: "I'd be happy to help you find an opportunity. Could you provide some details like the opportunity name, account name, stage, or amount range?" Do NOT call the action with empty search criteria. Supports accountName parameter to link Opportunity to Account. Supports bulk operations.</description>
+            <developerName>Opportunity_Action_179Kj000000t4Bn</developerName>
+            <invocationTarget>AFOpportunityAction</invocationTarget>
+            <invocationTargetType>apex</invocationTargetType>
+            <isConfirmationRequired>false</isConfirmationRequired>
+            <isIncludeInProgressIndicator>false</isIncludeInProgressIndicator>
+            <localDeveloperName>Opportunity_Action</localDeveloperName>
+            <masterLabel>Opportunity Action</masterLabel>
+        </localActions>
+        <localActions>
+            <fullName>Task_Action_179Kj000000t4Bo</fullName>
+            <description>Performs CRUD operations on Task records. Operation can be explicitly specified (create, read, update, delete, find) or inferred from context. CREATE: Provide fieldDataJson. READ: Provide recordId. UPDATE: Provide recordId + fieldDataJson. DELETE: Provide recordId + confirm=true. FIND: IMPORTANT - Before calling find operation, ensure you have search criteria. If the user asks to "find" or "look up" a task without providing specific details (task subject, related to account/contact, status, due date, etc.), you MUST ask the user for these details FIRST before calling this action. Only call this action with find operation when you have at least a searchTerm (task subject or partial subject) or filtersJson (specific field filters). If the user says "look up a task" or "find a task" without details, respond conversationally: "I'd be happy to help you find a task. Could you provide some details like the task subject, who it's related to (account or contact), status, or due date?" Do NOT call the action with empty search criteria. Supports accountName (WhatId) and contactNameOrEmail (WhoId) parameters to link Task to Account/Contact. Supports bulk operations.</description>
+            <developerName>Task_Action_179Kj000000t4Bo</developerName>
+            <invocationTarget>AFTaskAction</invocationTarget>
+            <invocationTargetType>apex</invocationTargetType>
+            <isConfirmationRequired>false</isConfirmationRequired>
+            <isIncludeInProgressIndicator>false</isIncludeInProgressIndicator>
+            <localDeveloperName>Task_Action</localDeveloperName>
+            <masterLabel>Task Action</masterLabel>
+        </localActions>
+        <localActions>
+            <fullName>Meeting_Action_179Kj000000t4Bp</fullName>
+            <description>Performs CRUD operations on Meeting__c records. Operation can be explicitly specified (create, read, update, delete, find) or inferred from context. CREATE: Provide fieldDataJson. READ: Provide recordId. UPDATE: Provide recordId + fieldDataJson. DELETE: Provide recordId + confirm=true. FIND: IMPORTANT - Before calling find operation, ensure you have search criteria. If the user asks to "find" or "look up" a meeting without providing specific details (meeting subject, account/contact, meeting date, meeting type, etc.), you MUST ask the user for these details FIRST before calling this action. Only call this action with find operation when you have at least a searchTerm (meeting subject or partial subject) or filtersJson (specific field filters). If the user says "look up a meeting" or "find a meeting" without details, respond conversationally: "I'd be happy to help you find a meeting. Could you provide some details like the meeting subject, account or contact name, meeting date, or meeting type?" Do NOT call the action with empty search criteria. AGENT INTELLIGENCE: Use your semantic understanding to map natural language to structured fields. For picklist fields like Meeting_Type__c, Meeting_Status__c, Meeting_Outcome__c, analyze the context (e.g., "lunch", "office visit", "zoom call" for type; "went well", "productive" for outcome; "completed", "scheduled" for status) and select the most appropriate value from available options. Query availableFieldsJson to see valid picklist values. If input does not clearly map, leave the field blank. For boolean fields like Samples_Dropped_Off__c, Marketing_Materials_Provided__c, Follow_Up_Required__c, Signature_Obtained__c, infer true/false from user intent (e.g., "dropped samples" -> true, "no follow up" -> false). For date fields like Meeting_Date__c, infer from temporal cues (e.g., "today", "tomorrow", "last week"). Supports accountName and contactNameOrEmail parameters to link Meeting to Account/Contact. Supports bulk operations.</description>
+            <developerName>Meeting_Action_179Kj000000t4Bp</developerName>
+            <invocationTarget>AFMeetingAction</invocationTarget>
+            <invocationTargetType>apex</invocationTargetType>
+            <isConfirmationRequired>false</isConfirmationRequired>
+            <isIncludeInProgressIndicator>false</isIncludeInProgressIndicator>
+            <localDeveloperName>Meeting_Action</localDeveloperName>
+            <masterLabel>Meeting Action</masterLabel>
+        </localActions>
+        <localActions>
+            <fullName>Customer_Order_Action_179Kj000000t4Bq</fullName>
+            <description>Performs CRUD operations on CustomerOrders__c records. Operation can be explicitly specified (create, read, update, delete, find) or inferred from context. CREATE: Provide fieldDataJson. Optionally provide lineItemsJson to create line items with the order. READ: Provide recordId. Automatically includes all line items. UPDATE: Provide recordId + fieldDataJson. Optionally provide addLineItemsJson, updateLineItemsJson, or deleteLineItemIds to manage line items. DELETE: Provide recordId + confirm=true. FIND: IMPORTANT - Before calling find operation, ensure you have search criteria. If the user asks to "find" or "look up" a customer order without providing specific details (order name, order number, account name, status, etc.), you MUST ask the user for these details FIRST before calling this action. Only call this action with find operation when you have at least a searchTerm (order name or order number) or filtersJson (specific field filters). If the user says "look up a customer order" or "find a customer order" without details, respond conversationally: "I'd be happy to help you find a customer order. Could you provide some details like the order name, order number, account name, or status?" Do NOT call the action with empty search criteria. Supports accountName and contactNameOrEmail parameters to link Order to Account/Contact. Supports bulk operations for create/update.</description>
+            <developerName>Customer_Order_Action_179Kj000000t4Bq</developerName>
+            <invocationTarget>AFCustomerOrderAction</invocationTarget>
+            <invocationTargetType>apex</invocationTargetType>
+            <isConfirmationRequired>false</isConfirmationRequired>
+            <isIncludeInProgressIndicator>false</isIncludeInProgressIndicator>
+            <localDeveloperName>Customer_Order_Action</localDeveloperName>
+            <masterLabel>Customer Order Action</masterLabel>
         </localActions>
         <localDeveloperName>General_CRM_Updates</localDeveloperName>
         <masterLabel>General CRM Updates</masterLabel>
