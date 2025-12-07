@@ -32,7 +32,7 @@ sf project deploy start --source-dir force-app/main/default --target-org myorg
 ```
 
 This deploys:
-- All 35 CRUD action classes (Account, Contact, Opportunity, Case, Task, Meeting, Customer Order)
+- All 7 consolidated CRUD action classes (Account, Contact, Opportunity, Case, Task, Meeting, Customer Order)
 - Core utilities (AFUniversalCrmRecordAction, AFUniversalAnalyticsAction)
 - Custom objects and fields (Meeting__c, Customer Order enhancements)
 - Permission sets and profiles
@@ -76,7 +76,8 @@ sf org assign permset --name AgentCourseSDOCustomAssetPermissions --on-behalf-of
 2. Create a new agent or edit an existing one
 3. Go to the **Actions** tab
 4. Add the deployed actions to your agent's action library:
-   - Search for actions like "Create Account", "Find Contact", etc.
+   - Search for actions like "Account Action", "Contact Action", etc.
+   - Each action supports all CRUD operations (create, read, update, delete, find)
    - Add the ones you want your agent to use
 
 ## Step 6: Test It Out!
@@ -86,7 +87,7 @@ Try creating a simple agent interaction:
 **Example**: "Create an account called Acme Corp"
 
 The agent should be able to:
-1. Call `AFAccountCreateAction`
+1. Call `AFAccountAction` with operation inferred as "create" (or explicitly set)
 2. Create the account
 3. Return the account ID
 

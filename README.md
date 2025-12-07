@@ -15,24 +15,26 @@ This repository serves as a hub for high-quality Agentforce technology assets. W
 
 ## 📦 What's Included
 
-### 🤖 CRUD Action Classes (35 Total)
+### 🤖 Consolidated CRUD Action Classes (7 Total)
 
-Complete Create, Read, Update, Delete, and Find operations for core CRM objects:
+Unified action classes that support all CRUD operations (Create, Read, Update, Delete, Find) for core CRM objects:
 
-- **Account Actions** (5 classes) - Full account management with ambiguity handling
-- **Contact Actions** (5 classes) - Contact operations with email/name resolution
-- **Opportunity Actions** (5 classes) - Sales pipeline management
-- **Case Actions** (5 classes) - Customer service case handling
-- **Task Actions** (5 classes) - Activity and to-do management
-- **Meeting Actions** (5 classes) - Custom Meeting object for field sales (pharmaceutical/medical)
-- **Customer Order Actions** (5 classes) - Order management with nested line items
+- **AFAccountAction** - Full account management with ambiguity handling
+- **AFContactAction** - Contact operations with email/name resolution
+- **AFOpportunityAction** - Sales pipeline management
+- **AFCaseAction** - Customer service case handling
+- **AFTaskAction** - Activity and to-do management
+- **AFMeetingAction** - Custom Meeting object for field sales (pharmaceutical/medical)
+- **AFCustomerOrderAction** - Order management with nested line items
 
-Each action set provides:
+Each consolidated action class provides:
 - ✅ **Create** - Single or bulk record creation with field enrichment
 - ✅ **Read** - Retrieve complete record details with related data
 - ✅ **Update** - Modify existing records with name-based resolution
 - ✅ **Delete** - Safe record deletion with cascade handling
 - ✅ **Find** - Intelligent search with disambiguation
+
+**Operation Inference**: Operations can be explicitly specified or automatically inferred from context (e.g., has fieldDataJson + recordId = update, has fieldDataJson only = create).
 
 ### 🛠️ Core Utilities
 

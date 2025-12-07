@@ -70,9 +70,11 @@ These objects represent the core use cases we've begun with, but the framework i
 
 ## Key Design Patterns
 
-### 1. Invocable Action Pattern
+### 1. Consolidated Invocable Action Pattern
 All action classes follow this structure:
-- `AF[Object][Operation]Action` naming (e.g., `AFAccountCreateAction`)
+- `AF[Object]Action` naming (e.g., `AFAccountAction`) - single class per object
+- Supports all CRUD operations (create, read, update, delete, find) via `operation` parameter
+- Operation can be explicitly specified or inferred from context
 - Request/Response inner classes with comprehensive labels and descriptions
 - `@InvocableMethod` with detailed descriptions that guide agent behavior
 - Delegate to `AFUniversalCrmRecordAction` for core logic
@@ -137,7 +139,7 @@ Custom exception for multiple matching records. Contains:
 3. Update `enforceCreateRequirements()` with required field validation
 4. Update `getRequiredFields()` and `getSuggestedFields()`
 5. Update `resolveRelatedRecords()` if object has lookups
-6. Create 5 action classes: Create, Read, Update, Delete, Find
+6. Create 1 consolidated action class: `AF[Object]Action` (e.g., `AFAccountAction`)
 7. Add to `AgentCourseSDOCustomAssetPermissions` permission set
 8. Update README.md
 

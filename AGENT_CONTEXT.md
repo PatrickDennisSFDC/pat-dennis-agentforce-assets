@@ -140,12 +140,15 @@ These objects represent our starting point, but the framework is designed to exp
 **Action Classes**: Thin wrappers that delegate to the utility
 **Benefit**: Single source of truth, consistent behavior, easier maintenance
 
-### 2. Invocable Action Pattern
+### 2. Consolidated Invocable Action Pattern
 Every action class:
 - Uses `@InvocableMethod` annotation
-- Has comprehensive Request/Response inner classes
+- Supports all CRUD operations (create, read, update, delete, find) via `operation` parameter
+- Operation can be explicitly specified or automatically inferred from context
+- Has comprehensive Request/Response inner classes that handle all operation types
 - Includes detailed labels and descriptions for all variables
 - Provides guidance in `@InvocableMethod` description
+- Single class per object (e.g., `AFAccountAction`) instead of 5 separate classes
 
 ### 3. Ambiguity-First Design
 **Never silently pick the first match**. When multiple records match:
@@ -227,18 +230,18 @@ Agents don't need to lookup IDs first:
    'lead' => new List<String>{'FirstName', 'Email', 'Phone', 'Company', 'Status'}
    ```
 
-2. **Create 5 Action Classes**:
-   - `AFLeadCreateAction.cls`
-   - `AFLeadReadAction.cls`
-   - `AFLeadUpdateAction.cls`
-   - `AFLeadDeleteAction.cls`
-   - `AFLeadFindAction.cls`
+2. **Create 1 Consolidated Action Class**:
+   - `AFLeadAction.cls` (supports all CRUD operations via `operation` parameter)
+   - Operation can be explicitly specified or inferred from context
+   - Includes operation inference logic
+   - Comprehensive Request/Response classes that handle all operation types
 
 3. **Follow the Pattern**:
-   - Copy from similar object (e.g., `AFContactCreateAction`)
+   - Copy from similar object (e.g., `AFContactAction`)
    - Update object name references
    - Update field-specific logic if needed
    - Add comprehensive labels/descriptions
+   - Implement `inferOperation()` method for context-based operation detection
 
 4. **Update Permissions**:
    - Add class access to `AgentCourseSDOCustomAssetPermissions` permission set
