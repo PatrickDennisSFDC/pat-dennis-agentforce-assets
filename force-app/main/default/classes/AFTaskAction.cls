@@ -203,7 +203,7 @@ public with sharing class AFTaskAction {
     }
     
     @InvocableMethod(
-        label='Task Action'
+        label='Agentforce Task Action'
         description='Performs CRUD operations on Task records. Operation can be explicitly specified (create, read, update, delete, find) or inferred from context. CREATE: Provide fieldDataJson. READ: Provide recordId. UPDATE: Provide recordId + fieldDataJson. DELETE: Provide recordId + confirm=true. FIND: IMPORTANT - Before calling find operation, ensure you have search criteria. If the user asks to "find" or "look up" a task without providing specific details (task subject, related to account/contact, status, due date, etc.), you MUST ask the user for these details FIRST before calling this action. Only call this action with find operation when you have at least a searchTerm (task subject or partial subject) or filtersJson (specific field filters). If the user says "look up a task" or "find a task" without details, respond conversationally: "I\'d be happy to help you find a task. Could you provide some details like the task subject, who it\'s related to (account or contact), status, or due date?" Do NOT call the action with empty search criteria. Supports accountName (WhatId) and contactNameOrEmail (WhoId) parameters to link Task to Account/Contact. Supports bulk operations.'
         category='CRM Actions'
     )

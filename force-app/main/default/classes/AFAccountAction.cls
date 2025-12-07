@@ -231,7 +231,7 @@ public with sharing class AFAccountAction {
      * Operation can be explicitly specified or inferred from context
      */
     @InvocableMethod(
-        label='Account Action'
+        label='Agentforce Account Action'
         description='Performs CRUD operations on Account records. Operation can be explicitly specified (create, read, update, delete, find) or inferred from context. CREATE: Provide fieldDataJson. READ: Provide recordId. UPDATE: Provide recordId + fieldDataJson. DELETE: Provide recordId + confirm=true (first call with confirm=false for confirmation). FIND: IMPORTANT - Before calling find operation, ensure you have search criteria. If the user asks to "find" or "look up" an account without providing specific details (account name, industry, city, state, phone, etc.), you MUST ask the user for these details FIRST before calling this action. Only call this action with find operation when you have at least a searchTerm (account name or partial name) or filtersJson (specific field filters). If the user says "look up an account" or "find an account" without details, respond conversationally: "I\'d be happy to help you find an account. Could you provide some details like the account name, industry, city, state, or phone number?" Do NOT call the action with empty search criteria. The agent should intelligently infer the operation from user intent, but can explicitly specify if needed. Supports bulk operations for create/update by providing JSON array in fieldDataJson.'
         category='CRM Actions'
     )

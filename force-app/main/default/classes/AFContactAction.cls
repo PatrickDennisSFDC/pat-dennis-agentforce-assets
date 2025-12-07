@@ -225,7 +225,7 @@ public with sharing class AFContactAction {
      * Contact Action - Performs all CRUD operations on Contact records
      */
     @InvocableMethod(
-        label='Contact Action'
+        label='Agentforce Contact Action'
         description='Performs CRUD operations on Contact records. Operation can be explicitly specified (create, read, update, delete, find) or inferred from context. CREATE: Provide fieldDataJson. READ: Provide recordId. UPDATE: Provide recordId + fieldDataJson. DELETE: Provide recordId + confirm=true (first call with confirm=false for confirmation). FIND: IMPORTANT - Before calling find operation, ensure you have search criteria. If the user asks to "find" or "look up" a contact without providing specific details (contact name, email, account name, phone, etc.), you MUST ask the user for these details FIRST before calling this action. Only call this action with find operation when you have at least a searchTerm (contact name or email) or filtersJson (specific field filters). If the user says "look up a contact" or "find a contact" without details, respond conversationally: "I\'d be happy to help you find a contact. Could you provide some details like the contact name, email, account name, or phone number?" Do NOT call the action with empty search criteria. Supports accountName parameter to link Contact to Account. Supports bulk operations for create/update by providing JSON array in fieldDataJson.'
         category='CRM Actions'
     )

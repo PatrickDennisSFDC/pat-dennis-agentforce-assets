@@ -197,7 +197,7 @@ public with sharing class AFOpportunityAction {
     }
     
     @InvocableMethod(
-        label='Opportunity Action'
+        label='Agentforce Opportunity Action'
         description='Performs CRUD operations on Opportunity records. Operation can be explicitly specified (create, read, update, delete, find) or inferred from context. CREATE: Provide fieldDataJson. READ: Provide recordId. UPDATE: Provide recordId + fieldDataJson. DELETE: Provide recordId + confirm=true. FIND: IMPORTANT - Before calling find operation, ensure you have search criteria. If the user asks to "find" or "look up" an opportunity without providing specific details (opportunity name, account name, stage, amount range, etc.), you MUST ask the user for these details FIRST before calling this action. Only call this action with find operation when you have at least a searchTerm (opportunity name or partial name) or filtersJson (specific field filters). If the user says "look up an opportunity" or "find an opportunity" without details, respond conversationally: "I\'d be happy to help you find an opportunity. Could you provide some details like the opportunity name, account name, stage, or amount range?" Do NOT call the action with empty search criteria. Supports accountName parameter to link Opportunity to Account. Supports bulk operations.'
         category='CRM Actions'
     )

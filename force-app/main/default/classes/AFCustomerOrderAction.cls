@@ -253,7 +253,7 @@ public with sharing class AFCustomerOrderAction {
     }
     
     @InvocableMethod(
-        label='Customer Order Action'
+        label='Agentforce Customer Order Action'
         description='Performs CRUD operations on CustomerOrders__c records. Operation can be explicitly specified (create, read, update, delete, find) or inferred from context. CREATE: Provide fieldDataJson. Optionally provide lineItemsJson to create line items with the order. READ: Provide recordId. Automatically includes all line items. UPDATE: Provide recordId + fieldDataJson. Optionally provide addLineItemsJson, updateLineItemsJson, or deleteLineItemIds to manage line items. DELETE: Provide recordId + confirm=true. FIND: IMPORTANT - Before calling find operation, ensure you have search criteria. If the user asks to "find" or "look up" a customer order without providing specific details (order name, order number, account name, status, etc.), you MUST ask the user for these details FIRST before calling this action. Only call this action with find operation when you have at least a searchTerm (order name or order number) or filtersJson (specific field filters). If the user says "look up a customer order" or "find a customer order" without details, respond conversationally: "I\'d be happy to help you find a customer order. Could you provide some details like the order name, order number, account name, or status?" Do NOT call the action with empty search criteria. Supports accountName and contactNameOrEmail parameters to link Order to Account/Contact. Supports bulk operations for create/update.'
         category='CRM Actions'
     )

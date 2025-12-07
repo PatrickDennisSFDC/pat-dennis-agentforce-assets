@@ -203,7 +203,7 @@ public with sharing class AFCaseAction {
     }
     
     @InvocableMethod(
-        label='Case Action'
+        label='Agentforce Case Action'
         description='Performs CRUD operations on Case records. Operation can be explicitly specified (create, read, update, delete, find) or inferred from context. CREATE: Provide fieldDataJson. READ: Provide recordId. UPDATE: Provide recordId + fieldDataJson. DELETE: Provide recordId + confirm=true. FIND: IMPORTANT - Before calling find operation, ensure you have search criteria. If the user asks to "find" or "look up" a case without providing specific details (case subject, case number, account name, status, etc.), you MUST ask the user for these details FIRST before calling this action. Only call this action with find operation when you have at least a searchTerm (case subject or partial subject) or filtersJson (specific field filters). If the user says "look up a case" or "find a case" without details, respond conversationally: "I\'d be happy to help you find a case. Could you provide some details like the case subject, case number, account name, or status?" Do NOT call the action with empty search criteria. Supports accountName and contactNameOrEmail parameters to link Case to Account/Contact. Supports bulk operations.'
         category='CRM Actions'
     )

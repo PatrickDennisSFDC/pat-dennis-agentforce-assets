@@ -200,7 +200,7 @@ public with sharing class AFUniversalAnalyticsAction {
      * Perform aggregate analytics query
      */
     @InvocableMethod(
-        label='Analytics Query'
+        label='Agentforce Analytics Query'
         description='Performs aggregate SOQL queries (SUM, COUNT, AVG, MIN, MAX) with optional GROUP BY and date range filtering. Use this to answer questions like "How much pipeline do I have?", "How many accounts by industry?", "Average deal size by stage", etc. The agent can construct any aggregate query by specifying the object, aggregate function, field, grouping, and filters. Supports all standard Salesforce objects (Account, Contact, Case, Opportunity, Task, Meeting__c).'
         category='CRM Analytics'
     )

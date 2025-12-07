@@ -106,13 +106,13 @@ sf org assign permset --name AgentCourseSDOCustomAssetPermissions --on-behalf-of
 3. Go to the **Actions** tab (or **Topics** → **General CRM Updates**)
 4. Click **"Add Action"** or **"New Action"**
 5. Search for the deployed actions:
-   - Search for "Account Action" → Select `AFAccountAction`
-   - Search for "Contact Action" → Select `AFContactAction`
-   - Search for "Case Action" → Select `AFCaseAction`
-   - Search for "Opportunity Action" → Select `AFOpportunityAction`
-   - Search for "Task Action" → Select `AFTaskAction`
-   - Search for "Meeting Action" → Select `AFMeetingAction`
-   - Search for "Customer Order Action" → Select `AFCustomerOrderAction`
+   - Search for "Agentforce Account Action" → Select `AFAccountAction`
+   - Search for "Agentforce Contact Action" → Select `AFContactAction`
+   - Search for "Agentforce Case Action" → Select `AFCaseAction`
+   - Search for "Agentforce Opportunity Action" → Select `AFOpportunityAction`
+   - Search for "Agentforce Task Action" → Select `AFTaskAction`
+   - Search for "Agentforce Meeting Action" → Select `AFMeetingAction`
+   - Search for "Agentforce Customer Order Action" → Select `AFCustomerOrderAction`
 6. Add the actions you want your agent to use
 
 **Note**: Each action supports all CRUD operations. You don't need separate actions for create/read/update/delete - the agent will infer the operation from context.

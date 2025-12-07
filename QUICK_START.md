@@ -76,7 +76,7 @@ sf org assign permset --name AgentCourseSDOCustomAssetPermissions --on-behalf-of
 2. Create a new agent or edit an existing one
 3. Go to the **Actions** tab
 4. Add the deployed actions to your agent's action library:
-   - Search for actions like "Account Action", "Contact Action", etc.
+   - Search for actions like "Agentforce Account Action", "Agentforce Contact Action", etc.
    - Each action supports all CRUD operations (create, read, update, delete, find)
    - Add the ones you want your agent to use
 
