@@ -1,16 +1,64 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Annual_Income__c</fullName>
-    <description>Annual household income. Captured for financial eligibility assessment. No automatic calculation - just data capture for review. Format as currency (e.g., 75000.00 for $75,000).</description>
+    <description>Annual household income range. Captured for financial eligibility assessment. No automatic calculation - just data capture for review. Query availableFieldsJson to see valid values.</description>
     <externalId>false</externalId>
-    <inlineHelpText>Enter the annual household income in dollars (e.g., 75000.00 for $75,000). This is used for financial eligibility assessment. Enter numbers only - currency formatting is applied automatically.</inlineHelpText>
+    <inlineHelpText>Select the annual household income range. This is used for financial eligibility assessment. Select the range that best matches the candidate's household income.</inlineHelpText>
     <label>Annual Income</label>
-    <precision>18</precision>
     <required>false</required>
-    <scale>2</scale>
     <trackFeedHistory>false</trackFeedHistory>
     <trackHistory>false</trackHistory>
     <trackTrending>false</trackTrending>
-    <type>Currency</type>
-    <unique>false</unique>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>false</restricted>
+        <valueSetDefinition>
+            <sorted>true</sorted>
+            <value>
+                <fullName>Less_Than_25000</fullName>
+                <default>false</default>
+                <label>Less than $25,000</label>
+            </value>
+            <value>
+                <fullName>25000_to_49999</fullName>
+                <default>false</default>
+                <label>$25,000 - $49,999</label>
+            </value>
+            <value>
+                <fullName>50000_to_74999</fullName>
+                <default>false</default>
+                <label>$50,000 - $74,999</label>
+            </value>
+            <value>
+                <fullName>75000_to_99999</fullName>
+                <default>false</default>
+                <label>$75,000 - $99,999</label>
+            </value>
+            <value>
+                <fullName>100000_to_149999</fullName>
+                <default>false</default>
+                <label>$100,000 - $149,999</label>
+            </value>
+            <value>
+                <fullName>150000_to_199999</fullName>
+                <default>false</default>
+                <label>$150,000 - $199,999</label>
+            </value>
+            <value>
+                <fullName>200000_to_249999</fullName>
+                <default>false</default>
+                <label>$200,000 - $249,999</label>
+            </value>
+            <value>
+                <fullName>250000_or_More</fullName>
+                <default>false</default>
+                <label>$250,000 or more</label>
+            </value>
+            <value>
+                <fullName>Prefer_Not_to_Answer</fullName>
+                <default>false</default>
+                <label>Prefer not to answer</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
 </CustomField>
