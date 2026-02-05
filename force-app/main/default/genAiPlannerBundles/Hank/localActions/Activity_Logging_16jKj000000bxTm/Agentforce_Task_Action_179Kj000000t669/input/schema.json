@@ -1,0 +1,69 @@
+{
+  "unevaluatedProperties" : false,
+  "properties" : {
+    "accountName" : {
+      "title" : "Account Name",
+      "description" : "Account name to resolve to WhatId for the Task. Links task to Account via WhatId. IMPORTANT: When the user wants to add or update the account on a task (e.g., \"update the account to Acme Corp\"), use this parameter with the account name. Do NOT put WhatId in fieldDataJson - use this parameter instead. The system will automatically resolve the account name to an Account ID.",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : false
+    },
+    "confirm" : {
+      "title" : "Confirm",
+      "description" : "For create/update: Set to false to preview only. For delete: Set to true to actually delete.",
+      "lightning:type" : "lightning__booleanType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : false
+    },
+    "contactNameOrEmail" : {
+      "title" : "Contact Name or Email",
+      "description" : "Contact name or email to resolve to WhoId for the Task. Links task to Contact via WhoId. IMPORTANT: When the user wants to add or update the contact on a task (e.g., \"add the contact as John Smith\" or \"update the contact to jane@example.com\"), use this parameter with the contact name or email. Do NOT put WhoId in fieldDataJson - use this parameter instead. The system will automatically resolve the contact name/email to a Contact ID. If multiple contacts match, the system will return candidates for user clarification.",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : false
+    },
+    "fieldDataJson" : {
+      "title" : "Field Data JSON",
+      "description" : "JSON string containing Task field data. For create: {\"Subject\":\"Follow up with John\",\"Priority\":\"High\",\"ActivityDate\":\"2024-12-10\"}. For update: {\"Status\":\"Completed\",\"Priority\":\"Low\"}. For bulk: [{\"Subject\":\"Task 1\"},{\"Subject\":\"Task 2\"}]. IMPORTANT: For picklist fields (Status, Priority, Type, etc.), query availableFieldsJson from a previous read operation to see valid values. Do NOT ask the user for picklist options - query availableFieldsJson to get them automatically. If the user wants to update the Contact or Account on the task, use the contactNameOrEmail or accountName parameters instead of putting WhoId or WhatId in fieldDataJson.",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : false
+    },
+    "filtersJson" : {
+      "title" : "Filters JSON",
+      "description" : "JSON string of exact-match filters for find operations. IMPORTANT: If the user wants to find a task but hasn't provided specific filters, ask them for details like related account/contact, status, or due date BEFORE calling this action. Do not call find operation without a searchTerm or filtersJson.",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : false
+    },
+    "operation" : {
+      "title" : "Operation",
+      "description" : "Explicit operation: \"create\", \"read\", \"update\", \"delete\", or \"find\". If not specified, inferred from context.",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : false
+    },
+    "recordId" : {
+      "title" : "Record ID",
+      "description" : "The Salesforce record ID of the Task. Required for read/update/delete. Format: 18-character ID like \"00Txx000003DGbYAAW\".",
+      "lightning:type" : "lightning__recordIdType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : false
+    },
+    "searchLimit" : {
+      "title" : "Search Limit",
+      "description" : "Maximum number of records to return for find operations (default: 5, max: 20).",
+      "lightning:type" : "lightning__integerType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : false
+    },
+    "searchTerm" : {
+      "title" : "Search Term",
+      "description" : "Text to search for in Task fields (Subject, Description, etc.). Used for find operations. IMPORTANT: If the user wants to find a task but hasn't provided a search term, ask them for the task subject, related account/contact, or other identifying information BEFORE calling this action. Do not call find operation without a searchTerm or filtersJson.",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : false
+    }
+  },
+  "lightning:type" : "lightning__objectType"
+}

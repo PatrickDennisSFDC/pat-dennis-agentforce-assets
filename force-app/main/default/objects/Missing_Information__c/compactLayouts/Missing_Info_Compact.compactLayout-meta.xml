@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CompactLayout xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Missing_Info_Compact</fullName>
+    <fields>Name</fields>
+    <fields>Information_Type__c</fields>
+    <fields>Status__c</fields>
+    <fields>Program_Candidate__c</fields>
+    <fields>Case__c</fields>
+    <label>Missing Info Compact</label>
+</CompactLayout>

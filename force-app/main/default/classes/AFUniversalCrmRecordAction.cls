@@ -21,19 +21,7 @@
 public without sharing class AFUniversalCrmRecordAction {
     
     // Supported objects
-    private static final Set<String> SUPPORTED_OBJECTS = new Set<String>{
-        'account',
-        'contact',
-        'lead',
-        'case',
-        'opportunity',
-        'task',
-        'meeting__c',
-        'customerorders__c',
-        'customer_order_line_item__c',
-        'potential_adverse_event__c',
-        'program_candidate__c'
-    };
+    private static final Set<String> SUPPORTED_OBJECTS = new Set<String>{'account', 'contact', 'case', 'opportunity', 'task', 'meeting__c', 'customerorders__c', 'customer_order_line_item__c', 'diagnostic_test_order__c', 'program_candidate__c'};
     private static final Integer DEFAULT_SEARCH_LIMIT = 5;
     private static final Integer MAX_SEARCH_LIMIT = 20;
     
@@ -63,7 +51,7 @@ public without sharing class AFUniversalCrmRecordAction {
      * Input: Request parameters for the operation
      */
     public class Request {
-        @InvocableVariable(label='Object API Name' description='The Salesforce object: Account, Contact, Lead, Case, Opportunity, Task, Meeting__c, CustomerOrders__c, Customer_Order_Line_Item__c, Potential_Adverse_Event__c, or Program_Candidate__c' required=true)
+        @InvocableVariable(label='Object API Name' description='The Salesforce object: Account, Contact, Case, or Opportunity' required=true)
         public String objectApiName;
         
         @InvocableVariable(label='Operation' description='The operation to perform: read, find, search, create, update, bulkCreate, or bulkUpdate' required=true)
@@ -530,126 +518,6 @@ public without sharing class AFUniversalCrmRecordAction {
             }
         }
         
-        // Handle WhatId/WhoId as name strings for Task
-        if (req.objectApiName.toLowerCase() == 'task') {
-            // If WhatId is provided as a name string, resolve it
-            if (fieldDataMap.containsKey('WhatId') && fieldDataMap.get('WhatId') != null) {
-                String whatValue = String.valueOf(fieldDataMap.get('WhatId'));
-                // Check if it's not already an ID (18 chars starting with 001 for Account, 006 for Opportunity)
-                if (whatValue.length() != 18 || (!whatValue.startsWith('001') && !whatValue.startsWith('006'))) {
-                    try {
-                        Id accountId = resolveAccountByName(whatValue);
-                        if (accountId != null) {
-                            fieldDataMap.put('WhatId', accountId);
-                        } else {
-                            fieldDataMap.remove('WhatId'); // Remove invalid value
-                        }
-                    } catch (Exception e) {
-                        System.debug(LoggingLevel.WARN, 'AFUniversalCrmRecordAction: Could not resolve WhatId name: ' + e.getMessage());
-                        fieldDataMap.remove('WhatId');
-                    }
-                }
-            }
-            // If WhoId is provided as a name string, resolve it
-            if (fieldDataMap.containsKey('WhoId') && fieldDataMap.get('WhoId') != null) {
-                String whoValue = String.valueOf(fieldDataMap.get('WhoId'));
-                // Check if it's not already an ID (18 chars starting with 003)
-                if (whoValue.length() != 18 || !whoValue.startsWith('003')) {
-                    try {
-                        Id contactId = resolveContactByNameOrEmail(whoValue, req.accountName);
-                        if (contactId != null) {
-                            fieldDataMap.put('WhoId', contactId);
-                        } else {
-                            fieldDataMap.remove('WhoId'); // Remove invalid value
-                        }
-                    } catch (Exception e) {
-                        System.debug(LoggingLevel.WARN, 'AFUniversalCrmRecordAction: Could not resolve WhoId name: ' + e.getMessage());
-                        fieldDataMap.remove('WhoId');
-                    }
-                }
-            }
-        }
-        
-        // Handle Account__c/Contact__c as name strings for Potential_Adverse_Event__c
-        if (req.objectApiName.toLowerCase() == 'potential_adverse_event__c') {
-            // If Account__c is provided as a name string, resolve it
-            if (fieldDataMap.containsKey('Account__c') && fieldDataMap.get('Account__c') != null) {
-                String accountValue = String.valueOf(fieldDataMap.get('Account__c'));
-                // Check if it's not already an ID (18 chars starting with 001)
-                if (accountValue.length() != 18 || !accountValue.startsWith('001')) {
-                    try {
-                        Id accountId = resolveAccountByName(accountValue);
-                        if (accountId != null) {
-                            fieldDataMap.put('Account__c', accountId);
-                        } else {
-                            fieldDataMap.remove('Account__c'); // Remove invalid value
-                        }
-                    } catch (Exception e) {
-                        System.debug(LoggingLevel.WARN, 'AFUniversalCrmRecordAction: Could not resolve Account__c name: ' + e.getMessage());
-                        fieldDataMap.remove('Account__c');
-                    }
-                }
-            }
-            // If Contact__c is provided as a name string, resolve it
-            if (fieldDataMap.containsKey('Contact__c') && fieldDataMap.get('Contact__c') != null) {
-                String contactValue = String.valueOf(fieldDataMap.get('Contact__c'));
-                // Check if it's not already an ID (18 chars starting with 003)
-                if (contactValue.length() != 18 || !contactValue.startsWith('003')) {
-                    try {
-                        Id contactId = resolveContactByNameOrEmail(contactValue, req.accountName);
-                        if (contactId != null) {
-                            fieldDataMap.put('Contact__c', contactId);
-                        } else {
-                            fieldDataMap.remove('Contact__c'); // Remove invalid value
-                        }
-                    } catch (Exception e) {
-                        System.debug(LoggingLevel.WARN, 'AFUniversalCrmRecordAction: Could not resolve Contact__c name: ' + e.getMessage());
-                        fieldDataMap.remove('Contact__c');
-                    }
-                }
-            }
-        }
-        
-        // Handle Account__c/Contact__c as name strings for Program_Candidate__c
-        if (req.objectApiName.toLowerCase() == 'program_candidate__c') {
-            // If Account__c is provided as a name string, resolve it
-            if (fieldDataMap.containsKey('Account__c') && fieldDataMap.get('Account__c') != null) {
-                String accountValue = String.valueOf(fieldDataMap.get('Account__c'));
-                // Check if it's not already an ID (18 chars starting with 001)
-                if (accountValue.length() != 18 || !accountValue.startsWith('001')) {
-                    try {
-                        Id accountId = resolveAccountByName(accountValue);
-                        if (accountId != null) {
-                            fieldDataMap.put('Account__c', accountId);
-                        } else {
-                            fieldDataMap.remove('Account__c'); // Remove invalid value
-                        }
-                    } catch (Exception e) {
-                        System.debug(LoggingLevel.WARN, 'AFUniversalCrmRecordAction: Could not resolve Account__c name: ' + e.getMessage());
-                        fieldDataMap.remove('Account__c');
-                    }
-                }
-            }
-            // If Contact__c is provided as a name string, resolve it
-            if (fieldDataMap.containsKey('Contact__c') && fieldDataMap.get('Contact__c') != null) {
-                String contactValue = String.valueOf(fieldDataMap.get('Contact__c'));
-                // Check if it's not already an ID (18 chars starting with 003)
-                if (contactValue.length() != 18 || !contactValue.startsWith('003')) {
-                    try {
-                        Id contactId = resolveContactByNameOrEmail(contactValue, req.accountName);
-                        if (contactId != null) {
-                            fieldDataMap.put('Contact__c', contactId);
-                        } else {
-                            fieldDataMap.remove('Contact__c'); // Remove invalid value
-                        }
-                    } catch (Exception e) {
-                        System.debug(LoggingLevel.WARN, 'AFUniversalCrmRecordAction: Could not resolve Contact__c name: ' + e.getMessage());
-                        fieldDataMap.remove('Contact__c');
-                    }
-                }
-            }
-        }
-        
         // Resolve recordId if not provided (name-based resolution)
         if (req.recordId == null) {
             System.debug(LoggingLevel.INFO, 'AFUniversalCrmRecordAction: recordId not provided, attempting name-based resolution');
@@ -659,9 +527,8 @@ public without sharing class AFUniversalCrmRecordAction {
                 String obj = req.objectApiName.toLowerCase();
                 String identifierHint = '';
                 switch on obj {
-                    when 'account' { identifierHint = 'Name field in fieldDataJson (e.g., {"Name":"Acme Corp","Industry":"Tech"})'; }
+                    when 'account' { identifierHint = 'Name field in fieldDataJson (e.g., {"Name":"Test 10","Industry":"Tech"})'; }
                     when 'contact' { identifierHint = 'LastName (and optionally FirstName or Email) in fieldDataJson'; }
-                    when 'lead' { identifierHint = 'LastName + Company, or Email, in fieldDataJson'; }
                     when 'opportunity' { identifierHint = 'Name field in fieldDataJson'; }
                     when 'task' { identifierHint = 'Task ID (name resolution not supported for Tasks)'; }
                     when 'meeting__c' { identifierHint = 'Subject__c field in fieldDataJson'; }
@@ -810,11 +677,8 @@ public without sharing class AFUniversalCrmRecordAction {
         else if (objectApiName.toLowerCase() == 'customerorders__c') {
             selectClause += ', Account__r.Name, Contact__r.Name';
         }
-        else if (objectApiName.toLowerCase() == 'potential_adverse_event__c') {
-            selectClause += ', Account__r.Name, Contact__r.Name';
-        }
-        else if (objectApiName.toLowerCase() == 'program_candidate__c') {
-            selectClause += ', Account__r.Name, Contact__r.Name';
+        else if (objectApiName.toLowerCase() == 'diagnostic_test_order__c') {
+            selectClause += ', Account__r.Name, Contact__r.Name, Contact__r.Email';
         }
         String soql = 'SELECT ' + selectClause + ' FROM ' + objectApiName;
         
@@ -848,7 +712,7 @@ public without sharing class AFUniversalCrmRecordAction {
         }
         
         if (normalizedFilters != null && !normalizedFilters.isEmpty()) {
-            whereClauses.addAll(buildFilterConditions(normalizedFilters, fieldMap, objectApiName));
+            whereClauses.addAll(buildFilterConditions(normalizedFilters, fieldMap));
         }
         
         // Add open tasks filter if requested
@@ -1253,30 +1117,6 @@ public without sharing class AFUniversalCrmRecordAction {
             Id accountId = resolveAccountByName(req.accountName);
             fieldDataMap.put('Account__c', accountId);
         }
-        
-        // Resolve Contact__c for Potential_Adverse_Event__c
-        if (obj == 'potential_adverse_event__c' && !String.isBlank(req.contactNameOrEmail)) {
-            Id contactId = resolveContactByNameOrEmail(req.contactNameOrEmail, req.accountName);
-            fieldDataMap.put('Contact__c', contactId);
-        }
-        
-        // Resolve Account__c for Potential_Adverse_Event__c
-        if (obj == 'potential_adverse_event__c' && !String.isBlank(req.accountName)) {
-            Id accountId = resolveAccountByName(req.accountName);
-            fieldDataMap.put('Account__c', accountId);
-        }
-        
-        // Resolve Contact__c for Program_Candidate__c
-        if (obj == 'program_candidate__c' && !String.isBlank(req.contactNameOrEmail)) {
-            Id contactId = resolveContactByNameOrEmail(req.contactNameOrEmail, req.accountName);
-            fieldDataMap.put('Contact__c', contactId);
-        }
-        
-        // Resolve Account__c for Program_Candidate__c
-        if (obj == 'program_candidate__c' && !String.isBlank(req.accountName)) {
-            Id accountId = resolveAccountByName(req.accountName);
-            fieldDataMap.put('Account__c', accountId);
-        }
     }
     
     /**
@@ -1397,62 +1237,6 @@ public without sharing class AFUniversalCrmRecordAction {
                 fieldDataMap.put('Account__c', accountId);
             }
         }
-        
-        // Resolve Contact__c for Potential_Adverse_Event__c
-        if (obj == 'potential_adverse_event__c' && fieldDataMap.containsKey('_contactNameOrEmail')) {
-            String contactNameOrEmail = String.valueOf(fieldDataMap.get('_contactNameOrEmail'));
-            fieldDataMap.remove('_contactNameOrEmail');
-            
-            // Check if accountName is also provided for scoping
-            String accountNameForScope = null;
-            if (fieldDataMap.containsKey('_accountName')) {
-                accountNameForScope = String.valueOf(fieldDataMap.get('_accountName'));
-            }
-            
-            if (!String.isBlank(contactNameOrEmail)) {
-                Id contactId = resolveContactByNameOrEmail(contactNameOrEmail, accountNameForScope);
-                fieldDataMap.put('Contact__c', contactId);
-            }
-        }
-        
-        // Resolve Account__c for Potential_Adverse_Event__c
-        if (obj == 'potential_adverse_event__c' && fieldDataMap.containsKey('_accountName')) {
-            String accountName = String.valueOf(fieldDataMap.get('_accountName'));
-            fieldDataMap.remove('_accountName');
-            
-            if (!String.isBlank(accountName)) {
-                Id accountId = resolveAccountByName(accountName);
-                fieldDataMap.put('Account__c', accountId);
-            }
-        }
-        
-        // Resolve Contact__c for Program_Candidate__c
-        if (obj == 'program_candidate__c' && fieldDataMap.containsKey('_contactNameOrEmail')) {
-            String contactNameOrEmail = String.valueOf(fieldDataMap.get('_contactNameOrEmail'));
-            fieldDataMap.remove('_contactNameOrEmail');
-            
-            // Check if accountName is also provided for scoping
-            String accountNameForScope = null;
-            if (fieldDataMap.containsKey('_accountName')) {
-                accountNameForScope = String.valueOf(fieldDataMap.get('_accountName'));
-            }
-            
-            if (!String.isBlank(contactNameOrEmail)) {
-                Id contactId = resolveContactByNameOrEmail(contactNameOrEmail, accountNameForScope);
-                fieldDataMap.put('Contact__c', contactId);
-            }
-        }
-        
-        // Resolve Account__c for Program_Candidate__c
-        if (obj == 'program_candidate__c' && fieldDataMap.containsKey('_accountName')) {
-            String accountName = String.valueOf(fieldDataMap.get('_accountName'));
-            fieldDataMap.remove('_accountName');
-            
-            if (!String.isBlank(accountName)) {
-                Id accountId = resolveAccountByName(accountName);
-                fieldDataMap.put('Account__c', accountId);
-            }
-        }
     }
     
     /**
@@ -1484,6 +1268,7 @@ public without sharing class AFUniversalCrmRecordAction {
         String escapedName = String.escapeSingleQuotes(accountName);
         
         // Query for up to 6 matches to detect ambiguity (limit 5 for candidates + 1 to know if more exist)
+        // Try exact match first
         List<Account> accounts = [
             SELECT Id, Name, BillingCity, BillingState, Phone, Industry
             FROM Account 
@@ -1491,6 +1276,19 @@ public without sharing class AFUniversalCrmRecordAction {
             ORDER BY LastModifiedDate DESC 
             LIMIT 6
         ];
+        
+        // FALLBACK: If no exact match, try fuzzy match with LIKE
+        if (accounts.isEmpty()) {
+            System.debug(LoggingLevel.INFO, 'AFUniversalCrmRecordAction: No exact account match, trying fuzzy match for: ' + accountName);
+            String likePattern = '%' + escapedName + '%';
+            accounts = [
+                SELECT Id, Name, BillingCity, BillingState, Phone, Industry
+                FROM Account 
+                WHERE Name LIKE :likePattern 
+                ORDER BY LastModifiedDate DESC 
+                LIMIT 6
+            ];
+        }
         
         if (accounts.isEmpty()) {
             // Get field metadata for Account
@@ -1592,7 +1390,7 @@ public without sharing class AFUniversalCrmRecordAction {
         // Try name match with optional account filter
         String likePattern = '%' + searchTerm + '%';
         if (!String.isBlank(accountSearchTerm)) {
-            // Search with account filter
+            // Search with account filter first
             String accountLikePattern = '%' + accountSearchTerm + '%';
             contacts = [
                 SELECT Id, Name, Email, Phone, Account.Name, Title, Department
@@ -1604,6 +1402,21 @@ public without sharing class AFUniversalCrmRecordAction {
                 ORDER BY LastModifiedDate DESC 
                 LIMIT 6
             ];
+            
+            // FALLBACK: If no contact found at specified account, search without account filter
+            // This handles cases where user mentions meeting at Account A with Contact from Account B
+            if (contacts.isEmpty()) {
+                System.debug(LoggingLevel.INFO, 'AFUniversalCrmRecordAction: Contact not found at specified account, searching without account filter');
+                contacts = [
+                    SELECT Id, Name, Email, Phone, Account.Name, Title, Department
+                    FROM Contact 
+                    WHERE Name LIKE :likePattern
+                       OR FirstName LIKE :likePattern
+                       OR LastName LIKE :likePattern
+                    ORDER BY LastModifiedDate DESC 
+                    LIMIT 6
+                ];
+            }
         } else {
             contacts = [
                 SELECT Id, Name, Email, Phone, Account.Name, Title, Department
@@ -2066,39 +1879,6 @@ public without sharing class AFUniversalCrmRecordAction {
                     }
                 }
             }
-            when 'lead' {
-                String lastName = fieldDataMap.containsKey('LastName') ? String.valueOf(fieldDataMap.get('LastName')) : null;
-                String company = fieldDataMap.containsKey('Company') ? String.valueOf(fieldDataMap.get('Company')) : null;
-                String email = fieldDataMap.containsKey('Email') ? String.valueOf(fieldDataMap.get('Email')) : null;
-                
-                // Prefer email if provided (typically unique)
-                if (!String.isBlank(email)) {
-                    List<Lead> leads = [
-                        SELECT Id FROM Lead
-                        WHERE Email = :email
-                        ORDER BY LastModifiedDate DESC
-                        LIMIT 1
-                    ];
-                    resolvedId = leads.isEmpty() ? null : leads[0].Id;
-                    if (resolvedId != null) {
-                        System.debug(LoggingLevel.INFO, 'AFUniversalCrmRecordAction: Resolved Lead by Email to ID: ' + resolvedId);
-                    }
-                }
-                
-                // Fallback: LastName + Company
-                if (resolvedId == null && !String.isBlank(lastName) && !String.isBlank(company)) {
-                    List<Lead> leads = [
-                        SELECT Id FROM Lead
-                        WHERE LastName = :lastName AND Company = :company
-                        ORDER BY LastModifiedDate DESC
-                        LIMIT 1
-                    ];
-                    resolvedId = leads.isEmpty() ? null : leads[0].Id;
-                    if (resolvedId != null) {
-                        System.debug(LoggingLevel.INFO, 'AFUniversalCrmRecordAction: Resolved Lead by LastName + Company to ID: ' + resolvedId);
-                    }
-                }
-            }
             when 'opportunity' {
                 if (fieldDataMap.containsKey('Name')) {
                     String oppName = String.valueOf(fieldDataMap.get('Name'));
@@ -2191,27 +1971,15 @@ public without sharing class AFUniversalCrmRecordAction {
                 for (Object item : filterList) {
                     if (item instanceof Map<String, Object>) {
                         Map<String, Object> filterMap = (Map<String, Object>) item;
-                        
-                        // Check if it's the structured format: {"fieldApiName": "...", "value": "..."}
-                        if (filterMap.containsKey('fieldApiName') && filterMap.containsKey('value')) {
-                            Filter f = new Filter();
+                        Filter f = new Filter();
+                        if (filterMap.containsKey('fieldApiName')) {
                             f.fieldApiName = String.valueOf(filterMap.get('fieldApiName'));
-                            f.value = String.valueOf(filterMap.get('value'));
-                            if (!String.isBlank(f.fieldApiName) && !String.isBlank(f.value)) {
-                                result.add(f);
-                            }
                         }
-                        // Handle simple object format in array: {"Account__c": "Omega Technologies"}
-                        else {
-                            for (String key : filterMap.keySet()) {
-                                Object value = filterMap.get(key);
-                                if (value != null && !String.isBlank(String.valueOf(value))) {
-                                    Filter f = new Filter();
-                                    f.fieldApiName = key;
-                                    f.value = String.valueOf(value);
-                                    result.add(f);
-                                }
-                            }
+                        if (filterMap.containsKey('value')) {
+                            f.value = String.valueOf(filterMap.get('value'));
+                        }
+                        if (!String.isBlank(f.fieldApiName) && !String.isBlank(f.value)) {
+                            result.add(f);
                         }
                     }
                 }
@@ -2221,33 +1989,16 @@ public without sharing class AFUniversalCrmRecordAction {
             // If it's a single object
             else if (parsed instanceof Map<String, Object>) {
                 Map<String, Object> filterMap = (Map<String, Object>) parsed;
-                
-                // Check if it's the structured format: {"fieldApiName": "...", "value": "..."}
-                if (filterMap.containsKey('fieldApiName') && filterMap.containsKey('value')) {
-                    Filter f = new Filter();
+                Filter f = new Filter();
+                if (filterMap.containsKey('fieldApiName')) {
                     f.fieldApiName = String.valueOf(filterMap.get('fieldApiName'));
-                    f.value = String.valueOf(filterMap.get('value'));
-                    if (!String.isBlank(f.fieldApiName) && !String.isBlank(f.value)) {
-                        System.debug(LoggingLevel.INFO, 'AFUniversalCrmRecordAction: Parsed single filter from JSON object (structured format)');
-                        return new List<Filter>{ f };
-                    }
                 }
-                // Handle simple object format: {"Account__c": "Omega Technologies", "Status__c": "Shipped"}
-                else {
-                    List<Filter> result = new List<Filter>();
-                    for (String key : filterMap.keySet()) {
-                        Object value = filterMap.get(key);
-                        if (value != null && !String.isBlank(String.valueOf(value))) {
-                            Filter f = new Filter();
-                            f.fieldApiName = key;
-                            f.value = String.valueOf(value);
-                            result.add(f);
-                        }
-                    }
-                    if (!result.isEmpty()) {
-                        System.debug(LoggingLevel.INFO, 'AFUniversalCrmRecordAction: Parsed ' + result.size() + ' filters from JSON object (simple format)');
-                        return result;
-                    }
+                if (filterMap.containsKey('value')) {
+                    f.value = String.valueOf(filterMap.get('value'));
+                }
+                if (!String.isBlank(f.fieldApiName) && !String.isBlank(f.value)) {
+                    System.debug(LoggingLevel.INFO, 'AFUniversalCrmRecordAction: Parsed single filter from JSON object');
+                    return new List<Filter>{ f };
                 }
             }
         } catch (Exception e) {
@@ -2335,99 +2086,18 @@ public without sharing class AFUniversalCrmRecordAction {
      */
     private static List<String> buildFilterConditions(
         List<Filter> filters,
-        Map<String, Schema.SObjectField> fieldMap,
-        String objectApiName
+        Map<String, Schema.SObjectField> fieldMap
     ) {
         List<String> conditions = new List<String>();
         
         if (filters == null || filters.isEmpty()) {
             return conditions;
-        }
+            }
         
         for (Filter f : filters) {
-            if (f != null && !String.isBlank(f.fieldApiName) && fieldMap.containsKey(f.fieldApiName)) {
-                String fieldApiName = f.fieldApiName;
-                String value = f.value;
-                
-                // Special handling for lookup fields on CustomerOrders__c
-                if (objectApiName != null && objectApiName.toLowerCase() == 'customerorders__c') {
-                    // Handle Account__c lookup - resolve name to ID
-                    if (fieldApiName == 'Account__c' && !String.isBlank(value)) {
-                        try {
-                            // Check if value is already an ID (starts with 001 and is 15/18 chars)
-                            if (value.length() == 15 || value.length() == 18) {
-                                try {
-                                    Id testId = Id.valueOf(value);
-                                    if (String.valueOf(testId).startsWith('001')) {
-                                        // It's already an ID, use it directly
-                                        String escapedValue = String.escapeSingleQuotes(value);
-                                        conditions.add(fieldApiName + ' = \'' + escapedValue + '\'');
-                                        continue;
-                                    }
-                                } catch (Exception e) {
-                                    // Not a valid ID, continue with name resolution
-                                }
-                            }
-                            
-                            // Resolve account name to ID
-                            Id accountId = resolveAccountByName(value);
-                            if (accountId != null) {
-                                String escapedAccountId = String.escapeSingleQuotes(String.valueOf(accountId));
-                                conditions.add(fieldApiName + ' = \'' + escapedAccountId + '\'');
-                                continue;
-                            }
-                        } catch (Exception e) {
-                            System.debug(LoggingLevel.WARN, 'AFUniversalCrmRecordAction: Could not resolve Account name "' + value + '" in filter: ' + e.getMessage());
-                            // If resolution fails (e.g., ambiguous or not found), skip this filter
-                            // This prevents incorrect queries
-                            continue;
-                        }
-                    }
-                    // Handle Contact__c lookup - resolve name/email to ID
-                    else if (fieldApiName == 'Contact__c' && !String.isBlank(value)) {
-                        try {
-                            // Check if value is already an ID (starts with 003 and is 15/18 chars)
-                            if (value.length() == 15 || value.length() == 18) {
-                                try {
-                                    Id testId = Id.valueOf(value);
-                                    if (String.valueOf(testId).startsWith('003')) {
-                                        // It's already an ID, use it directly
-                                        String escapedValue = String.escapeSingleQuotes(value);
-                                        conditions.add(fieldApiName + ' = \'' + escapedValue + '\'');
-                                        continue;
-                                    }
-                                } catch (Exception e) {
-                                    // Not a valid ID, continue with name/email resolution
-                                }
-                            }
-                            
-                            // Try to find accountName in other filters for scoping
-                            String accountNameForScope = null;
-                            for (Filter otherFilter : filters) {
-                                if (otherFilter != null && otherFilter.fieldApiName == 'Account__c' && !String.isBlank(otherFilter.value)) {
-                                    accountNameForScope = otherFilter.value;
-                                    break;
-                                }
-                            }
-                            
-                            // Resolve contact name/email to ID
-                            Id contactId = resolveContactByNameOrEmail(value, accountNameForScope);
-                            if (contactId != null) {
-                                String escapedContactId = String.escapeSingleQuotes(String.valueOf(contactId));
-                                conditions.add(fieldApiName + ' = \'' + escapedContactId + '\'');
-                                continue;
-                            }
-                        } catch (Exception e) {
-                            System.debug(LoggingLevel.WARN, 'AFUniversalCrmRecordAction: Could not resolve Contact name/email "' + value + '" in filter: ' + e.getMessage());
-                            // If resolution fails, skip this filter
-                            continue;
-                        }
-                    }
-                }
-                
-                // For all other fields, use direct value comparison
-                String escapedValue = String.escapeSingleQuotes(value);
-                conditions.add(fieldApiName + ' = \'' + escapedValue + '\'');
+                if (f != null && !String.isBlank(f.fieldApiName) && fieldMap.containsKey(f.fieldApiName)) {
+                    String escapedValue = String.escapeSingleQuotes(f.value);
+                    conditions.add(f.fieldApiName + ' = \'' + escapedValue + '\'');
             }
         }
         
@@ -2454,19 +2124,14 @@ public without sharing class AFUniversalCrmRecordAction {
             addLikeCondition('BillingStreet', likePattern, fieldMap, orConditions);
             addLikeCondition('BillingCity', likePattern, fieldMap, orConditions);
             addLikeCondition('BillingState', likePattern, fieldMap, orConditions);
-            orConditions.add('Account__r.Name LIKE ' + '%' + escapedTerm + '%');
-            orConditions.add('Contact__r.Name LIKE ' + '%' + escapedTerm + '%');
             addLikeCondition('BillingPostalCode', likePattern, fieldMap, orConditions);
         } else if (obj == 'contact') {
+            // Name is the compound full name field - critical for "Joe Dennis" type searches
+            addLikeCondition('Name', likePattern, fieldMap, orConditions);
             addLikeCondition('FirstName', likePattern, fieldMap, orConditions);
             addLikeCondition('LastName', likePattern, fieldMap, orConditions);
             addLikeCondition('Email', likePattern, fieldMap, orConditions);
             addLikeCondition('Phone', likePattern, fieldMap, orConditions);
-        } else if (obj == 'lead') {
-            // Prioritize name, email, and company for Lead search
-            addLikeCondition('Name', likePattern, fieldMap, orConditions);
-            addLikeCondition('Email', likePattern, fieldMap, orConditions);
-            addLikeCondition('Company', likePattern, fieldMap, orConditions);
         } else if (obj == 'case') {
             addLikeCondition('CaseNumber', likePattern, fieldMap, orConditions);
             addLikeCondition('Subject', likePattern, fieldMap, orConditions);
@@ -2474,7 +2139,9 @@ public without sharing class AFUniversalCrmRecordAction {
         } else if (obj == 'opportunity') {
             addLikeCondition('Name', likePattern, fieldMap, orConditions);
             addLikeCondition('StageName', likePattern, fieldMap, orConditions);
-            addLikeCondition('Description', likePattern, fieldMap, orConditions);
+            addLikeCondition('NextStep', likePattern, fieldMap, orConditions);
+            // Also search by Account name for better matching
+            orConditions.add('Account.Name LIKE \'' + likePattern + '\'');
         } else if (obj == 'task') {
             addLikeCondition('Subject', likePattern, fieldMap, orConditions);
             addLikeCondition('Description', likePattern, fieldMap, orConditions);
@@ -2488,25 +2155,40 @@ public without sharing class AFUniversalCrmRecordAction {
             addLikeCondition('Order_Number__c', likePattern, fieldMap, orConditions);
             addLikeCondition('PO_Number__c', likePattern, fieldMap, orConditions);
             addLikeCondition('Status__c', likePattern, fieldMap, orConditions);
-            orConditions.add('Account__r.Name LIKE ' + likePattern);
-            orConditions.add('Contact__r.Name LIKE ' + likePattern);
+            orConditions.add('Account__r.Name LIKE \'' + likePattern + '\'');
+            orConditions.add('Contact__r.Name LIKE \'' + likePattern + '\'');
         } else if (obj == 'customer_order_line_item__c') {
             addLikeCondition('Product_Name__c', likePattern, fieldMap, orConditions);
             addLikeCondition('SKU__c', likePattern, fieldMap, orConditions);
-        } else if (obj == 'potential_adverse_event__c') {
+        } else if (obj == 'diagnostic_test_order__c') {
+            // Diagnostic Test Order search - supports patient name, order numbers, tracking, physician
             addLikeCondition('Name', likePattern, fieldMap, orConditions);
-            addLikeCondition('Product_Name__c', likePattern, fieldMap, orConditions);
-            addLikeCondition('Product_Lot_Number__c', likePattern, fieldMap, orConditions);
-            addLikeCondition('Account_Number__c', likePattern, fieldMap, orConditions);
-            addLikeCondition('Customer_Email__c', likePattern, fieldMap, orConditions);
-            addLikeCondition('Reporting_Party_Email__c', likePattern, fieldMap, orConditions);
-            addLikeCondition('Reporting_Party_Name__c', likePattern, fieldMap, orConditions);
-            addLikeCondition('Name_of_Submitter__c', likePattern, fieldMap, orConditions);
+            addLikeCondition('Order_Number__c', likePattern, fieldMap, orConditions);
+            addLikeCondition('Requisition_Number__c', likePattern, fieldMap, orConditions);
+            addLikeCondition('Lab_Reference_Number__c', likePattern, fieldMap, orConditions);
+            addLikeCondition('Tracking_Number__c', likePattern, fieldMap, orConditions);
+            addLikeCondition('Physician_Name__c', likePattern, fieldMap, orConditions);
+            addLikeCondition('Test_Name__c', likePattern, fieldMap, orConditions);
+            addLikeCondition('Test_Provider__c', likePattern, fieldMap, orConditions);
+            orConditions.add('Account__r.Name LIKE \'' + likePattern + '\'');
+            orConditions.add('Contact__r.Name LIKE \'' + likePattern + '\'');
         } else if (obj == 'program_candidate__c') {
-            // Simplified search: FirstName, LastName, Email only
+            // Program Candidate search - supports patient name, email, program name
+            addLikeCondition('Name', likePattern, fieldMap, orConditions);
             addLikeCondition('FirstName__c', likePattern, fieldMap, orConditions);
             addLikeCondition('LastName__c', likePattern, fieldMap, orConditions);
             addLikeCondition('Email__c', likePattern, fieldMap, orConditions);
+            addLikeCondition('Phone__c', likePattern, fieldMap, orConditions);
+            addLikeCondition('Program_Name__c', likePattern, fieldMap, orConditions);
+            addLikeCondition('Insurance_Provider__c', likePattern, fieldMap, orConditions);
+            
+            // Handle "FirstName LastName" pattern - split and search both fields
+            List<String> nameParts = searchTerm.trim().split('\\s+');
+            if (nameParts.size() >= 2) {
+                String firstName = String.escapeSingleQuotes(nameParts[0]);
+                String lastName = String.escapeSingleQuotes(nameParts[nameParts.size() - 1]);
+                orConditions.add('(FirstName__c LIKE \'%' + firstName + '%\' AND LastName__c LIKE \'%' + lastName + '%\')');
+            }
         }
         
         return orConditions.isEmpty() ? '' : String.join(orConditions, ' OR ');
@@ -2573,14 +2255,6 @@ public without sharing class AFUniversalCrmRecordAction {
             when 'contact' {
                 required.add('LastName');
             }
-            when 'lead' {
-                // Standard Salesforce Lead requirements
-                required.add('LastName');
-                required.add('Company');
-            }
-            when 'program_candidate__c' {
-                // No required fields - all fields are optional
-            }
             when 'case' {
                 required.add('Subject');
             }
@@ -2622,14 +2296,12 @@ public without sharing class AFUniversalCrmRecordAction {
         Map<String, List<String>> commonFields = new Map<String, List<String>>{
             'account' => new List<String>{'Industry', 'BillingCity', 'BillingState', 'Phone', 'Website', 'Description', 'AnnualRevenue', 'NumberOfEmployees'},
             'contact' => new List<String>{'FirstName', 'Email', 'Phone', 'Title', 'Department', 'MailingCity', 'MailingState'},
-            'lead' => new List<String>{'Company', 'Email', 'Phone', 'Title', 'LeadSource', 'Status', 'Rating', 'Industry'},
             'case' => new List<String>{'Status', 'Priority', 'Type', 'Origin', 'Description'},
             'opportunity' => new List<String>{'Amount', 'Description', 'Type', 'LeadSource'},
             'task' => new List<String>{'Priority', 'ActivityDate', 'Description'},
             'meeting__c' => new List<String>{'Meeting_Type__c', 'Meeting_Outcome__c', 'Description__c', 'Product_Discussed__c', 'Attendees_Count__c'},
             'customerorders__c' => new List<String>{'Status__c', 'Order_Date__c', 'Priority__c', 'Requested_Delivery_Date__c', 'Shipping_Method__c', 'Order_Notes__c', 'PO_Number__c'},
-            'customer_order_line_item__c' => new List<String>{'SKU__c', 'Fulfillment_Notes__c'},
-            'program_candidate__c' => new List<String>{'Insurance_Provider__c', 'Insurance_Policy_Number__c', 'Insurance_Group_Number__c', 'Household_Size__c', 'Annual_Income__c', 'Preferred_Contact_Method__c', 'Language_Preference__c', 'Street__c'}
+            'customer_order_line_item__c' => new List<String>{'SKU__c', 'Fulfillment_Notes__c'}
         };
         
         List<String> fieldsForObject = commonFields.get(obj);
@@ -2768,14 +2440,6 @@ public without sharing class AFUniversalCrmRecordAction {
                     throw new ActionException('To create a Contact, the LastName field is required.');
                 }
             }
-            when 'lead' {
-                if (!hasValidField(fieldData, 'LastName')) {
-                    throw new ActionException('To create a Lead, the LastName field is required.');
-                }
-                if (!hasValidField(fieldData, 'Company')) {
-                    throw new ActionException('To create a Lead, the Company field is required.');
-                }
-            }
             when 'case' {
                 if (!hasValidField(fieldData, 'Subject')) {
                     throw new ActionException('To create a Case, the Subject field is required.');
@@ -2810,9 +2474,6 @@ public without sharing class AFUniversalCrmRecordAction {
                 if (!hasValidField(fieldData, 'Unit_Price__c')) {
                     throw new ActionException('To create a Line Item, the Unit_Price__c field is required.');
                 }
-            }
-            when 'program_candidate__c' {
-                // No required fields - all fields are optional
             }
         }
     }
@@ -2946,6 +2607,21 @@ public without sharing class AFUniversalCrmRecordAction {
      * Custom exception class
      */
     public class ActionException extends Exception {}
+    
+    /**
+     * Normalize JSON string to handle common LLM mistakes like using single quotes instead of double quotes.
+     * JSON spec requires double quotes, but LLMs often generate Python-style single quotes.
+     */
+    private static String normalizeJsonQuotes(String jsonStr) {
+        if (String.isBlank(jsonStr)) {
+            return jsonStr;
+        }
+        // Replace single quotes with double quotes for JSON keys and string values
+        // This handles: {'key': 'value'} -> {"key": "value"}
+        // Be careful not to replace apostrophes inside strings - this is a simple fix
+        // that works for the common case of LLM-generated JSON
+        return jsonStr.replace('\'', '"');
+    }
     
     /**
      * Exception for missing parent records with field metadata
@@ -3162,7 +2838,8 @@ public without sharing class AFUniversalCrmRecordAction {
         try {
             // Add new line items
             if (!String.isBlank(addLineItemsJson)) {
-                List<Object> addList = (List<Object>) JSON.deserializeUntyped(addLineItemsJson);
+                String normalizedAddJson = normalizeJsonQuotes(addLineItemsJson);
+                List<Object> addList = (List<Object>) JSON.deserializeUntyped(normalizedAddJson);
                 List<Customer_Order_Line_Item__c> lineItemsToInsert = new List<Customer_Order_Line_Item__c>();
                 
                 for (Object itemObj : addList) {
@@ -3190,7 +2867,9 @@ public without sharing class AFUniversalCrmRecordAction {
             
             // Update existing line items
             if (!String.isBlank(updateLineItemsJson)) {
-                List<Object> updateList = (List<Object>) JSON.deserializeUntyped(updateLineItemsJson);
+                String normalizedUpdateJson = normalizeJsonQuotes(updateLineItemsJson);
+                System.debug(LoggingLevel.INFO, 'AFUniversalCrmRecordAction: Normalized updateLineItemsJson: ' + normalizedUpdateJson);
+                List<Object> updateList = (List<Object>) JSON.deserializeUntyped(normalizedUpdateJson);
                 List<Customer_Order_Line_Item__c> lineItemsToUpdate = new List<Customer_Order_Line_Item__c>();
                 
                 for (Object itemObj : updateList) {
@@ -3225,7 +2904,8 @@ public without sharing class AFUniversalCrmRecordAction {
             
             // Delete line items
             if (!String.isBlank(deleteLineItemIds)) {
-                List<Object> deleteList = (List<Object>) JSON.deserializeUntyped(deleteLineItemIds);
+                String normalizedDeleteJson = normalizeJsonQuotes(deleteLineItemIds);
+                List<Object> deleteList = (List<Object>) JSON.deserializeUntyped(normalizedDeleteJson);
                 List<Id> idsToDelete = new List<Id>();
                 
                 for (Object idObj : deleteList) {

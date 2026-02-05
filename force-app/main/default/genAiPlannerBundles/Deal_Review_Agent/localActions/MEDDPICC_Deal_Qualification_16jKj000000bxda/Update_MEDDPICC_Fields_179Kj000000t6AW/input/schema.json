@@ -1,0 +1,49 @@
+{
+  "required" : [ "opportunityId", "updatesJson" ],
+  "unevaluatedProperties" : false,
+  "properties" : {
+    "consolidateWithExisting" : {
+      "title" : "Consolidate with Existing",
+      "description" : "If true, new text content will be intelligently merged with existing content. If false, existing content will be replaced. Default: true.",
+      "lightning:type" : "lightning__booleanType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : false
+    },
+    "newCloseDate" : {
+      "title" : "New Close Date",
+      "description" : "Optional. If the conversation reveals a new target close date, specify it in YYYY-MM-DD format. Only set this when user confirms or provides explicit timeline. Example: \"2026-03-31\"",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : false
+    },
+    "newNextStep" : {
+      "title" : "New Next Step",
+      "description" : "Optional. The next action item or milestone for this deal. Capture specific next steps discussed in the conversation. Examples: \"Schedule demo with IT team\", \"Send proposal by Friday\", \"Get legal review of MSA\", \"Follow up with CFO after budget meeting\". Update this when the rep mentions upcoming actions or when you identify a logical next step based on the deal stage.",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : false
+    },
+    "newStageName" : {
+      "title" : "New Stage Name",
+      "description" : "Optional. If the conversation suggests the deal should move to a different stage, specify the new stage. Valid values: Qualification, Discovery, Proposal/Quote, Negotiation. Only set this when user confirms they want to change the stage. Example: \"Negotiation\"",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : false
+    },
+    "opportunityId" : {
+      "title" : "Opportunity ID",
+      "description" : "REQUIRED. The ID of the opportunity being reviewed. This should be passed from the Deal Review UI context.",
+      "lightning:type" : "lightning__recordIdType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : false
+    },
+    "updatesJson" : {
+      "title" : "Updates JSON",
+      "description" : "JSON object containing MEDDPICC field updates. Format: {\"metrics\": {\"text\": \"content\", \"score\": 4}, \"champion\": {\"text\": \"content\", \"score\": 3}}. Dimension keys: metrics, economic_buyer, decision_criteria, decision_process, paper_process, identify_pain, champion, competition. Each dimension has \"text\" (string content) and \"score\" (integer 1-5). Only include dimensions that need updating.",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : false
+    }
+  },
+  "lightning:type" : "lightning__objectType"
+}

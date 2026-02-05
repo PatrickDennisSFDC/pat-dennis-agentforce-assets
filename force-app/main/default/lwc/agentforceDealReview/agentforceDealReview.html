@@ -1,0 +1,535 @@
+<template>
+    <div class={containerClass}>
+        <!-- HEADER -->
+        <header class="deal-review-header">
+            <div class="header-left">
+                <lightning-icon icon-name="utility:agent_astro" size="medium" class="agentforce-icon"></lightning-icon>
+                <h1>Agentforce Deal Review</h1>
+            </div>
+            <div class="header-right">
+                <template if:true={hasChanges}>
+                    <lightning-badge label="Unsaved Changes" class="changes-badge"></lightning-badge>
+                </template>
+                <lightning-button-icon
+                    icon-name="utility:settings"
+                    alternative-text="Settings"
+                    variant="border-filled"
+                    onclick={toggleSettings}
+                    class="settings-btn"
+                ></lightning-button-icon>
+            </div>
+        </header>
+
+        <!-- SETTINGS MODAL -->
+        <template if:true={showSettings}>
+            <section class="settings-modal" aria-modal="true" role="dialog">
+                <div class="settings-backdrop" onclick={toggleSettings}></div>
+                <div class="settings-content">
+                    <header class="settings-header">
+                        <h2>Settings</h2>
+                        <lightning-button-icon
+                            icon-name="utility:close"
+                            alternative-text="Close"
+                            onclick={toggleSettings}
+                        ></lightning-button-icon>
+                    </header>
+                    <div class="settings-body">
+                        <!-- Coaching Intensity -->
+                        <div class="settings-section">
+                            <h3>Coaching Style</h3>
+                            <div class="coaching-slider-container">
+                                <div class="coaching-labels">
+                                    <span class="coaching-label-left">Supportive</span>
+                                    <span class="coaching-label-right">Challenging</span>
+                                </div>
+                                <input 
+                                    type="range" 
+                                    min="1" 
+                                    max="5" 
+                                    value={coachingIntensity} 
+                                    onchange={handleCoachingIntensityChange}
+                                    class="coaching-slider"
+                                >
+                                <div class="coaching-value">{coachingIntensityLabel}</div>
+                            </div>
+                            <p class="coaching-description">{coachingDescription}</p>
+                        </div>
+                        
+                        <!-- Voice Settings -->
+                        <div class="settings-section">
+                            <h3>Voice Settings</h3>
+                            <lightning-combobox
+                                name="voice"
+                                label="AI Voice"
+                                value={selectedVoice}
+                                options={voiceOptions}
+                                onchange={handleVoiceChange}
+                            ></lightning-combobox>
+                            
+                            <div class="slider-group">
+                                <label>Stability: {stabilityPercent}%</label>
+                                <input type="range" min="0" max="100" value={stabilityValue} onchange={handleStabilityChange}>
+                            </div>
+                            
+                            <div class="slider-group">
+                                <label>Speed: {speedPercent}x</label>
+                                <input type="range" min="50" max="150" value={speedValue} onchange={handleSpeedChange}>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </template>
+        
+        <!-- FEEDBACK MODAL -->
+        <template if:true={showFeedbackModal}>
+            <section class="feedback-modal" aria-modal="true" role="dialog">
+                <div class="feedback-backdrop" onclick={closeFeedbackModal}></div>
+                <div class="feedback-content">
+                    <header class="feedback-header">
+                        <h2>How was this session?</h2>
+                        <lightning-button-icon
+                            icon-name="utility:close"
+                            alternative-text="Close"
+                            onclick={closeFeedbackModal}
+                        ></lightning-button-icon>
+                    </header>
+                    <div class="feedback-body">
+                        <div class="feedback-rating">
+                            <button 
+                                class={thumbsUpClass} 
+                                onclick={handleThumbsUp}
+                                aria-label="Good session"
+                            >
+                                <lightning-icon icon-name="utility:like" size="large"></lightning-icon>
+                                <span>Helpful</span>
+                            </button>
+                            <button 
+                                class={thumbsDownClass} 
+                                onclick={handleThumbsDown}
+                                aria-label="Bad session"
+                            >
+                                <lightning-icon icon-name="utility:dislike" size="large"></lightning-icon>
+                                <span>Not Helpful</span>
+                            </button>
+                        </div>
+                        <lightning-textarea
+                            label="Additional feedback (optional)"
+                            placeholder="What could be improved? What worked well?"
+                            value={feedbackComment}
+                            onchange={handleFeedbackCommentChange}
+                            max-length="1000"
+                        ></lightning-textarea>
+                    </div>
+                    <footer class="feedback-footer">
+                        <lightning-button
+                            label="Skip"
+                            onclick={skipFeedback}
+                        ></lightning-button>
+                        <lightning-button
+                            label="Submit Feedback"
+                            variant="brand"
+                            onclick={submitFeedback}
+                            disabled={isFeedbackSubmitDisabled}
+                        ></lightning-button>
+                    </footer>
+                </div>
+            </section>
+        </template>
+
+        <!-- MAIN CONTENT -->
+        <main class="deal-review-main">
+            <!-- LEFT PANEL: Opportunity List -->
+            <section class="panel panel-left">
+                <div class="panel-header">
+                    <h2>Open Opportunities</h2>
+                    <span class="record-count">{totalRecords} deals</span>
+                </div>
+                
+                <!-- Filters -->
+                <div class="filter-section">
+                    <lightning-combobox
+                        name="closeDateFilter"
+                        label="Close Date"
+                        value={closeDateFilter}
+                        options={closeDateOptions}
+                        onchange={handleCloseDateFilterChange}
+                        variant="label-hidden"
+                        class="filter-combobox"
+                    ></lightning-combobox>
+                    <lightning-combobox
+                        name="ownerFilter"
+                        label="Owner"
+                        value={ownerFilter}
+                        options={ownerOptions}
+                        onchange={handleOwnerFilterChange}
+                        variant="label-hidden"
+                        class="filter-combobox"
+                    ></lightning-combobox>
+                </div>
+                
+                <div class="opportunity-list">
+                    <template if:true={isLoadingList}>
+                        <div class="loading-spinner">
+                            <lightning-spinner alternative-text="Loading"></lightning-spinner>
+                        </div>
+                    </template>
+                    <template if:false={isLoadingList}>
+                        <template for:each={opportunities} for:item="opp">
+                            <div 
+                                key={opp.Id}
+                                class={opp.itemClass}
+                                data-id={opp.Id}
+                                onclick={handleOpportunityClick}
+                            >
+                                <div class="opp-name">{opp.Name}</div>
+                                <div class="opp-details">
+                                    <span class="opp-amount">{opp.formattedAmount}</span>
+                                    <span class="opp-close">{opp.formattedCloseDate}</span>
+                                </div>
+                                <div class="opp-meta">
+                                    <template if:true={opp.MEDDPICC_Overall_Score__c}>
+                                        <lightning-badge 
+                                            label={opp.scoreLabel}
+                                            class={opp.scoreClass}
+                                        ></lightning-badge>
+                                    </template>
+                                    <span class="opp-account">{opp.Account.Name}</span>
+                                </div>
+                            </div>
+                        </template>
+                    </template>
+                </div>
+                <div class="pagination">
+                    <lightning-button-icon
+                        icon-name="utility:chevronleft"
+                        alternative-text="Previous"
+                        disabled={isPrevDisabled}
+                        onclick={handlePrevPage}
+                    ></lightning-button-icon>
+                    <span class="page-info">{currentPage} / {totalPages}</span>
+                    <lightning-button-icon
+                        icon-name="utility:chevronright"
+                        alternative-text="Next"
+                        disabled={isNextDisabled}
+                        onclick={handleNextPage}
+                    ></lightning-button-icon>
+                </div>
+            </section>
+
+            <!-- CENTER PANEL: Deal Details & MEDDPICC -->
+            <section class="panel panel-center">
+                <template if:false={selectedOpportunity}>
+                    <div class="empty-state">
+                        <lightning-icon icon-name="standard:opportunity" size="large"></lightning-icon>
+                        <h3>Select a deal to review</h3>
+                        <p>Click an opportunity from the list to start your AI-powered deal review.</p>
+                    </div>
+                </template>
+                
+                <template if:true={selectedOpportunity}>
+                    <template if:true={isLoadingDetail}>
+                        <div class="loading-spinner">
+                            <lightning-spinner alternative-text="Loading"></lightning-spinner>
+                        </div>
+                    </template>
+                    <template if:false={isLoadingDetail}>
+                        <div class="deal-detail">
+                            <!-- Deal Header -->
+                            <div class="deal-header">
+                                <h2>{selectedOpportunity.Name}</h2>
+                                <div class="deal-meta">
+                                    <span class="deal-amount">{formattedSelectedAmount}</span>
+                                    <span class="deal-probability">{probabilityDisplay}</span>
+                                    <span class={closeDateClass}>Close: {formattedSelectedCloseDate}</span>
+                                </div>
+                            </div>
+                            
+                            <!-- Opportunity Path -->
+                            <div class={pathContainerClass}>
+                                <div class="opportunity-path">
+                                    <template for:each={stagePathItems} for:item="stage">
+                                        <div key={stage.value} class={stage.itemClass}>
+                                            <span class="stage-label">{stage.label}</span>
+                                        </div>
+                                    </template>
+                                </div>
+                            </div>
+                            
+                            <!-- Description & Next Step - Side by Side -->
+                            <div class="description-nextstep-row">
+                                <!-- Description -->
+                                <div class="description-section">
+                                    <h3>Description</h3>
+                                    <template if:true={isEditingDescription}>
+                                        <lightning-textarea
+                                            value={editedDescription}
+                                            onchange={handleDescriptionChange}
+                                        ></lightning-textarea>
+                                    </template>
+                                    <template if:false={isEditingDescription}>
+                                        <p class="description-text">{descriptionDisplay}</p>
+                                    </template>
+                                </div>
+                                
+                                <!-- Next Step -->
+                                <div class={nextStepContainerClass}>
+                                    <h3>Next Step</h3>
+                                    <div class="next-step-content">
+                                        <lightning-icon icon-name="utility:forward" size="x-small" class="next-step-icon"></lightning-icon>
+                                        <template if:true={hasNextStep}>
+                                            <span>{selectedOpportunity.NextStep}</span>
+                                        </template>
+                                        <template if:false={hasNextStep}>
+                                            <span class="no-next-step">No next step defined</span>
+                                        </template>
+                                    </div>
+                                    <template if:true={nextStepUpdated}>
+                                        <div class="update-indicator">
+                                            <lightning-icon icon-name="utility:sparkles" size="xx-small"></lightning-icon>
+                                            <span>Updated by AI</span>
+                                        </div>
+                                    </template>
+                                </div>
+                            </div>
+
+                            <!-- MEDDPICC Grid -->
+                            <div class="meddpicc-section">
+                                <div class="meddpicc-header">
+                                    <h3>MEDDPICC Qualification</h3>
+                                    <template if:true={selectedOpportunity.MEDDPICC_Overall_Score__c}>
+                                        <div class="overall-score">
+                                            <span class="score-label">Overall:</span>
+                                            <span class={overallScoreClass}>{formattedOverallScore}</span>
+                                        </div>
+                                    </template>
+                                </div>
+                                
+                                <div class="meddpicc-grid">
+                                    <template for:each={meddpiccFields} for:item="field">
+                                        <div key={field.key} class={field.wrapperClass}>
+                                            <div class="field-header">
+                                                <span class="field-name">{field.label}</span>
+                                                <template if:true={field.score}>
+                                                    <span class={field.scoreClass}>{field.score}</span>
+                                                </template>
+                                            </div>
+                                            <template if:true={field.isEditing}>
+                                                <lightning-textarea
+                                                    data-field={field.key}
+                                                    value={field.editValue}
+                                                    onchange={handleFieldEdit}
+                                                ></lightning-textarea>
+                                                <lightning-combobox
+                                                    data-field={field.scoreKey}
+                                                    value={field.editScore}
+                                                    options={scoreOptions}
+                                                    onchange={handleScoreEdit}
+                                                ></lightning-combobox>
+                                            </template>
+                                            <template if:false={field.isEditing}>
+                                                <p class="field-content">{field.displayValue}</p>
+                                            </template>
+                                            <template if:true={field.wasUpdated}>
+                                                <div class="update-indicator">
+                                                    <lightning-icon icon-name="utility:sparkles" size="xx-small"></lightning-icon>
+                                                    <span>Updated by AI</span>
+                                                </div>
+                                            </template>
+                                        </div>
+                                    </template>
+                                </div>
+                            </div>
+
+                            <!-- Action Buttons -->
+                            <div class="action-bar">
+                                <template if:true={hasChanges}>
+                                    <lightning-button
+                                        label="Accept All"
+                                        variant="brand"
+                                        onclick={handleAcceptAll}
+                                        disabled={isSaving}
+                                    ></lightning-button>
+                                    <lightning-button
+                                        label="Edit"
+                                        variant="neutral"
+                                        onclick={handleToggleEdit}
+                                    ></lightning-button>
+                                    <lightning-button
+                                        label="Discard"
+                                        variant="destructive-text"
+                                        onclick={handleDiscardChanges}
+                                    ></lightning-button>
+                                </template>
+                                <template if:true={isEditing}>
+                                    <lightning-button
+                                        label="Save Changes"
+                                        variant="brand"
+                                        onclick={handleSaveEdits}
+                                        disabled={isSaving}
+                                    ></lightning-button>
+                                    <lightning-button
+                                        label="Cancel"
+                                        variant="neutral"
+                                        onclick={handleCancelEdit}
+                                    ></lightning-button>
+                                </template>
+                            </div>
+                        </div>
+                    </template>
+                </template>
+            </section>
+
+            <!-- RIGHT PANEL: Chat Interface -->
+            <section class="panel panel-right">
+                <div class="chat-header">
+                    <div class="chat-title">
+                        <lightning-icon icon-name="utility:agent_astro" size="small" class="chat-agent-icon"></lightning-icon>
+                        <h2>Deal Review Agent</h2>
+                    </div>
+                </div>
+
+                <div class="chat-messages" lwc:ref="chatContainer">
+                    <template if:false={selectedOpportunity}>
+                        <div class="chat-empty">
+                            <p>Select an opportunity to start your AI-powered deal review.</p>
+                        </div>
+                    </template>
+                    <template if:true={selectedOpportunity}>
+                        <template for:each={messages} for:item="msg">
+                            <div key={msg.id} class={msg.wrapperClass}>
+                                <template if:true={msg.isAgent}>
+                                    <lightning-icon icon-name="utility:agent_astro" size="small" class="msg-avatar"></lightning-icon>
+                                </template>
+                                <div class={msg.bubbleClass}>
+                                    <template if:true={msg.isTyping}>
+                                        <div class="typing-indicator">
+                                            <span></span><span></span><span></span>
+                                        </div>
+                                    </template>
+                                    <template if:false={msg.isTyping}>
+                                        {msg.content}
+                                    </template>
+                                </div>
+                                <template if:true={msg.isAgent}>
+                                    <template if:true={msg.canSpeak}>
+                                        <lightning-button-icon
+                                            icon-name={msg.speakIcon}
+                                            alternative-text="Play audio"
+                                            onclick={handlePlayMessage}
+                                            data-id={msg.id}
+                                            class="speak-btn"
+                                            disabled={msg.isPlaying}
+                                        ></lightning-button-icon>
+                                    </template>
+                                </template>
+                            </div>
+                        </template>
+                    </template>
+                </div>
+
+                <div class="chat-input">
+                    <template if:true={selectedOpportunity}>
+                        <!-- Mode Selector -->
+                        <div class="mode-selector-bottom">
+                            <lightning-button-group>
+                                <lightning-button
+                                    label="Text"
+                                    variant={textModeVariant}
+                                    onclick={setTextMode}
+                                ></lightning-button>
+                                <lightning-button
+                                    label="Whisper"
+                                    variant={whisperModeVariant}
+                                    onclick={setWhisperMode}
+                                ></lightning-button>
+                                <lightning-button
+                                    label="Voice"
+                                    variant={voiceModeVariant}
+                                    onclick={setVoiceMode}
+                                ></lightning-button>
+                            </lightning-button-group>
+                        </div>
+                        
+                        <!-- TEXT MODE: Normal textarea -->
+                        <template if:true={isTextMode}>
+                            <div class="input-row">
+                                <lightning-textarea
+                                    placeholder="Type your message..."
+                                    value={userInput}
+                                    onchange={handleInputChange} 
+                                    onkeydown={handleKeyDown}
+                                    disabled={isProcessing}
+                                    class="chat-textarea"
+                                ></lightning-textarea>
+                                <lightning-button-icon
+                                    icon-name="utility:send"
+                                    alternative-text="Send"
+                                    onclick={handleSend}
+                                    variant="brand"
+                                    disabled={isSendDisabled}
+                                    class="send-btn"
+                                ></lightning-button-icon>
+                            </div>
+                        </template>
+                        
+                        <!-- WHISPER/VOICE MODE: Continuous Listening Toggle -->
+                        <template if:true={isVoiceInputMode}>
+                            <template if:false={isListeningActive}>
+                                <!-- Inactive - Click to Start (disabled during processing) -->
+                                <button class={voiceToggleInactiveClass} onclick={toggleListening} disabled={isProcessing}>
+                                    <div class="voice-toggle-icon">
+                                        <template if:true={isProcessing}>
+                                            <lightning-spinner alternative-text="Processing" size="x-small"></lightning-spinner>
+                                        </template>
+                                        <template if:false={isProcessing}>
+                                            <svg viewBox="0 0 24 24" fill="currentColor">
+                                                <path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z"/>
+                                                <path d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z"/>
+                                            </svg>
+                                        </template>
+                                    </div>
+                                    <span class="voice-toggle-label">{voiceButtonLabel}</span>
+                                    <span class="voice-toggle-hint">{voiceModeHint}</span>
+                                </button>
+                            </template>
+                            
+                            <template if:true={isListeningActive}>
+                                <!-- Active - Listening, Speaking, or Processing -->
+                                <div class={voiceActiveClass} onclick={handleVoiceActiveClick}>
+                                    <div class="voice-active-indicator">
+                                        <template if:true={isProcessing}>
+                                            <lightning-spinner alternative-text="Processing" size="small"></lightning-spinner>
+                                        </template>
+                                        <template if:false={isProcessing}>
+                                            <template if:true={isRecording}>
+                                                <div class="pulse-animation">
+                                                    <div class="pulse-ring"></div>
+                                                    <div class="pulse-ring delay-1"></div>
+                                                    <div class="pulse-ring delay-2"></div>
+                                                </div>
+                                            </template>
+                                            <svg viewBox="0 0 24 24" fill="currentColor" class="voice-active-icon">
+                                                <path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z"/>
+                                                <path d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z"/>
+                                            </svg>
+                                        </template>
+                                    </div>
+                                    <span class="voice-active-label">{voiceStatusLabel}</span>
+                                    <span class="voice-active-hint">{voiceActiveHint}</span>
+                                </div>
+                            </template>
+                        </template>
+                    </template>
+                    
+                    <template if:false={selectedOpportunity}>
+                        <div class="input-disabled">
+                            <span>Select an opportunity to chat</span>
+                        </div>
+                    </template>
+                </div>
+            </section>
+        </main>
+    </div>
+</template>
+

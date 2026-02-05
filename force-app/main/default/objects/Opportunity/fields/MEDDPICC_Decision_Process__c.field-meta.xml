@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>MEDDPICC_Decision_Process__c</fullName>
+    <description>MEDDPICC Decision Process: The formal steps and timeline the customer follows to make a purchase decision. Document approval stages, stakeholders involved, and key milestones.</description>
+    <externalId>false</externalId>
+    <inlineHelpText>What is the customer's formal process for making this purchase decision? Document steps, stakeholders, timeline, and approval requirements.</inlineHelpText>
+    <label>MEDDPICC: Decision Process</label>
+    <length>32000</length>
+    <trackTrending>false</trackTrending>
+    <type>LongTextArea</type>
+    <visibleLines>4</visibleLines>
+</CustomField>

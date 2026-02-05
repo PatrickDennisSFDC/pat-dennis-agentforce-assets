@@ -284,7 +284,8 @@ public without sharing class AFProgramCandidateAction {
                     }
                 }
                 
-                AFUniversalCrmRecordAction.Response actionRes = AFUniversalCrmRecordAction.processRequest(actionReq);
+                // Execute with retry logic for transient errors
+                AFUniversalCrmRecordAction.Response actionRes = executeWithRetry(actionReq, op);
                 
                 if (actionRes.success) {
                     res.success = true;
@@ -419,16 +420,20 @@ public without sharing class AFProgramCandidateAction {
                     }
                 } else {
                     res.success = false;
-                    res.errorMessage = actionRes.message != null ? actionRes.message : 'Operation failed.';
+                    // Generate user-friendly, specific error messages
+                    res.errorMessage = generateUserFriendlyError(actionRes.message, op, req);
+                    res.message = res.errorMessage;
                 }
                 
             } catch (AFUniversalCrmRecordAction.ActionException ae) {
                 res.success = false;
-                res.errorMessage = ae.getMessage();
+                res.errorMessage = generateUserFriendlyError(ae.getMessage(), res.operation, req);
+                res.message = res.errorMessage;
                 System.debug(LoggingLevel.ERROR, 'AFProgramCandidateAction: ActionException - ' + ae.getMessage());
             } catch (Exception e) {
                 res.success = false;
-                res.errorMessage = 'Error performing Program Candidate operation: ' + e.getMessage();
+                res.errorMessage = generateUserFriendlyError(e.getMessage(), res.operation, req);
+                res.message = res.errorMessage;
                 System.debug(LoggingLevel.ERROR, 'AFProgramCandidateAction: Exception - ' + e.getMessage());
             }
             
@@ -437,4 +442,129 @@ public without sharing class AFProgramCandidateAction {
         
         return responses;
     }
+    
+    /**
+     * Execute action with automatic retry for transient errors
+     * Retries once for DML/connection errors before returning failure
+     */
+    private static AFUniversalCrmRecordAction.Response executeWithRetry(
+        AFUniversalCrmRecordAction.Request actionReq, 
+        String operation
+    ) {
+        AFUniversalCrmRecordAction.Response actionRes;
+        Integer maxRetries = 1;
+        Integer retryCount = 0;
+        Boolean shouldRetry = true;
+        
+        while (shouldRetry && retryCount <= maxRetries) {
+            actionRes = AFUniversalCrmRecordAction.processRequest(actionReq);
+            
+            if (actionRes.success) {
+                shouldRetry = false;
+            } else {
+                // Check if this is a retryable error
+                String errorMsg = actionRes.message != null ? actionRes.message.toLowerCase() : '';
+                Boolean isRetryable = isRetryableError(errorMsg);
+                
+                if (isRetryable && retryCount < maxRetries) {
+                    retryCount++;
+                    System.debug(LoggingLevel.INFO, 'AFProgramCandidateAction: Retrying ' + operation + ' operation (attempt ' + (retryCount + 1) + ')');
+                    // Small delay before retry (simulated via debug)
+                    System.debug(LoggingLevel.DEBUG, 'AFProgramCandidateAction: Retry delay...');
+                } else {
+                    shouldRetry = false;
+                }
+            }
+        }
+        
+        if (retryCount > 0 && actionRes.success) {
+            System.debug(LoggingLevel.INFO, 'AFProgramCandidateAction: Operation succeeded after ' + retryCount + ' retry(ies)');
+        }
+        
+        return actionRes;
+    }
+    
+    /**
+     * Determine if an error is transient and worth retrying
+     */
+    private static Boolean isRetryableError(String errorMsg) {
+        if (String.isBlank(errorMsg)) return false;
+        
+        // Retryable error patterns
+        return errorMsg.contains('unable to lock row') ||
+               errorMsg.contains('record currently unavailable') ||
+               errorMsg.contains('deadlock') ||
+               errorMsg.contains('timeout') ||
+               errorMsg.contains('connection') ||
+               errorMsg.contains('temporarily unavailable') ||
+               errorMsg.contains('try again');
+    }
+    
+    /**
+     * Generate user-friendly, specific error messages
+     * Avoids generic "there was an issue" messages that frustrate patients
+     */
+    private static String generateUserFriendlyError(String technicalError, String operation, Request req) {
+        if (String.isBlank(technicalError)) {
+            technicalError = 'Unknown error';
+        }
+        
+        String errorLower = technicalError.toLowerCase();
+        
+        // Data validation errors - be specific about what's wrong
+        if (errorLower.contains('invalid email') || errorLower.contains('email format')) {
+            return 'The email address format doesn\'t look quite right. Could you double-check it? It should look like name@example.com.';
+        }
+        if (errorLower.contains('invalid phone') || errorLower.contains('phone format')) {
+            return 'The phone number format doesn\'t look quite right. Please provide a 10-digit phone number.';
+        }
+        if (errorLower.contains('invalid date') || errorLower.contains('date format')) {
+            return 'I couldn\'t understand that date format. Could you provide your date of birth as month/day/year (like 01/15/1990)?';
+        }
+        if (errorLower.contains('required field') || errorLower.contains('missing required')) {
+            return 'I\'m missing some required information. Let me ask you a few more questions to complete your enrollment.';
+        }
+        
+        // Duplicate/existing record errors
+        if (errorLower.contains('duplicate') || errorLower.contains('already exists')) {
+            return 'It looks like we may already have an enrollment for you. Let me check on that - can you confirm your email address?';
+        }
+        
+        // Connection/system errors - reassure data is safe
+        if (errorLower.contains('timeout') || errorLower.contains('connection') || errorLower.contains('unavailable')) {
+            return 'Our system is running a bit slow right now, but don\'t worry - I\'ve saved all the information you\'ve provided. Would you like me to try submitting again, or would you prefer to speak with a representative who can complete this for you?';
+        }
+        
+        // Permission/access errors
+        if (errorLower.contains('permission') || errorLower.contains('access denied') || errorLower.contains('insufficient')) {
+            return 'I\'m having trouble accessing the enrollment system right now. Let me connect you with a patient services representative who can help complete your enrollment. All the information you\'ve shared will be passed along.';
+        }
+        
+        // Record not found (for updates/reads)
+        if (errorLower.contains('not found') || errorLower.contains('no record')) {
+            if (operation == 'find' || operation == 'read') {
+                return 'I couldn\'t find an existing enrollment with that information. Would you like to start a new enrollment?';
+            }
+            return 'I couldn\'t locate that enrollment record. Let me help you start fresh or connect you with a representative.';
+        }
+        
+        // Generic fallback - but still helpful and specific about next steps
+        if (operation == 'create') {
+            return 'I wasn\'t able to submit your enrollment just now, but I\'ve saved all the information you\'ve provided. Would you like me to try again, or would you prefer to speak with a representative who can complete this for you right away?';
+        } else if (operation == 'update') {
+            return 'I wasn\'t able to update your enrollment just now. Would you like me to try again, or would you prefer to speak with a representative?';
+        } else if (operation == 'find') {
+            return 'I\'m having trouble searching our records right now. Could you try providing your information again, or would you like to speak with a representative?';
+        }
+        
+        // Ultimate fallback
+        return 'I ran into a technical issue, but don\'t worry - I can connect you with a patient services representative who can help right away. Would you like me to do that?';
+    }
 }
+
+
+
+
+
+
+

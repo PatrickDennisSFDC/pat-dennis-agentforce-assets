@@ -1,0 +1,139 @@
+{
+  "unevaluatedProperties" : false,
+  "properties" : {
+    "accountName" : {
+      "title" : "Account Name",
+      "description" : "Account name to resolve to Account__c lookup. If provided, system searches for an Account and links the Order to it. IMPORTANT: When the user wants to add or update the account on an order (e.g., \"update the account to Omega Technologies\"), use this parameter with the account name. Do NOT put Account__c in fieldDataJson - use this parameter instead. The system will automatically resolve the account name to an Account ID.",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : false
+    },
+    "addLineItemsJson" : {
+      "title" : "Add Line Items JSON",
+      "description" : "JSON array of NEW line items to add to the order (for update operation). Format: [{\"Product_Name__c\":\"Widget C\",\"Quantity__c\":3,\"Unit_Price__c\":75.00}].",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : false
+    },
+    "aggregateField" : {
+      "title" : "Aggregate Field",
+      "description" : "For aggregate: Field to aggregate. Use \"Id\" for COUNT.",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : false
+    },
+    "aggregateFunction" : {
+      "title" : "Aggregate Function",
+      "description" : "For aggregate: SUM, COUNT, AVG, MIN, MAX. Example: COUNT for \"how many orders\".",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : false
+    },
+    "confirm" : {
+      "title" : "Confirm",
+      "description" : "For create/update: Set to false to preview only. For delete: Set to true to actually delete.",
+      "lightning:type" : "lightning__booleanType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : false
+    },
+    "contactNameOrEmail" : {
+      "title" : "Contact Name or Email",
+      "description" : "Contact name or email to resolve to Contact__c lookup. If provided, system searches for a Contact and links the Order to them. IMPORTANT: When the user wants to add or update the contact on an order (e.g., \"add the contact as Lauren Bailey\" or \"update the contact to Bob Hodges\"), use this parameter with the contact name or email. Do NOT put Contact__c in fieldDataJson - use this parameter instead. The system will automatically resolve the contact name/email to a Contact ID. If multiple contacts match, the system will return candidates for user clarification.",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : false
+    },
+    "dateRangeDays" : {
+      "title" : "Date Range Days",
+      "description" : "For aggregate with LAST_N_DAYS or NEXT_N_DAYS.",
+      "lightning:type" : "lightning__integerType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : false
+    },
+    "dateRangeField" : {
+      "title" : "Date Range Field",
+      "description" : "For aggregate: Date field to filter. Use \"Order_Date__c\" or \"CreatedDate\".",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : false
+    },
+    "dateRangePredefined" : {
+      "title" : "Date Range Predefined",
+      "description" : "For aggregate: TODAY, THIS_WEEK, THIS_MONTH, THIS_QUARTER, etc.",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : false
+    },
+    "deleteLineItemIds" : {
+      "title" : "Delete Line Item IDs",
+      "description" : "JSON array of line item IDs to delete from the order (for update operation). Format: [\"a00xxx...\",\"a00yyy...\"].",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : false
+    },
+    "fieldDataJson" : {
+      "title" : "Field Data JSON",
+      "description" : "JSON string containing Customer Order field data. For create: {\"Name\":\"Q4 2024 Order\",\"Status__c\":\"Draft\",\"Order_Date__c\":\"2024-12-04\"}. For update: {\"Status__c\":\"Shipped\",\"Priority__c\":\"High\"}. For bulk: [{\"Name\":\"Order 1\"},{\"Name\":\"Order 2\"}]. Required field: Name. IMPORTANT: For picklist fields (Status__c, Priority__c, etc.), query availableFieldsJson from a previous read operation to see valid values. Do NOT ask the user for picklist options - query availableFieldsJson to get them automatically. If the user wants to update the Contact or Account on the order, use the contactNameOrEmail or accountName parameters instead of putting Contact__c or Account__c in fieldDataJson.",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : false
+    },
+    "filtersJson" : {
+      "title" : "Filters JSON",
+      "description" : "JSON string of exact-match filters for find operations. Use for precise filtering by field values. Example: {\"Status__c\":\"Shipped\"} or {\"Priority__c\":\"High\"}. Can be combined with searchTerm for refined results. Prefer searchTerm for name-based lookups (account name, order number, contact name).",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : false
+    },
+    "groupByFieldsJson" : {
+      "title" : "Group By Fields JSON",
+      "description" : "For aggregate: JSON array of fields to group by. Example: [\"Status__c\"] for orders by status.",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : false
+    },
+    "lineItemsJson" : {
+      "title" : "Line Items JSON",
+      "description" : "JSON array of line items to create with the order (for create operation). Optional. Format: [{\"Product_Name__c\":\"Widget A\",\"Quantity__c\":10,\"Unit_Price__c\":50.00}]. Each line item requires: Product_Name__c, Quantity__c, Unit_Price__c.",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : false
+    },
+    "operation" : {
+      "title" : "Operation",
+      "description" : "Explicit operation: \"create\", \"read\", \"update\", \"delete\", \"find\", or \"aggregate\". AGGREGATE for order analytics like \"how many orders this month\", \"orders by status\".",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : false
+    },
+    "recordId" : {
+      "title" : "Record ID",
+      "description" : "The Customer ORDER ID (not line item ID). Required for read/update/delete operations on orders. IMPORTANT: When updating line items, this must be the ORDER ID (starts with the order prefix), NOT the line item ID. The line item IDs go in updateLineItemsJson. Example: If order ID is \"a2sKj00000ABC123\" and you want to update line items, use recordId=\"a2sKj00000ABC123\" and updateLineItemsJson=[{\"Id\":\"a2tKj00000XYZ789\",\"Quantity__c\":150}].",
+      "lightning:type" : "lightning__recordIdType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : false
+    },
+    "searchLimit" : {
+      "title" : "Search Limit",
+      "description" : "Maximum number of records to return for find operations (default: 5, max: 20).",
+      "lightning:type" : "lightning__integerType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : false
+    },
+    "searchTerm" : {
+      "title" : "Search Term",
+      "description" : "Text to search for Customer Orders. Searches: Order Name, Order Number, Account Name, Contact Name. Flexible matching with LIKE - spaces and punctuation variations work (e.g., \"ORD 10003\" or \"ORD-10003\" both match). Pass the search term exactly as the user provides it. Examples: \"Plasmosis Inc\" finds orders for that account, \"ORD-10003\" or \"10003\" finds by order number.",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : false
+    },
+    "updateLineItemsJson" : {
+      "title" : "Update Line Items JSON",
+      "description" : "JSON array of line items to update. IMPORTANT: Put the ORDER ID in recordId parameter, and the LINE ITEM IDs here. Format: [{\"Id\":\"<LINE_ITEM_ID>\",\"Quantity__c\":150}]. Example to update 2 line items: recordId=\"a2sKj00000ORDER\" (the order), updateLineItemsJson=[{\"Id\":\"a2tKj00000ITEM1\",\"Quantity__c\":150},{\"Id\":\"a2tKj00000ITEM2\",\"Quantity__c\":150}]. Get line item IDs from a previous read operation on the order.",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : false
+    }
+  },
+  "lightning:type" : "lightning__objectType"
+}

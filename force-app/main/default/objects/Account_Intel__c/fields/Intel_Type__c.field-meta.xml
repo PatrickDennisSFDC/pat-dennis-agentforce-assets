@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Intel_Type__c</fullName>
+    <description>Category of intelligence</description>
+    <externalId>false</externalId>
+    <label>Intel Type</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Support Summary</fullName>
+                <default>false</default>
+                <label>Support Summary</label>
+            </value>
+            <value>
+                <fullName>Upsell Opportunity</fullName>
+                <default>false</default>
+                <label>Upsell Opportunity</label>
+            </value>
+            <value>
+                <fullName>Cross-Sell Opportunity</fullName>
+                <default>false</default>
+                <label>Cross-Sell Opportunity</label>
+            </value>
+            <value>
+                <fullName>Portal Activity</fullName>
+                <default>false</default>
+                <label>Portal Activity</label>
+            </value>
+            <value>
+                <fullName>Industry News</fullName>
+                <default>false</default>
+                <label>Industry News</label>
+            </value>
+            <value>
+                <fullName>Leadership Change</fullName>
+                <default>false</default>
+                <label>Leadership Change</label>
+            </value>
+            <value>
+                <fullName>Contract/Renewal</fullName>
+                <default>false</default>
+                <label>Contract/Renewal</label>
+            </value>
+            <value>
+                <fullName>Competitive Intel</fullName>
+                <default>false</default>
+                <label>Competitive Intel</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>
+
+

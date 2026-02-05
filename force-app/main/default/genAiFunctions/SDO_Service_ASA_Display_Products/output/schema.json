@@ -1,0 +1,28 @@
+{
+  "unevaluatedProperties" : false,
+  "properties" : {
+    "nextSteps" : {
+      "title" : "nextSteps",
+      "description" : "This is the recommended next steps for the user",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isDisplayable" : true,
+      "copilotAction:isUsedByPlanner" : true,
+      "copilotAction:useHydratedPrompt" : false
+    },
+    "productsToDisplay" : {
+      "title" : "productsToDisplay",
+      "description" : "This is a list of products for the user to select from",
+      "maxItems" : 2000,
+      "items" : {
+        "lightning:type" : "lightning__textType"
+      },
+      "lightning:type" : "lightning__listType",
+      "lightning:isPII" : false,
+      "copilotAction:isDisplayable" : true,
+      "copilotAction:isUsedByPlanner" : true,
+      "copilotAction:useHydratedPrompt" : false
+    }
+  },
+  "lightning:type" : "lightning__objectType"
+}

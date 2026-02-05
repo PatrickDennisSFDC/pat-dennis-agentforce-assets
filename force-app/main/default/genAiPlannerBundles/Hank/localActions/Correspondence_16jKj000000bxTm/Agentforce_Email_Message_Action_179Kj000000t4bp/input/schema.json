@@ -1,0 +1,55 @@
+{
+  "unevaluatedProperties" : false,
+  "properties" : {
+    "accountName" : {
+      "title" : "Account Name",
+      "description" : "Optional Account name to help narrow down Contact search when multiple contacts with the same name exist. Example: \"Acme Corp\".",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : false
+    },
+    "body" : {
+      "title" : "Body",
+      "description" : "Email body text (plain text). Required. This is customer-facing content - maintain a professional, courteous tone. The AI agent should ensure the email is written in second person (you, your) when addressing the recipient, not third person (their, them). If the user provides content in third person, the agent should convert it to second person. The user may also describe a desired tone (e.g., casual, formal, friendly), which the agent should incorporate into the email content. If you need formatting (bullets, numbers, bold), use the htmlBody field instead.",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : false
+    },
+    "confirm" : {
+      "title" : "Confirm",
+      "description" : "Set to false to preview the email without creating it. The agent should show the preview to the user and ask for confirmation. Set to true (or omit) to create the email message immediately. When user asks to \"draft an email\" or \"create an email\", use confirm=false first to show preview, then confirm=true to create.",
+      "lightning:type" : "lightning__booleanType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : false
+    },
+    "contactNameOrEmail" : {
+      "title" : "Contact Name or Email",
+      "description" : "The name or email address of the Contact recipient. Required. Example: \"Joe Smith\" or \"joe@example.com\". If multiple contacts match, the agent will be prompted to clarify which one.",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : false
+    },
+    "htmlBody" : {
+      "title" : "HTML Body",
+      "description" : "Optional HTML email body for rich formatting. Use this for customer-facing emails that need professional formatting: bullet points (<ul>/<li>), numbered lists (<ol>/<li>), bold (<b> or <strong>), links (<a href>), paragraphs (<p>), etc. The AI agent should ensure the email is written in second person (you, your) when addressing the recipient, not third person (their, them). If the user provides content in third person, the agent should convert it to second person. The user may also describe a desired tone (e.g., casual, formal, friendly), which the agent should incorporate into the email content. If both body and htmlBody are provided, htmlBody takes precedence.",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : false
+    },
+    "status" : {
+      "title" : "Status",
+      "description" : "Email status: \"Draft\" (saves as draft, Status=5) or \"Sent\" (sends immediately, Status=3). Default is \"Draft\" if not specified. If status is \"Sent\", the email will actually be sent via Salesforce email delivery.",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : false
+    },
+    "subject" : {
+      "title" : "Subject",
+      "description" : "Email subject line. Required for creating the email message.",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : false
+    }
+  },
+  "lightning:type" : "lightning__objectType"
+}

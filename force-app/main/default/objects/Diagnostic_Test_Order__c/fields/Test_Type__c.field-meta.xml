@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Test_Type__c</fullName>
+    <label>Test Type</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Genetic Testing</fullName>
+                <default>false</default>
+                <label>Genetic Testing</label>
+            </value>
+            <value>
+                <fullName>Blood Panel</fullName>
+                <default>false</default>
+                <label>Blood Panel</label>
+            </value>
+            <value>
+                <fullName>Cancer Screening</fullName>
+                <default>false</default>
+                <label>Cancer Screening</label>
+            </value>
+            <value>
+                <fullName>Infectious Disease</fullName>
+                <default>false</default>
+                <label>Infectious Disease</label>
+            </value>
+            <value>
+                <fullName>Metabolic Panel</fullName>
+                <default>false</default>
+                <label>Metabolic Panel</label>
+            </value>
+            <value>
+                <fullName>Hormone Panel</fullName>
+                <default>false</default>
+                <label>Hormone Panel</label>
+            </value>
+            <value>
+                <fullName>Allergy Testing</fullName>
+                <default>false</default>
+                <label>Allergy Testing</label>
+            </value>
+            <value>
+                <fullName>Pharmacogenomics</fullName>
+                <default>false</default>
+                <label>Pharmacogenomics</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>
+

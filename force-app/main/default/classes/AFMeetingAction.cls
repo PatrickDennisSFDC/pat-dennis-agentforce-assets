@@ -8,13 +8,32 @@ public without sharing class AFMeetingAction {
     public class Request {
         @InvocableVariable(
             label='Operation'
-            description='Explicit operation: "create", "read", "update", "delete", or "find". If not specified, inferred from context.'
+            description='Explicit operation: "create", "read", "update", "delete", "find", or "aggregate". AGGREGATE for meeting analytics like "how many meetings this month", "meetings by type".'
         )
         public String operation;
         
+        // ========== AGGREGATE OPERATION PARAMETERS ==========
+        @InvocableVariable(label='Aggregate Function' description='For aggregate: SUM, COUNT, AVG, MIN, MAX. Example: COUNT for "how many meetings".')
+        public String aggregateFunction;
+        
+        @InvocableVariable(label='Aggregate Field' description='For aggregate: Field to aggregate. Use "Id" for COUNT.')
+        public String aggregateField;
+        
+        @InvocableVariable(label='Group By Fields JSON' description='For aggregate: JSON array of fields to group by. Example: ["Meeting_Type__c"] for meetings by type.')
+        public String groupByFieldsJson;
+        
+        @InvocableVariable(label='Date Range Field' description='For aggregate: Date field to filter. Use "Meeting_Date__c".')
+        public String dateRangeField;
+        
+        @InvocableVariable(label='Date Range Predefined' description='For aggregate: TODAY, THIS_WEEK, THIS_MONTH, THIS_QUARTER, etc.')
+        public String dateRangePredefined;
+        
+        @InvocableVariable(label='Date Range Days' description='For aggregate with LAST_N_DAYS or NEXT_N_DAYS.')
+        public Integer dateRangeDays;
+        
         @InvocableVariable(
             label='Field Data JSON'
-            description='JSON string containing Meeting field data. Required fields: Meeting_Date__c, Subject__c. INTELLIGENT FIELD MAPPING: Use your semantic understanding to map natural language to structured fields. When user describes a meeting conversationally (e.g., "had lunch with Dr. Smith, discussed Product X, went well, need to follow up"), extract and infer the appropriate values: Parse meeting type from context (lunch→In-Person Visit, zoom→Virtual Meeting, etc.), infer outcome from sentiment (optimistic/good→Productive, excellent→Very Productive), detect follow-up needs from language (mentions of "next steps" or "follow up"→Follow_Up_Required__c:true), extract product names, sample/material info, and other structured data from description. Query availableFieldsJson to see valid picklist options, then use your best judgment to map. If unclear, leave field blank. Example: {"Subject__c":"Lunch with Dr. Smith","Meeting_Date__c":"2024-12-10","Meeting_Type__c":"In-Person Visit","Meeting_Outcome__c":"Productive","Follow_Up_Required__c":true,"Description__c":"Discussed Product X proposal"}. Use accountName or contactNameOrEmail to resolve lookups by name.'
+            description='JSON string containing Meeting field data. YOUR GOAL: Create meeting records that are genuinely useful to the sales team. A meeting with just a subject and date is almost worthless. A meeting with outcome, next steps, description, and product context is VALUABLE. Every meeting you create should answer: What happened, how did it go, and what needs to happen next? DATE INFERENCE (CRITICAL): If no date mentioned, DEFAULT TO TODAY. Do NOT ask for meeting date - infer it: today/this morning/this afternoon/just now/earlier -> today, yesterday/last night -> yesterday, last week/last Monday -> calculate the date. NEVER block meeting creation just because date is missing - use today as default. MINIMUM VIABLE MEETING - Do NOT create until you have: (1) Contact or Account - required (but proceed if neither found, capture name in description), (2) Meeting Date - default to today if not specified, (3) Subject - required, (4) Meeting Type - required via inference or asking, (5) Meeting Outcome - infer from context or default to Neutral, (6) Next Steps - strongly encouraged and ALWAYS ask if not mentioned, (7) Description - strongly encouraged and synthesize from conversation. SPARSE INPUT RULE: If user message does NOT contain at least TWO of: outcome sentiment, next steps, meeting type context - then STOP and ask follow-up questions. Do not create sparse records. Examples requiring probing: Log a meeting with X, I called X about their ticket. Example ready for inference: Stopped by X office, great chat about renewal, they want proposal next week. MANDATORY DESCRIPTION: Always populate Description__c with a 2-3 sentence narrative capturing: what was discussed, key outcomes or decisions, context that helps colleagues understand this meeting. Never leave Description__c blank. INTELLIGENT INFERENCE FOR MEETING TYPE: lunch/dinner/coffee/office/stopped by/visited -> In-Person Visit, zoom/teams/virtual/video/webex -> Virtual Meeting, called/phone/rang/dialed -> Phone Call, conference/trade show/event/expo -> Conference. INTELLIGENT INFERENCE FOR OUTCOME: great/excellent/amazing/really well/excited/love it -> Very Productive, good/productive/positive/on track/solid -> Productive, fine/okay/standard/routine/uneventful/quick/check-in -> Neutral, tough/challenging/concerns/issues/pushback/worried -> Needs Follow-up, disaster/rejected/not interested/dead end/lost/killed -> Unsuccessful. SAMPLES/MATERIALS: dropped off samples/left samples/gave samples -> Samples_Dropped_Off__c Yes, left brochures/marketing materials/collateral -> Marketing_Materials_Provided__c Yes. FOLLOW-UP DETECTION: follow up/next steps/action items/need to schedule/send proposal/get back to them -> Follow_Up_Required__c true and capture in Next_Steps__c. Use accountName or contactNameOrEmail to resolve lookups. FUZZY MATCHING: Account names use fuzzy matching so Accusage Inc matches Accusage, Inc and variations with different suffixes like Corp, LLC etc are handled automatically. DEMO MODE: This is a demo environment - prioritize creating records over asking clarifying questions. When in doubt, make a reasonable assumption and proceed.'
             required=false
         )
         public String fieldDataJson;
@@ -45,13 +64,13 @@ public without sharing class AFMeetingAction {
         
         @InvocableVariable(
             label='Account Name'
-            description='Account name to resolve to Account__c lookup. If provided, system searches for an Account and links the Meeting to it.'
+            description='Account name to resolve to Account__c lookup. Use this when you know the company/organization but not a specific contact. If the user says they met with someone at Acme Corp or had a meeting at General Hospital, you can use accountName even without a contact. The Account will be linked to the meeting. Note: If you provide contactNameOrEmail, the Account is auto-populated from the Contact record so you usually do not need both.'
         )
         public String accountName;
         
         @InvocableVariable(
             label='Contact Name or Email'
-            description='Contact name or email to resolve to Contact__c lookup. If provided, system searches for a Contact and links the Meeting to them.'
+            description='Contact name or email to resolve to Contact__c lookup. IMPORTANT: When a Contact is resolved, their Account is AUTOMATICALLY populated on the Meeting. You do NOT need to separately provide accountName if you have the contact. Example: If user says I met with Joe Dennis, just provide contactNameOrEmail and both Contact and Account will be linked. Only use accountName separately if you ONLY know the company, not a specific person.'
         )
         public String contactNameOrEmail;
         
@@ -182,6 +201,19 @@ public without sharing class AFMeetingAction {
             description='True if this is a confirmation request for delete operation.'
         )
         public Boolean confirmationRequired;
+        
+        // ========== AGGREGATE OPERATION RESPONSE FIELDS ==========
+        @InvocableVariable(label='Aggregate Results JSON' description='For aggregate: JSON array of results.')
+        public String aggregateResultsJson;
+        
+        @InvocableVariable(label='Total Value' description='For aggregate: Total value across all groups.')
+        public Decimal totalValue;
+        
+        @InvocableVariable(label='Group Count' description='For aggregate: Number of groups in results.')
+        public Integer groupCount;
+        
+        @InvocableVariable(label='Query Description' description='For aggregate: Human-readable query description.')
+        public String queryDescription;
     }
     
     private static String inferOperation(Request req) {
@@ -193,7 +225,9 @@ public without sharing class AFMeetingAction {
         Boolean hasFieldData = !String.isBlank(req.fieldDataJson);
         Boolean hasSearchTerm = !String.isBlank(req.searchTerm);
         Boolean hasFilters = !String.isBlank(req.filtersJson);
+        Boolean hasAggregateParams = !String.isBlank(req.aggregateFunction);
         
+        if (hasAggregateParams) return 'aggregate';
         if (hasRecordId && hasFieldData) return 'update';
         else if (hasRecordId && !hasFieldData && !hasSearchTerm && !hasFilters) return 'read';
         else if (hasFieldData && !hasRecordId) return 'create';
@@ -205,7 +239,7 @@ public without sharing class AFMeetingAction {
     
     @InvocableMethod(
         label='Agentforce Meeting Action'
-        description='Performs CRUD operations on Meeting__c records. Operation can be explicitly specified (create, read, update, delete, find) or inferred from context. CREATE: Provide fieldDataJson. READ: Provide recordId. UPDATE: Provide recordId + fieldDataJson. DELETE: Provide recordId + confirm=true. FIND: IMPORTANT - Before calling find operation, ensure you have search criteria. If the user asks to "find" or "look up" a meeting without providing specific details (meeting subject, account/contact, meeting date, meeting type, etc.), you MUST ask the user for these details FIRST before calling this action. Only call this action with find operation when you have at least a searchTerm (meeting subject or partial subject) or filtersJson (specific field filters). If the user says "look up a meeting" or "find a meeting" without details, respond conversationally: "I\'d be happy to help you find a meeting. Could you provide some details like the meeting subject, account or contact name, meeting date, or meeting type?" Do NOT call the action with empty search criteria. AGENT INTELLIGENCE: Use your semantic understanding to map natural language to structured fields. For picklist fields like Meeting_Type__c, Meeting_Status__c, Meeting_Outcome__c, analyze the context (e.g., "lunch", "office visit", "zoom call" for type; "went well", "productive" for outcome; "completed", "scheduled" for status) and select the most appropriate value from available options. Query availableFieldsJson to see valid picklist values. If input does not clearly map, leave the field blank. For boolean fields like Samples_Dropped_Off__c, Marketing_Materials_Provided__c, Follow_Up_Required__c, Signature_Obtained__c, infer true/false from user intent (e.g., "dropped samples" -> true, "no follow up" -> false). For date fields like Meeting_Date__c, infer from temporal cues (e.g., "today", "tomorrow", "last week"). Supports accountName and contactNameOrEmail parameters to link Meeting to Account/Contact. Supports bulk operations.'
+        description='Performs CRUD operations on Meeting__c records. DEMO MODE: This is a demo environment - prioritize creating records quickly over asking many questions. Make reasonable assumptions and proceed. ROUTING CLAIM: If user says I had a meeting, log a meeting, record a meeting, or any variation mentioning meeting explicitly, this is ALWAYS a meeting logging request regardless of sentiment or topic. Even tough meetings, bad meetings, or meetings with concerns should be logged here - do NOT redirect to Account Intelligence. DATE HANDLING (CRITICAL): If no date mentioned, DEFAULT TO TODAY. Infer dates: today/this morning/this afternoon/just now -> today, yesterday -> yesterday. NEVER ask for meeting date - just use today if unclear. CONVERSATIONAL FLOW: (1) GATHER - Get who and basic context. Date defaults to today. (2) INFER - Extract Meeting_Type__c, Meeting_Outcome__c from context clues. (3) CREATE - Proceed with inferred values. Only ask follow-ups if truly critical info missing (like who they met with). (4) POST-CREATE TASK OFFER - If next steps mentioned, offer task creation. DATA GOAL: Create useful records quickly. MINIMUM: Contact/Account (or capture name in description if lookup fails), Subject, Meeting Type (infer or default to In-Person Visit), Outcome (infer or default to Neutral). GRACEFUL LOOKUP: When contact or account lookup fails, create the meeting anyway with available info. Capture the name in the description. Do NOT block the user. NEGATIVE MEETING HANDLING: Tough/difficult/challenging meetings should STILL be logged here with Outcome as Needs Follow-up or Unsuccessful. OPERATIONS: CREATE needs fieldDataJson, READ needs recordId, UPDATE needs recordId plus fieldDataJson, DELETE needs recordId plus confirm true, FIND needs searchTerm or filtersJson. PICKLIST SAFETY: Query availableFieldsJson for valid values. Supports accountName and contactNameOrEmail for lookup resolution - system uses fuzzy matching so Accusage Inc will match Accusage, Inc.'
         category='CRM Actions'
     )
     public static List<Response> meetingAction(List<Request> requests) {
@@ -266,6 +300,10 @@ public without sharing class AFMeetingAction {
                 actionReq.filtersJson = req.filtersJson;
                 actionReq.searchLimit = req.searchLimit;
                 
+                // NOTE: Aggregate operations for meetings should be handled separately
+                // by delegating to AFUniversalAnalyticsAction (similar to AFOpportunityAction)
+                // For now, aggregate params are defined in Request but not passed to CRM action
+                
                 if ((op == 'create' || op == 'update') && !String.isBlank(req.fieldDataJson)) {
                     try {
                         Object parsed = JSON.deserializeUntyped(req.fieldDataJson);
@@ -295,6 +333,9 @@ public without sharing class AFMeetingAction {
                     res.relationshipCandidatesJson = actionRes.relationshipCandidatesJson;
                     res.ambiguous = actionRes.ambiguous != null ? actionRes.ambiguous : false;
                     res.totalMatches = actionRes.totalMatches != null ? actionRes.totalMatches : 0;
+                    
+                    // NOTE: Aggregate response fields would be populated here if aggregate operations
+                    // were delegated to AFUniversalAnalyticsAction. For now, they remain null.
                     
                     if (actionRes.record != null) {
                         res.record = (Meeting__c) actionRes.record;

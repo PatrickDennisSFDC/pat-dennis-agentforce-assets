@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>MEDDPICC_Competition__c</fullName>
+    <description>MEDDPICC Competition: Alternatives the customer is considering, including other vendors, internal builds, or doing nothing (status quo). Document competitive landscape and your differentiation.</description>
+    <externalId>false</externalId>
+    <inlineHelpText>What alternatives is the customer considering? Document competitors, build vs buy options, status quo risk, and how you differentiate against each.</inlineHelpText>
+    <label>MEDDPICC: Competition</label>
+    <length>32000</length>
+    <trackTrending>false</trackTrending>
+    <type>LongTextArea</type>
+    <visibleLines>4</visibleLines>
+</CustomField>

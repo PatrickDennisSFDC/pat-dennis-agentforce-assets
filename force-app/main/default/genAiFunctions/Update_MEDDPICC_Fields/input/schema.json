@@ -1,0 +1,19 @@
+{
+  "type": "object",
+  "properties": {
+    "opportunityId": {
+      "type": "string",
+      "description": "REQUIRED. The ID of the opportunity being reviewed. This should be passed from the Deal Review UI context."
+    },
+    "updatesJson": {
+      "type": "string",
+      "description": "JSON object containing MEDDPICC field updates. Format: {\"metrics\": {\"text\": \"content\", \"score\": 4}, \"champion\": {\"text\": \"content\", \"score\": 3}}. Dimension keys: metrics, economic_buyer, decision_criteria, decision_process, paper_process, identify_pain, champion, competition. Each dimension has 'text' (string content) and 'score' (integer 1-5). Only include dimensions that need updating."
+    },
+    "consolidateWithExisting": {
+      "type": "boolean",
+      "description": "If true, new text content will be intelligently merged with existing content. If false, existing content will be replaced. Default: true."
+    }
+  },
+  "required": ["opportunityId", "updatesJson"]
+}
+

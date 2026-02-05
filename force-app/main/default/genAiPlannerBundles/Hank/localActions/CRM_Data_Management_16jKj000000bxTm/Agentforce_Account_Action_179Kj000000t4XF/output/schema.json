@@ -1,0 +1,200 @@
+{
+  "unevaluatedProperties" : false,
+  "properties" : {
+    "ambiguous" : {
+      "title" : "Ambiguous Result",
+      "description" : "True if multiple records were found in a find/search operation. When true, present all records to the user and ask for clarification using additional identifying fields like Industry, BillingCity, BillingState, or Phone to narrow down the selection.",
+      "lightning:type" : "lightning__booleanType",
+      "lightning:isPII" : false,
+      "copilotAction:isDisplayable" : false,
+      "copilotAction:isUsedByPlanner" : true,
+      "copilotAction:useHydratedPrompt" : false
+    },
+    "ambiguousRelationship" : {
+      "title" : "Ambiguous Relationship",
+      "description" : "True if a parent Account lookup found multiple matches (2+). When true, DO NOT tell the user the Account was created/updated. Instead, you MUST present the candidates from relationshipCandidatesJson to the user and ask which parent Account they meant.",
+      "lightning:type" : "lightning__booleanType",
+      "lightning:isPII" : false,
+      "copilotAction:isDisplayable" : false,
+      "copilotAction:isUsedByPlanner" : true,
+      "copilotAction:useHydratedPrompt" : false
+    },
+    "ambiguousRelationshipType" : {
+      "title" : "Ambiguous Relationship Type",
+      "description" : "The type of relationship that has multiple matches, typically \"Account\" for parent Account lookups. Use this to know what kind of candidates are provided in relationshipCandidatesJson.",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isDisplayable" : false,
+      "copilotAction:isUsedByPlanner" : true,
+      "copilotAction:useHydratedPrompt" : false
+    },
+    "availableFieldsJson" : {
+      "title" : "Available Fields JSON",
+      "description" : "JSON string containing metadata for all available fields that can be set on Account records. Includes API name, label, type, required status, picklist values, help text, and more. Use this to understand what fields are available and their constraints.",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isDisplayable" : false,
+      "copilotAction:isUsedByPlanner" : true,
+      "copilotAction:useHydratedPrompt" : false
+    },
+    "confirmationRequired" : {
+      "title" : "Confirmation Required",
+      "description" : "True if this is a confirmation request for delete operation (confirm=false). The agent should present the message to the user and call again with confirm=true if the user confirms the deletion.",
+      "lightning:type" : "lightning__booleanType",
+      "lightning:isPII" : false,
+      "copilotAction:isDisplayable" : false,
+      "copilotAction:isUsedByPlanner" : true,
+      "copilotAction:useHydratedPrompt" : false
+    },
+    "enrichmentSuggested" : {
+      "title" : "Enrichment Suggested",
+      "description" : "True if the provided data is minimal and additional fields are suggested (for create operations). When true, check suggestedFields for commonly-used fields that could be populated.",
+      "lightning:type" : "lightning__booleanType",
+      "lightning:isPII" : false,
+      "copilotAction:isDisplayable" : false,
+      "copilotAction:isUsedByPlanner" : true,
+      "copilotAction:useHydratedPrompt" : false
+    },
+    "errorMessage" : {
+      "title" : "Error Message",
+      "description" : "If success is false, this contains a user-friendly error message to relay directly to the user. Example: \"To create an Account, the Name field is required.\"",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isDisplayable" : false,
+      "copilotAction:isUsedByPlanner" : true,
+      "copilotAction:useHydratedPrompt" : false
+    },
+    "message" : {
+      "title" : "Message",
+      "description" : "Human-readable message describing the operation result. Use this exact message to inform the user. Examples: \"Account created successfully\", \"Found 3 matching Account records\", \"Account deleted successfully\".",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isDisplayable" : false,
+      "copilotAction:isUsedByPlanner" : true,
+      "copilotAction:useHydratedPrompt" : false
+    },
+    "moreResultsAvailable" : {
+      "title" : "More Results Available",
+      "description" : "True if the search returned the maximum number of results (searchLimit) but there are more matching records available. When true, suggest the user provide more specific search criteria or increase the searchLimit.",
+      "lightning:type" : "lightning__booleanType",
+      "lightning:isPII" : false,
+      "copilotAction:isDisplayable" : false,
+      "copilotAction:isUsedByPlanner" : true,
+      "copilotAction:useHydratedPrompt" : false
+    },
+    "objectType" : {
+      "title" : "Object Type",
+      "description" : "The Salesforce object type, always \"Account\" for Account operations. Useful for agent context and logging.",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isDisplayable" : false,
+      "copilotAction:isUsedByPlanner" : true,
+      "copilotAction:useHydratedPrompt" : false
+    },
+    "operation" : {
+      "title" : "Operation",
+      "description" : "The operation that was performed: \"create\", \"read\", \"update\", \"delete\", or \"find\". Useful for agent context and logging.",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isDisplayable" : false,
+      "copilotAction:isUsedByPlanner" : true,
+      "copilotAction:useHydratedPrompt" : false
+    },
+    "previewData" : {
+      "title" : "Preview Data",
+      "description" : "A JSON string representation of what would be created/updated. Use this to show the user a preview before committing. Format: {\"Name\":\"Test 1\",\"Industry\":null,\"BillingCity\":null,...}",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isDisplayable" : false,
+      "copilotAction:isUsedByPlanner" : true,
+      "copilotAction:useHydratedPrompt" : false
+    },
+    "previewOnly" : {
+      "title" : "Preview Only",
+      "description" : "True if this is a preview response (confirm=false for create/update). The record has not been committed yet. The agent should present the preview to the user, then call again with confirm=true to commit.",
+      "lightning:type" : "lightning__booleanType",
+      "lightning:isPII" : false,
+      "copilotAction:isDisplayable" : false,
+      "copilotAction:isUsedByPlanner" : true,
+      "copilotAction:useHydratedPrompt" : false
+    },
+    "record" : {
+      "title" : "Record",
+      "description" : "The Account record (for single record operations: create, read, update). Use the record.Id field from this record for follow-up operations. This is null for bulk operations or when multiple records are found.",
+      "lightning:type" : "lightning__recordInfoType",
+      "lightning:sObjectInfo" : {
+        "apiName" : "Account"
+      },
+      "lightning:isPII" : false,
+      "copilotAction:isDisplayable" : false,
+      "copilotAction:isUsedByPlanner" : true,
+      "copilotAction:useHydratedPrompt" : false
+    },
+    "recordId" : {
+      "title" : "Record ID",
+      "description" : "The Salesforce ID of the record (18-character format like \"001xx000003DGbYAAW\"). Use this ID for subsequent operations. This is the primary identifier for follow-up operations in the conversation.",
+      "lightning:type" : "lightning__recordIdType",
+      "lightning:isPII" : false,
+      "copilotAction:isDisplayable" : false,
+      "copilotAction:isUsedByPlanner" : true,
+      "copilotAction:useHydratedPrompt" : false
+    },
+    "records" : {
+      "title" : "Records",
+      "description" : "List of Account records (for bulk operations or find operations with multiple results). Use record.Id from each record for subsequent operations.",
+      "maxItems" : 2000,
+      "items" : {
+        "lightning:type" : "lightning__recordInfoType",
+        "lightning:sObjectInfo" : {
+          "apiName" : "Account"
+        }
+      },
+      "lightning:type" : "lightning__listType",
+      "lightning:isPII" : false,
+      "copilotAction:isDisplayable" : false,
+      "copilotAction:isUsedByPlanner" : true,
+      "copilotAction:useHydratedPrompt" : false
+    },
+    "relationshipCandidatesJson" : {
+      "title" : "Relationship Candidates JSON",
+      "description" : "JSON array of candidate Account records when ambiguousRelationship is true. Each candidate includes disambiguating details: Name, BillingCity, BillingState, Phone, Industry. Present these options to the user in a clear, numbered list with the distinguishing details, then ask them to clarify which one they meant.",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isDisplayable" : false,
+      "copilotAction:isUsedByPlanner" : true,
+      "copilotAction:useHydratedPrompt" : false
+    },
+    "success" : {
+      "title" : "Success",
+      "description" : "True if operation completed successfully, false if an error occurred. Check this before using other output variables.",
+      "lightning:type" : "lightning__booleanType",
+      "lightning:isPII" : false,
+      "copilotAction:isDisplayable" : false,
+      "copilotAction:isUsedByPlanner" : true,
+      "copilotAction:useHydratedPrompt" : false
+    },
+    "suggestedFields" : {
+      "title" : "Suggested Fields",
+      "description" : "List of commonly-used field API names that could be populated to enrich this Account. Examples: Industry, BillingCity, Phone, Website. The agent should ask the user about these fields and add them to fieldDataJson before calling again with confirm=true.",
+      "maxItems" : 2000,
+      "items" : {
+        "lightning:type" : "lightning__textType"
+      },
+      "lightning:type" : "lightning__listType",
+      "lightning:isPII" : false,
+      "copilotAction:isDisplayable" : false,
+      "copilotAction:isUsedByPlanner" : true,
+      "copilotAction:useHydratedPrompt" : false
+    },
+    "totalMatches" : {
+      "title" : "Total Matches",
+      "description" : "Number of Account records found in a find/search operation. Use this to inform the user: \"Found X matching accounts\" or \"No accounts found matching your criteria\".",
+      "lightning:type" : "lightning__integerType",
+      "lightning:isPII" : false,
+      "copilotAction:isDisplayable" : false,
+      "copilotAction:isUsedByPlanner" : true,
+      "copilotAction:useHydratedPrompt" : false
+    }
+  },
+  "lightning:type" : "lightning__objectType"
+}

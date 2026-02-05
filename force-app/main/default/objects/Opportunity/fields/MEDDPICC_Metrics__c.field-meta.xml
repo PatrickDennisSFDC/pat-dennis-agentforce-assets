@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>MEDDPICC_Metrics__c</fullName>
+    <description>MEDDPICC Metrics: Measurable results and economic benefits your solution provides. Document quantifiable outcomes the customer expects (ROI, cost savings, revenue growth, efficiency gains, time savings).</description>
+    <externalId>false</externalId>
+    <inlineHelpText>What measurable business outcomes will the customer achieve? Include specific numbers, percentages, or dollar amounts where possible.</inlineHelpText>
+    <label>MEDDPICC: Metrics</label>
+    <length>32000</length>
+    <trackTrending>false</trackTrending>
+    <type>LongTextArea</type>
+    <visibleLines>4</visibleLines>
+</CustomField>

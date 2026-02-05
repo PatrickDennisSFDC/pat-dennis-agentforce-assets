@@ -1,0 +1,21 @@
+{
+  "required" : [ "Input:Input" ],
+  "unevaluatedProperties" : false,
+  "properties" : {
+    "Input:Input" : {
+      "title" : "Input",
+      "description" : "This is the user's inquiry/question",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : false
+    },
+    "citationMode" : {
+      "title" : "Citation Mode",
+      "description" : "Select Citation Mode",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : false
+    }
+  },
+  "lightning:type" : "lightning__objectType"
+}

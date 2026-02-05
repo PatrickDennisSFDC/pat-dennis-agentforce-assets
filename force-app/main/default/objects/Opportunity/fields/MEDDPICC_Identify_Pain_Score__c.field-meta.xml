@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>MEDDPICC_Identify_Pain_Score__c</fullName>
+    <description>Score for MEDDPICC Identify Pain qualification criteria. 1=Very Weak (no pain identified), 5=Very Strong (compelling pain with urgency to act).</description>
+    <externalId>false</externalId>
+    <inlineHelpText>Rate understanding of Customer Pain: 1=Very Weak, 2=Weak, 3=Moderate, 4=Strong, 5=Very Strong</inlineHelpText>
+    <label>MEDDPICC: Identify Pain Score</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>1 - Very Weak</fullName>
+                <default>false</default>
+                <label>1 - Very Weak</label>
+            </value>
+            <value>
+                <fullName>2 - Weak</fullName>
+                <default>false</default>
+                <label>2 - Weak</label>
+            </value>
+            <value>
+                <fullName>3 - Moderate</fullName>
+                <default>false</default>
+                <label>3 - Moderate</label>
+            </value>
+            <value>
+                <fullName>4 - Strong</fullName>
+                <default>false</default>
+                <label>4 - Strong</label>
+            </value>
+            <value>
+                <fullName>5 - Very Strong</fullName>
+                <default>false</default>
+                <label>5 - Very Strong</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

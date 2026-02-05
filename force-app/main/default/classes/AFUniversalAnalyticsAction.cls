@@ -19,7 +19,7 @@ public without sharing class AFUniversalAnalyticsAction {
     
     // Supported objects (same as AFUniversalCrmRecordAction)
     private static final Set<String> SUPPORTED_OBJECTS = new Set<String>{
-        'account', 'contact', 'case', 'opportunity', 'task', 'meeting__c'
+        'account', 'contact', 'case', 'opportunity', 'task', 'meeting__c', 'customerorders__c'
     };
     
     // Supported aggregate functions
@@ -338,7 +338,9 @@ public without sharing class AFUniversalAnalyticsAction {
         } else if (aggFunc == 'COUNT') {
             selectClause = 'COUNT(' + aggField + ')';
         } else {
-            selectClause = aggFunc + '(' + aggField + ')';
+            // For non-COUNT aggregates (SUM, AVG, MIN, MAX), also include COUNT(Id) 
+            // so we can report the actual number of records being aggregated
+            selectClause = aggFunc + '(' + aggField + '), COUNT(Id)';
         }
         
         // Add GROUP BY fields
@@ -377,18 +379,22 @@ public without sharing class AFUniversalAnalyticsAction {
             soql += ' GROUP BY ' + String.join(groupByFields, ', ');
         }
         
-        // Add ORDER BY clause
-        if (!String.isBlank(req.orderBy)) {
-            soql += ' ORDER BY ' + req.orderBy;
-        } else if (!groupByFields.isEmpty()) {
-            // Default: order by aggregate value descending
-            soql += ' ORDER BY expr0 DESC';
+        // Add ORDER BY clause (only valid with GROUP BY)
+        if (!groupByFields.isEmpty()) {
+            if (!String.isBlank(req.orderBy)) {
+                soql += ' ORDER BY ' + req.orderBy;
+            } else {
+                // Default: order by aggregate value descending
+                // Use the actual aggregate function in ORDER BY (not expr0 alias)
+                soql += ' ORDER BY ' + aggFunc + '(' + aggField + ') DESC';
+            }
+            
+            // Add LIMIT (only valid with GROUP BY for aggregate queries)
+            Integer limitToUse = (req.recordLimit != null && req.recordLimit > 0) ? 
+                Math.min(req.recordLimit, 200) : 100;
+            soql += ' LIMIT ' + limitToUse;
         }
-        
-        // Add LIMIT
-        Integer limitToUse = (req.recordLimit != null && req.recordLimit > 0) ? 
-            Math.min(req.recordLimit, 200) : 100;
-        soql += ' LIMIT ' + limitToUse;
+        // Note: Non-grouped aggregate queries cannot use ORDER BY or LIMIT
         
         return soql;
     }
@@ -585,8 +591,9 @@ public without sharing class AFUniversalAnalyticsAction {
             } else {
                 Object aggObj = aggResult.get('expr0');
                 aggValue = aggObj != null ? (Decimal) aggObj : 0;
-                // For non-COUNT, we don't have easy access to record count per group
-                recordCount = 1; // Placeholder
+                // For non-COUNT aggregates, we include COUNT(Id) as expr1 in the query
+                Object countObj = aggResult.get('expr1');
+                recordCount = countObj != null ? ((Decimal) countObj).intValue() : 0;
             }
             
             totalValue += aggValue;

@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GenAiPlannerBundle xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <description>Internal patient services agent for enrollment, benefits verification, and case management support.</description>
+    <localActionLinks>
+        <genAiFunctionName>AnswerQuestionsWithKnowledge_16jKj000000GyC2</genAiFunctionName>
+    </localActionLinks>
+    <localTopicLinks>
+        <genAiPluginName>Case_Management_16jKj000000GyC2</genAiPluginName>
+    </localTopicLinks>
+    <localTopicLinks>
+        <genAiPluginName>Patient_Information_16jKj000000GyC2</genAiPluginName>
+    </localTopicLinks>
+    <localTopicLinks>
+        <genAiPluginName>Program_Enrollment_16jKj000000GyC2</genAiPluginName>
+    </localTopicLinks>
+    <localTopics>
+        <fullName>Program_Enrollment_16jKj000000GyC2</fullName>
+        <canEscalate>false</canEscalate>
+        <description>Internal topic for patient services reps managing program candidate records, enrollment workflows, missing information tracking, and benefits verification.
+
+ROUTING CLAIMS (use this topic):
+- &quot;program candidate&quot;, &quot;enrollment&quot;, &quot;enroll patient&quot;
+- &quot;benefits verification&quot;, &quot;BV&quot;, &quot;insurance verification&quot;
+- &quot;missing information&quot;, &quot;missing docs&quot;, &quot;consent form&quot;, &quot;insurance card&quot;
+- &quot;enrollment status&quot;, &quot;update candidate&quot;, &quot;new inquiry&quot;
+- Working with Program_Candidate__c records
+
+ROUTING EXCLUSIONS (do NOT use):
+- Support cases/tickets → Case Management
+- Patient demographics only (no enrollment context) → Patient Information
+- Billing issues → Case Management (create a case)</description>
+        <developerName>Program_Enrollment_16jKj000000GyC2</developerName>
+        <genAiPluginInstructions>
+            <description>When a rep asks about a patient&apos;s enrollment, search by name, email, or phone. If multiple matches, show candidates and ask which one.</description>
+            <developerName>instruction_1</developerName>
+            <language xsi:nil="true"/>
+            <masterLabel>Instruction 1</masterLabel>
+            <sortOrder>0</sortOrder>
+        </genAiPluginInstructions>
+        <genAiPluginInstructions>
+            <description>For missing information, use the Missing Information action. Common items: Consent Form, Insurance Card, Member ID, Income Verification, ID Document, Prescription. Mark items as &quot;Received&quot; when collected.</description>
+            <developerName>instruction_2</developerName>
+            <language xsi:nil="true"/>
+            <masterLabel>Instruction 2</masterLabel>
+            <sortOrder>1</sortOrder>
+        </genAiPluginInstructions>
+        <genAiPluginInstructions>
+            <description>Update enrollment status as patients progress: New Inquiry → Pending Documentation → Benefits Verification → Approved → Enrolled. Add notes when making status changes.</description>
+            <developerName>instruction_3</developerName>
+            <language xsi:nil="true"/>
+            <masterLabel>Instruction 3</masterLabel>
+            <sortOrder>2</sortOrder>
+        </genAiPluginInstructions>
+        <genAiPluginInstructions>
+            <description>This is an INTERNAL tool for reps. Speak professionally but efficiently - reps know the processes, don&apos;t over-explain.</description>
+            <developerName>instruction_4</developerName>
+            <language xsi:nil="true"/>
+            <masterLabel>Instruction 4</masterLabel>
+            <sortOrder>3</sortOrder>
+        </genAiPluginInstructions>
+        <language>en_US</language>
+        <localActionLinks>
+            <functionName>Agentforce_Program_Candidate_Action_179Kj000000PlKP</functionName>
+        </localActionLinks>
+        <localActionLinks>
+            <functionName>Agentforce_Missing_Information_Action_179Kj000000PlKP</functionName>
+        </localActionLinks>
+        <localActions>
+            <fullName>Agentforce_Missing_Information_Action_179Kj000000PlKP</fullName>
+            <description>Manages Missing Information records that track what documents or data are needed from patients. Use to: (1) CREATE new missing info items when you discover something is needed, (2) FIND all missing items for a Program Candidate or Case, (3) UPDATE status to &quot;Received&quot; when information is collected, (4) DELETE items that are no longer needed. Common Information Types: Insurance Card, Member ID, Income Verification, Date of Birth, Prescription, Consent Form, ID Document, Address Verification, Contact Information, Other. Tip: Use statusOnlyMissing=true to quickly find all outstanding items for a patient.</description>
+            <developerName>Agentforce_Missing_Information_Action_179Kj000000PlKP</developerName>
+            <invocationTarget>AFMissingInformationAction</invocationTarget>
+            <invocationTargetType>apex</invocationTargetType>
+            <isConfirmationRequired>false</isConfirmationRequired>
+            <isIncludeInProgressIndicator>false</isIncludeInProgressIndicator>
+            <localDeveloperName>Agentforce_Missing_Information_Action</localDeveloperName>
+            <masterLabel>Agentforce Missing Information Action</masterLabel>
+        </localActions>
+        <localActions>
+            <fullName>Agentforce_Program_Candidate_Action_179Kj000000PlKP</fullName>
+            <description>Performs CRUD operations on Program_Candidate__c records for post-prescription support enrollment. Operation can be explicitly specified (create, read, update, delete, find) or inferred from context. CREATE WORKFLOW - CRITICAL: For complete enrollment, you MUST collect ALL information before submitting. Use this workflow: (1) First, call with confirm=false to preview what would be created (this does NOT create the record). (2) Check the suggestedFields and previewData in the response to see what fields are missing. (3) Ask the user for missing information, especially insurance (Insurance_Provider__c, Insurance_Policy_Number__c, Insurance_Group_Number__c) and eligibility (Household_Size__c, Annual_Income__c) - these are essential. (4) Continue collecting information and calling with confirm=false until you have gathered all available information. (5) Only call with confirm=true when you have collected all information OR the user explicitly wants to submit with incomplete information. The system will validate completeness and guide you. For complete enrollment, collect: Basic Info (FirstName, LastName, DateOfBirth), Contact (Phone, Email, PreferredContactMethod, LanguagePreference), Address (Street, City, State, PostalCode, Country), Program (ProgramName), Eligibility (HouseholdSize, AnnualIncome), Insurance (Provider, PolicyNumber, GroupNumber). Records typically start in &quot;New Inquiry&quot; status. READ: Provide recordId. UPDATE: Provide recordId + fieldDataJson. DELETE: Provide recordId + confirm=true. FIND: IMPORTANT - Before calling find operation, ensure you have search criteria. If the user wants to find a record but hasn&apos;t provided a search term, ask them for details first. Search uses FirstName, LastName, and Email fields. Supports accountName and contactNameOrEmail parameters to link to Account/Contact. System uses best judgement to match by phone/email when creating records. Supports bulk operations.</description>
+            <developerName>Agentforce_Program_Candidate_Action_179Kj000000PlKP</developerName>
+            <invocationTarget>AFProgramCandidateAction</invocationTarget>
+            <invocationTargetType>apex</invocationTargetType>
+            <isConfirmationRequired>false</isConfirmationRequired>
+            <isIncludeInProgressIndicator>false</isIncludeInProgressIndicator>
+            <localDeveloperName>Agentforce_Program_Candidate_Action</localDeveloperName>
+            <masterLabel>Agentforce Program Candidate Action</masterLabel>
+        </localActions>
+        <localDeveloperName>Program_Enrollment</localDeveloperName>
+        <masterLabel>Program Enrollment</masterLabel>
+        <pluginType>Topic</pluginType>
+        <scope>I help patient services reps manage program enrollments. I can find, create, and update Program Candidate records. I track missing information items (consent forms, insurance cards, income verification, etc.) and help move candidates through the enrollment workflow. I work with enrollment statuses like New Inquiry, Pending Documentation, Benefits Verification, Approved, and Enrolled.</scope>
+    </localTopics>
+    <localTopics>
+        <fullName>Case_Management_16jKj000000GyC2</fullName>
+        <canEscalate>false</canEscalate>
+        <description>Internal topic for managing support cases, tasks, follow-ups, and case-related activities for patient services.
+
+ROUTING CLAIMS (use this topic):
+- &quot;case&quot;, &quot;ticket&quot;, &quot;support case&quot;, &quot;create case&quot;
+- &quot;task&quot;, &quot;follow-up&quot;, &quot;callback&quot;, &quot;to-do&quot;
+- &quot;case status&quot;, &quot;close case&quot;, &quot;escalate&quot;, &quot;reassign&quot;
+- &quot;summarize case&quot;, &quot;catch me up&quot;, &quot;case history&quot;
+- Working with Case records and Task records
+
+ROUTING EXCLUSIONS (do NOT use):
+- Enrollment workflows → Program Enrollment
+- Patient demographics lookup only → Patient Information
+- Missing enrollment documents → Program Enrollment</description>
+        <developerName>Case_Management_16jKj000000GyC2</developerName>
+        <genAiPluginInstructions>
+            <description>If a rep doesn&apos;t have a case number, search by patient name, account, or subject keywords. Use the summarize operation to quickly brief the rep on case history.</description>
+            <developerName>instruction_1</developerName>
+            <language xsi:nil="true"/>
+            <masterLabel>Instruction 1</masterLabel>
+            <sortOrder>0</sortOrder>
+        </genAiPluginInstructions>
+        <genAiPluginInstructions>
+            <description>When creating tasks, link them to the appropriate case and/or contact. Set realistic due dates and appropriate priority.</description>
+            <developerName>instruction_2</developerName>
+            <language xsi:nil="true"/>
+            <masterLabel>Instruction 2</masterLabel>
+            <sortOrder>1</sortOrder>
+        </genAiPluginInstructions>
+        <genAiPluginInstructions>
+            <description>The Case Action has a SUMMARIZE operation - use it when reps say &quot;catch me up&quot;, &quot;what&apos;s the history&quot;, &quot;TL;DR this case&quot;, or want context before calling a patient.</description>
+            <developerName>instruction_3</developerName>
+            <language xsi:nil="true"/>
+            <masterLabel>Instruction 3</masterLabel>
+            <sortOrder>2</sortOrder>
+        </genAiPluginInstructions>
+        <language>en_US</language>
+        <localActionLinks>
+            <functionName>Agentforce_Case_Action_179Kj000000PlKU</functionName>
+        </localActionLinks>
+        <localActionLinks>
+            <functionName>Agentforce_Task_Action_179Kj000000PlKU</functionName>
+        </localActionLinks>
+        <localActions>
+            <fullName>Agentforce_Task_Action_179Kj000000PlKU</fullName>
+            <description>Performs CRUD operations on Task records. Operation can be explicitly specified (create, read, update, delete, find) or inferred from context. CREATE: Provide fieldDataJson. READ: Provide recordId. UPDATE: Provide recordId + fieldDataJson. DELETE: Provide recordId + confirm=true. FIND: IMPORTANT - Before calling find operation, ensure you have search criteria. If the user asks to &quot;find&quot; or &quot;look up&quot; a task without providing specific details (task subject, related to account/contact, status, due date, etc.), you MUST ask the user for these details FIRST before calling this action. Only call this action with find operation when you have at least a searchTerm (task subject or partial subject) or filtersJson (specific field filters). If the user says &quot;look up a task&quot; or &quot;find a task&quot; without details, respond conversationally: &quot;I&apos;d be happy to help you find a task. Could you provide some details like the task subject, who it&apos;s related to (account or contact), status, or due date?&quot; Do NOT call the action with empty search criteria. PICKLIST VALUES: When the user asks about valid options for picklist fields (Status, Priority, Type, etc.), query availableFieldsJson from a previous read operation instead of asking the user. The availableFieldsJson contains all valid picklist values with their labels. CONTACT/ACCOUNT UPDATES: When the user wants to add or update the Contact or Account on a task, use the contactNameOrEmail or accountName parameters (not WhoId or WhatId in fieldDataJson). These parameters support name-based resolution. Supports bulk operations.</description>
+            <developerName>Agentforce_Task_Action_179Kj000000PlKU</developerName>
+            <invocationTarget>AFTaskAction</invocationTarget>
+            <invocationTargetType>apex</invocationTargetType>
+            <isConfirmationRequired>false</isConfirmationRequired>
+            <isIncludeInProgressIndicator>false</isIncludeInProgressIndicator>
+            <localDeveloperName>Agentforce_Task_Action</localDeveloperName>
+            <masterLabel>Agentforce Task Action</masterLabel>
+        </localActions>
+        <localActions>
+            <fullName>Agentforce_Case_Action_179Kj000000PlKU</fullName>
+            <description>Performs CRUD and summarize operations on Case records. Operations: CREATE, READ, UPDATE, DELETE, FIND, SUMMARIZE. SUMMARIZE OPERATION: Use when user asks to &quot;summarize this case&quot;, &quot;catch me up on the ticket&quot;, &quot;what has been discussed&quot;, &quot;show email history&quot;, &quot;TL;DR this case&quot;, or wants context on case communications. For summarize: provide recordId OR searchTerm (case number, subject, account name). Returns case details + most recent 10 emails in structured format for briefing. The caseSummaryData field contains everything needed to provide: (1) TL;DR - quick summary, (2) Current Status - case state and priority, (3) Communication History - email thread summary, (4) Action Items - suggested next steps. FIND: Requires searchTerm or filtersJson. PICKLIST VALUES: Query availableFieldsJson for valid Status, Priority, Type values. CONTACT/ACCOUNT: Use contactNameOrEmail or accountName parameters for name-based resolution. Supports bulk operations.</description>
+            <developerName>Agentforce_Case_Action_179Kj000000PlKU</developerName>
+            <invocationTarget>AFCaseAction</invocationTarget>
+            <invocationTargetType>apex</invocationTargetType>
+            <isConfirmationRequired>false</isConfirmationRequired>
+            <isIncludeInProgressIndicator>false</isIncludeInProgressIndicator>
+            <localDeveloperName>Agentforce_Case_Action</localDeveloperName>
+            <masterLabel>Agentforce Case Action</masterLabel>
+        </localActions>
+        <localDeveloperName>Case_Management</localDeveloperName>
+        <masterLabel>Case Management</masterLabel>
+        <pluginType>Topic</pluginType>
+        <scope>I help patient services reps manage support cases and tasks. I can find cases by number, subject, or patient name. I can update case status, add notes, create follow-up tasks, and summarize case history including email communications. Use me for support issues, callbacks, complaints, and general inquiries that aren&apos;t part of the enrollment workflow.</scope>
+    </localTopics>
+    <localTopics>
+        <fullName>Patient_Information_16jKj000000GyC2</fullName>
+        <canEscalate>false</canEscalate>
+        <description>Internal topic for looking up and managing patient account and contact records - demographics, contact info, and basic patient data.
+
+ROUTING CLAIMS (use this topic):
+- &quot;find patient&quot;, &quot;look up patient&quot;, &quot;patient info&quot;
+- &quot;update contact&quot;, &quot;update phone&quot;, &quot;update email&quot;, &quot;update address&quot;
+- &quot;patient demographics&quot;, &quot;patient details&quot;
+- Working with Account and Contact records (without enrollment or case context)
+
+ROUTING EXCLUSIONS (do NOT use):
+- Enrollment management → Program Enrollment
+- Case/ticket management → Case Management
+- Missing enrollment documents → Program Enrollment</description>
+        <developerName>Patient_Information_16jKj000000GyC2</developerName>
+        <genAiPluginInstructions>
+            <description>Search for patients by name, phone, email, or date of birth. If multiple matches, show options and ask the rep to clarify.</description>
+            <developerName>instruction_1</developerName>
+            <language xsi:nil="true"/>
+            <masterLabel>Instruction 1</masterLabel>
+            <sortOrder>0</sortOrder>
+        </genAiPluginInstructions>
+        <language>en_US</language>
+        <localActionLinks>
+            <functionName>Agentforce_Contact_Action_179Kj000000PlKZ</functionName>
+        </localActionLinks>
+        <localActionLinks>
+            <functionName>Agentforce_Account_Action_179Kj000000PlKZ</functionName>
+        </localActionLinks>
+        <localActions>
+            <fullName>Agentforce_Account_Action_179Kj000000PlKZ</fullName>
+            <description>Performs CRUD operations on Account records. Operation can be explicitly specified (create, read, update, delete, find) or inferred from context. CREATE: Provide fieldDataJson. READ: Provide recordId. UPDATE: Provide recordId + fieldDataJson. DELETE: Provide recordId + confirm=true (first call with confirm=false for confirmation). FIND: IMPORTANT - Before calling find operation, ensure you have search criteria. If the user asks to &quot;find&quot; or &quot;look up&quot; an account without providing specific details (account name, industry, city, state, phone, etc.), you MUST ask the user for these details FIRST before calling this action. Only call this action with find operation when you have at least a searchTerm (account name or partial name) or filtersJson (specific field filters). If the user says &quot;look up an account&quot; or &quot;find an account&quot; without details, respond conversationally: &quot;I&apos;d be happy to help you find an account. Could you provide some details like the account name, industry, city, state, or phone number?&quot; Do NOT call the action with empty search criteria. PICKLIST VALUES: When the user asks about valid options for picklist fields (Industry, Type, etc.), query availableFieldsJson from a previous read operation instead of asking the user. The availableFieldsJson contains all valid picklist values with their labels. The agent should intelligently infer the operation from user intent, but can explicitly specify if needed. Supports bulk operations for create/update by providing JSON array in fieldDataJson.</description>
+            <developerName>Agentforce_Account_Action_179Kj000000PlKZ</developerName>
+            <invocationTarget>AFAccountAction</invocationTarget>
+            <invocationTargetType>apex</invocationTargetType>
+            <isConfirmationRequired>false</isConfirmationRequired>
+            <isIncludeInProgressIndicator>false</isIncludeInProgressIndicator>
+            <localDeveloperName>Agentforce_Account_Action</localDeveloperName>
+            <masterLabel>Agentforce Account Action</masterLabel>
+        </localActions>
+        <localActions>
+            <fullName>Agentforce_Contact_Action_179Kj000000PlKZ</fullName>
+            <description>Performs CRUD operations on Contact records. Operation can be explicitly specified (create, read, update, delete, find) or inferred from context. CREATE: Provide fieldDataJson. READ: Provide recordId. UPDATE: Provide recordId + fieldDataJson. DELETE: Provide recordId + confirm=true (first call with confirm=false for confirmation). FIND: IMPORTANT - Before calling find operation, ensure you have search criteria. If the user asks to &quot;find&quot; or &quot;look up&quot; a contact without providing specific details (contact name, email, account name, phone, etc.), you MUST ask the user for these details FIRST before calling this action. Only call this action with find operation when you have at least a searchTerm (contact name or email) or filtersJson (specific field filters). If the user says &quot;look up a contact&quot; or &quot;find a contact&quot; without details, respond conversationally: &quot;I&apos;d be happy to help you find a contact. Could you provide some details like the contact name, email, account name, or phone number?&quot; Do NOT call the action with empty search criteria. PICKLIST VALUES: When the user asks about valid options for picklist fields (Title, Department, LeadSource, etc.), query availableFieldsJson from a previous read operation instead of asking the user. The availableFieldsJson contains all valid picklist values with their labels. Supports accountName parameter to link Contact to Account. Supports bulk operations for create/update by providing JSON array in fieldDataJson.</description>
+            <developerName>Agentforce_Contact_Action_179Kj000000PlKZ</developerName>
+            <invocationTarget>AFContactAction</invocationTarget>
+            <invocationTargetType>apex</invocationTargetType>
+            <isConfirmationRequired>false</isConfirmationRequired>
+            <isIncludeInProgressIndicator>false</isIncludeInProgressIndicator>
+            <localDeveloperName>Agentforce_Contact_Action</localDeveloperName>
+            <masterLabel>Agentforce Contact Action</masterLabel>
+        </localActions>
+        <localDeveloperName>Patient_Information</localDeveloperName>
+        <masterLabel>Patient Information</masterLabel>
+        <pluginType>Topic</pluginType>
+        <scope>I help reps find and update patient records (Accounts and Contacts). I can look up patients by name, phone, email, or date of birth. I can update contact information, addresses, and demographics. Use me for basic patient lookups when you&apos;re not specifically working on an enrollment or case.</scope>
+    </localTopics>
+    <masterLabel>Aria (Patient Services)</masterLabel>
+    <plannerActions>
+        <fullName>AnswerQuestionsWithKnowledge_16jKj000000GyC2</fullName>
+        <description>Answers questions about company policies and procedures, troubleshooting steps, or product information. For example: “What is your return policy?” “How do I fix an issue?” or “What features does a product have?”</description>
+        <developerName>AnswerQuestionsWithKnowledge_16jKj000000GyC2</developerName>
+        <invocationTarget>streamKnowledgeSearch</invocationTarget>
+        <invocationTargetType>standardInvocableAction</invocationTargetType>
+        <isConfirmationRequired>false</isConfirmationRequired>
+        <isIncludeInProgressIndicator>true</isIncludeInProgressIndicator>
+        <localDeveloperName>AnswerQuestionsWithKnowledge</localDeveloperName>
+        <masterLabel>Answer Questions with Knowledge</masterLabel>
+        <progressIndicatorMessage>Getting answers</progressIndicatorMessage>
+        <source>EmployeeCopilot__AnswerQuestionsWithKnowledge</source>
+    </plannerActions>
+    <plannerSurfaces>
+        <adaptiveResponseAllowed>true</adaptiveResponseAllowed>
+        <callRecordingAllowed>false</callRecordingAllowed>
+        <surface>SurfaceAction__Messaging</surface>
+        <surfaceType>Messaging</surfaceType>
+    </plannerSurfaces>
+    <plannerType>AiCopilot__ReAct</plannerType>
+</GenAiPlannerBundle>

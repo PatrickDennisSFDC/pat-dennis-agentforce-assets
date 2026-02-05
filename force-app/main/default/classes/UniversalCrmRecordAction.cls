@@ -1312,9 +1312,11 @@ public without sharing class AFUniversalCrmRecordAction {
             addLikeCondition('Email', likePattern, fieldMap, orConditions);
             addLikeCondition('Phone', likePattern, fieldMap, orConditions);
         } else if (obj == 'case') {
+            // Note: Description is a Long Text Area and cannot be filtered with LIKE
             addLikeCondition('CaseNumber', likePattern, fieldMap, orConditions);
             addLikeCondition('Subject', likePattern, fieldMap, orConditions);
-            addLikeCondition('Description', likePattern, fieldMap, orConditions);
+            // Also search by Account name for "cases for [Account]" queries
+            orConditions.add('Account.Name LIKE \'' + likePattern + '\'');
         } else if (obj == 'opportunity') {
             addLikeCondition('Name', likePattern, fieldMap, orConditions);
             addLikeCondition('StageName', likePattern, fieldMap, orConditions);

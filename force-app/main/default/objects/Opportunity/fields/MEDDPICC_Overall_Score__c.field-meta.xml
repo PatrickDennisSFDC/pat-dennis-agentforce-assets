@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>MEDDPICC_Overall_Score__c</fullName>
+    <description>Overall MEDDPICC deal qualification score from 0-100. Calculated as the average of all 8 MEDDPICC criteria scores, weighted equally. Score of 100 means all criteria rated "5 - Very Strong". Blank scores count as 0.</description>
+    <externalId>false</externalId>
+    <formula>(
+    (CASE(TEXT(MEDDPICC_Metrics_Score__c), 
+        "1 - Very Weak", 1, 
+        "2 - Weak", 2, 
+        "3 - Moderate", 3, 
+        "4 - Strong", 4, 
+        "5 - Very Strong", 5, 0) +
+    CASE(TEXT(MEDDPICC_Economic_Buyer_Score__c), 
+        "1 - Very Weak", 1, 
+        "2 - Weak", 2, 
+        "3 - Moderate", 3, 
+        "4 - Strong", 4, 
+        "5 - Very Strong", 5, 0) +
+    CASE(TEXT(MEDDPICC_Decision_Criteria_Score__c), 
+        "1 - Very Weak", 1, 
+        "2 - Weak", 2, 
+        "3 - Moderate", 3, 
+        "4 - Strong", 4, 
+        "5 - Very Strong", 5, 0) +
+    CASE(TEXT(MEDDPICC_Decision_Process_Score__c), 
+        "1 - Very Weak", 1, 
+        "2 - Weak", 2, 
+        "3 - Moderate", 3, 
+        "4 - Strong", 4, 
+        "5 - Very Strong", 5, 0) +
+    CASE(TEXT(MEDDPICC_Paper_Process_Score__c), 
+        "1 - Very Weak", 1, 
+        "2 - Weak", 2, 
+        "3 - Moderate", 3, 
+        "4 - Strong", 4, 
+        "5 - Very Strong", 5, 0) +
+    CASE(TEXT(MEDDPICC_Identify_Pain_Score__c), 
+        "1 - Very Weak", 1, 
+        "2 - Weak", 2, 
+        "3 - Moderate", 3, 
+        "4 - Strong", 4, 
+        "5 - Very Strong", 5, 0) +
+    CASE(TEXT(MEDDPICC_Champion_Score__c), 
+        "1 - Very Weak", 1, 
+        "2 - Weak", 2, 
+        "3 - Moderate", 3, 
+        "4 - Strong", 4, 
+        "5 - Very Strong", 5, 0) +
+    CASE(TEXT(MEDDPICC_Competition_Score__c), 
+        "1 - Very Weak", 1, 
+        "2 - Weak", 2, 
+        "3 - Moderate", 3, 
+        "4 - Strong", 4, 
+        "5 - Very Strong", 5, 0)
+    ) / 40
+) * 100</formula>
+    <inlineHelpText>Overall deal qualification score (0-100) based on all MEDDPICC criteria. 100 = fully qualified, 0 = not assessed.</inlineHelpText>
+    <label>Deal Qualification Score</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>0</scale>
+    <trackTrending>false</trackTrending>
+    <type>Number</type>
+</CustomField>

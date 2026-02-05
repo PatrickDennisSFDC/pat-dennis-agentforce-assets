@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GenAiFunction xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description>Generates a comprehensive morning briefing for field sales reps. The Daily Brief is an AI-powered podcast-style update covering: (1) Quick Account Updates from CRM, PR Newswire, portal data, and ERP. (2) Inside the House - Company announcements. (3) Market Overview - Healthcare trends. (4) Clinical and Biologic Updates. (5) Med-Surg and Diagnostic Tech news. (6) Corporate and Strategic Moves. TRIGGER PHRASES: "give me my daily brief", "morning briefing", "daily brief", "morning rundown", "what do I need to know today", "catch me up", "market update", "start my day", "whats on my plate today", "what is happening in the industry". This action generates a comprehensive briefing without requiring specific input.</description>
+    <developerName>Daily_Brief_Agents_Action</developerName>
+    <invocationTarget>Daily_Brief_Agents</invocationTarget>
+    <invocationTargetType>generatePromptResponse</invocationTargetType>
+    <isConfirmationRequired>false</isConfirmationRequired>
+    <isIncludeInProgressIndicator>true</isIncludeInProgressIndicator>
+    <localDeveloperName>Daily_Brief_Agents_Action</localDeveloperName>
+    <masterLabel>Daily Brief (Agents)</masterLabel>
+    <progressIndicatorMessage>Preparing your daily brief...</progressIndicatorMessage>
+</GenAiFunction>

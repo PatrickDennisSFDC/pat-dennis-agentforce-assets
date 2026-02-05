@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Test_Provider__c</fullName>
+    <label>Test Provider</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Genomic Diagnostics Inc</fullName>
+                <default>false</default>
+                <label>Genomic Diagnostics Inc</label>
+            </value>
+            <value>
+                <fullName>MediTest Laboratories</fullName>
+                <default>false</default>
+                <label>MediTest Laboratories</label>
+            </value>
+            <value>
+                <fullName>Precision Health Analytics</fullName>
+                <default>false</default>
+                <label>Precision Health Analytics</label>
+            </value>
+            <value>
+                <fullName>BioScreen Diagnostics</fullName>
+                <default>false</default>
+                <label>BioScreen Diagnostics</label>
+            </value>
+            <value>
+                <fullName>Advanced Clinical Testing</fullName>
+                <default>false</default>
+                <label>Advanced Clinical Testing</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>
+

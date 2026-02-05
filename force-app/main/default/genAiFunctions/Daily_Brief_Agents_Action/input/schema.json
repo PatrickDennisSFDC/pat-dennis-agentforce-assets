@@ -1,0 +1,15 @@
+{
+  "required" : [ "Input:Input" ],
+  "unevaluatedProperties" : false,
+  "properties" : {
+    "Input:Input" : {
+      "title" : "Input",
+      "description" : "Conversational context for the daily brief. The agent passes the conversation context to help personalize the briefing.",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : false
+    }
+  },
+  "lightning:type" : "lightning__objectType"
+}
+

@@ -9,9 +9,28 @@ public without sharing class AFCustomerOrderAction {
     public class Request {
         @InvocableVariable(
             label='Operation'
-            description='Explicit operation: "create", "read", "update", "delete", or "find". If not specified, inferred from context.'
+            description='Explicit operation: "create", "read", "update", "delete", "find", or "aggregate". AGGREGATE for order analytics like "how many orders this month", "orders by status".'
         )
         public String operation;
+        
+        // ========== AGGREGATE OPERATION PARAMETERS ==========
+        @InvocableVariable(label='Aggregate Function' description='For aggregate: SUM, COUNT, AVG, MIN, MAX. Example: COUNT for "how many orders".')
+        public String aggregateFunction;
+        
+        @InvocableVariable(label='Aggregate Field' description='For aggregate: Field to aggregate. Use "Id" for COUNT.')
+        public String aggregateField;
+        
+        @InvocableVariable(label='Group By Fields JSON' description='For aggregate: JSON array of fields to group by. Example: ["Status__c"] for orders by status.')
+        public String groupByFieldsJson;
+        
+        @InvocableVariable(label='Date Range Field' description='For aggregate: Date field to filter. Use "Order_Date__c" or "CreatedDate".')
+        public String dateRangeField;
+        
+        @InvocableVariable(label='Date Range Predefined' description='For aggregate: TODAY, THIS_WEEK, THIS_MONTH, THIS_QUARTER, etc.')
+        public String dateRangePredefined;
+        
+        @InvocableVariable(label='Date Range Days' description='For aggregate with LAST_N_DAYS or NEXT_N_DAYS.')
+        public Integer dateRangeDays;
         
         @InvocableVariable(
             label='Field Data JSON'
@@ -22,19 +41,19 @@ public without sharing class AFCustomerOrderAction {
         
         @InvocableVariable(
             label='Record ID'
-            description='The Salesforce record ID of the Customer Order. Required for read/update/delete. Format: 18-character ID like "a2sxx000000ABCDEF".'
+            description='The Customer ORDER ID (not line item ID). Required for read/update/delete operations on orders. IMPORTANT: When updating line items, this must be the ORDER ID (starts with the order prefix), NOT the line item ID. The line item IDs go in updateLineItemsJson. Example: If order ID is "a2sKj00000ABC123" and you want to update line items, use recordId="a2sKj00000ABC123" and updateLineItemsJson=[{"Id":"a2tKj00000XYZ789","Quantity__c":150}].'
         )
         public Id recordId;
         
         @InvocableVariable(
             label='Search Term'
-            description='Text to search for in Customer Order fields (Name, Order_Number__c, PO_Number__c, etc.). Used for find operations. IMPORTANT: If the user wants to find a customer order but hasn\'t provided a search term, ask them for the order name, order number, or other identifying information BEFORE calling this action. Do not call find operation without a searchTerm or filtersJson.'
+            description='Text to search for Customer Orders. Searches: Order Name, Order Number, Account Name, Contact Name. Flexible matching with LIKE - spaces and punctuation variations work (e.g., "ORD 10003" or "ORD-10003" both match). Pass the search term exactly as the user provides it. Examples: "Plasmosis Inc" finds orders for that account, "ORD-10003" or "10003" finds by order number.'
         )
         public String searchTerm;
         
         @InvocableVariable(
             label='Filters JSON'
-            description='JSON string of exact-match filters for find operations. IMPORTANT: If the user wants to find a customer order but hasn\'t provided specific filters, ask them for details like order number, account name, or status BEFORE calling this action. Do not call find operation without a searchTerm or filtersJson.'
+            description='JSON string of exact-match filters for find operations. Use for precise filtering by field values. Example: {"Status__c":"Shipped"} or {"Priority__c":"High"}. Can be combined with searchTerm for refined results. Prefer searchTerm for name-based lookups (account name, order number, contact name).'
         )
         public String filtersJson;
         
@@ -72,7 +91,7 @@ public without sharing class AFCustomerOrderAction {
         
         @InvocableVariable(
             label='Update Line Items JSON'
-            description='JSON array of EXISTING line items to update (for update operation). Format: [{"Id":"a00xxx...","Quantity__c":50}]. Each item must include the line item Id plus the fields to change.'
+            description='JSON array of line items to update. IMPORTANT: Put the ORDER ID in recordId parameter, and the LINE ITEM IDs here. Format: [{"Id":"<LINE_ITEM_ID>","Quantity__c":150}]. Example to update 2 line items: recordId="a2sKj00000ORDER" (the order), updateLineItemsJson=[{"Id":"a2tKj00000ITEM1","Quantity__c":150},{"Id":"a2tKj00000ITEM2","Quantity__c":150}]. Get line item IDs from a previous read operation on the order.'
             required=false
         )
         public String updateLineItemsJson;
@@ -231,6 +250,19 @@ public without sharing class AFCustomerOrderAction {
             description='Name of the related Contact if the Order is linked to a Contact.'
         )
         public String relatedContactName;
+        
+        // ========== AGGREGATE OPERATION RESPONSE FIELDS ==========
+        @InvocableVariable(label='Aggregate Results JSON' description='For aggregate: JSON array of results.')
+        public String aggregateResultsJson;
+        
+        @InvocableVariable(label='Total Value' description='For aggregate: Total value across all groups.')
+        public Decimal totalValue;
+        
+        @InvocableVariable(label='Group Count' description='For aggregate: Number of groups in results.')
+        public Integer groupCount;
+        
+        @InvocableVariable(label='Query Description' description='For aggregate: Human-readable query description.')
+        public String queryDescription;
     }
     
     private static String inferOperation(Request req) {
@@ -242,7 +274,9 @@ public without sharing class AFCustomerOrderAction {
         Boolean hasFieldData = !String.isBlank(req.fieldDataJson);
         Boolean hasSearchTerm = !String.isBlank(req.searchTerm);
         Boolean hasFilters = !String.isBlank(req.filtersJson);
+        Boolean hasAggregateParams = !String.isBlank(req.aggregateFunction);
         
+        if (hasAggregateParams) return 'aggregate';
         if (hasRecordId && hasFieldData) return 'update';
         else if (hasRecordId && !hasFieldData && !hasSearchTerm && !hasFilters) return 'read';
         else if (hasFieldData && !hasRecordId) return 'create';
@@ -254,7 +288,7 @@ public without sharing class AFCustomerOrderAction {
     
     @InvocableMethod(
         label='Agentforce Customer Order Action'
-        description='Performs CRUD operations on CustomerOrders__c records. Operation can be explicitly specified (create, read, update, delete, find) or inferred from context. CREATE: Provide fieldDataJson. Optionally provide lineItemsJson to create line items with the order. READ: Provide recordId. Automatically includes all line items. UPDATE: Provide recordId + fieldDataJson. Optionally provide addLineItemsJson, updateLineItemsJson, or deleteLineItemIds to manage line items. DELETE: Provide recordId + confirm=true. FIND: IMPORTANT - Before calling find operation, ensure you have search criteria. If the user asks to "find" or "look up" a customer order without providing specific details (order name, order number, account name, status, etc.), you MUST ask the user for these details FIRST before calling this action. Only call this action with find operation when you have at least a searchTerm (order name or order number) or filtersJson (specific field filters). If the user says "look up a customer order" or "find a customer order" without details, respond conversationally: "I\'d be happy to help you find a customer order. Could you provide some details like the order name, order number, account name, or status?" Do NOT call the action with empty search criteria. PICKLIST VALUES: When the user asks about valid options for picklist fields (Status__c, Priority__c, etc.), query availableFieldsJson from a previous read operation instead of asking the user. The availableFieldsJson contains all valid picklist values with their labels. CONTACT/ACCOUNT UPDATES: When the user wants to add or update the Contact or Account on an order, use the contactNameOrEmail or accountName parameters (not Contact__c or Account__c in fieldDataJson). These parameters support name-based resolution. Supports bulk operations for create/update.'
+        description='Performs CRUD operations on CustomerOrders__c records. FIND/SEARCH: Use searchTerm to find orders. Searches Order Name, Order Number, Account Name, Contact Name. Flexible matching - "ORD 10003" or "ORD-10003" both work. Examples: "Plasmosis Inc" finds orders for that account. READ: Provide recordId (ORDER ID) to get order details including all line items with their IDs. UPDATE ORDER FIELDS: recordId (ORDER ID) + fieldDataJson. UPDATE LINE ITEMS: recordId must be the ORDER ID (not line item ID!), put line item changes in updateLineItemsJson with line item IDs. Example: recordId="a2sKj00000ORDER", updateLineItemsJson=[{"Id":"a2tKj00000LINEITEM","Quantity__c":150}]. Get line item IDs from a previous read. CREATE: fieldDataJson with order details, optionally lineItemsJson for new line items. DELETE: recordId + confirm=true. ACCOUNT/CONTACT: Use accountName or contactNameOrEmail parameters to link by name.'
         category='CRM Actions'
     )
     public static List<Response> customerOrderAction(List<Request> requests) {
@@ -559,6 +593,35 @@ public without sharing class AFCustomerOrderAction {
                         res.success = false;
                         res.errorMessage = actionRes.message != null ? actionRes.message : 'Search failed.';
                     }
+                    responses.add(res);
+                    continue;
+                }
+                
+                // For aggregate operation - delegates to AFUniversalAnalyticsAction
+                if (op == 'aggregate') {
+                    AFUniversalAnalyticsAction.Request analyticsReq = new AFUniversalAnalyticsAction.Request();
+                    analyticsReq.objectApiName = 'CustomerOrders__c';
+                    analyticsReq.aggregateFunction = req.aggregateFunction;
+                    analyticsReq.aggregateField = req.aggregateField;
+                    analyticsReq.groupByFieldsJson = req.groupByFieldsJson;
+                    analyticsReq.dateRangeField = req.dateRangeField;
+                    analyticsReq.dateRangePredefined = req.dateRangePredefined;
+                    analyticsReq.dateRangeDays = req.dateRangeDays;
+                    analyticsReq.filtersJson = req.filtersJson;
+                    
+                    List<AFUniversalAnalyticsAction.Request> analyticsRequests = new List<AFUniversalAnalyticsAction.Request>{ analyticsReq };
+                    List<AFUniversalAnalyticsAction.Response> analyticsResponses = AFUniversalAnalyticsAction.executeAnalytics(analyticsRequests);
+                    AFUniversalAnalyticsAction.Response analyticsRes = analyticsResponses[0];
+                    
+                    res.success = analyticsRes.success;
+                    res.message = analyticsRes.message;
+                    res.errorMessage = analyticsRes.errorMessage;
+                    res.aggregateResultsJson = analyticsRes.aggregateResultsJson;
+                    res.totalValue = analyticsRes.totalValue;
+                    res.groupCount = analyticsRes.groupCount;
+                    res.totalMatches = analyticsRes.recordCount;
+                    res.queryDescription = analyticsRes.queryDescription;
+                    
                     responses.add(res);
                     continue;
                 }

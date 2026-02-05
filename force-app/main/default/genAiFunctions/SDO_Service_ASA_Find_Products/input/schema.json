@@ -1,0 +1,14 @@
+{
+  "required" : [ "productRequest" ],
+  "unevaluatedProperties" : false,
+  "properties" : {
+    "productRequest" : {
+      "title" : "productRequest",
+      "description" : "This is type of product or product category the user is looking for",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : false
+    }
+  },
+  "lightning:type" : "lightning__objectType"
+}

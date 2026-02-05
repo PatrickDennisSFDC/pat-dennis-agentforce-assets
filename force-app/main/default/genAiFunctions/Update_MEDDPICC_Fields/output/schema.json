@@ -1,0 +1,37 @@
+{
+  "type": "object",
+  "properties": {
+    "success": {
+      "type": "boolean",
+      "description": "Whether the operation completed successfully"
+    },
+    "message": {
+      "type": "string",
+      "description": "Human-readable summary of what was updated"
+    },
+    "updatedFields": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "List of MEDDPICC text field names that were updated"
+    },
+    "updatedScores": {
+      "type": "object",
+      "description": "Map of field names to their new score values (1-5)"
+    },
+    "newOverallScore": {
+      "type": "number",
+      "description": "The new overall MEDDPICC score for the opportunity (average of all dimension scores)"
+    },
+    "errorMessage": {
+      "type": "string",
+      "description": "Error message if success is false"
+    },
+    "opportunityJson": {
+      "type": "string",
+      "description": "JSON representation of the updated opportunity record"
+    }
+  }
+}
+

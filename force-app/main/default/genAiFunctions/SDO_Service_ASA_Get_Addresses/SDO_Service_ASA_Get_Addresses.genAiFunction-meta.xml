@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GenAiFunction xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description>Used in the Cirrus Agentforce Service Agent to get the address associated with a customer account.</description>
+    <developerName>SDO_Service_ASA_Get_Addresses</developerName>
+    <invocationTarget>SDO_Service_ASA_Get_Addresses</invocationTarget>
+    <invocationTargetType>flow</invocationTargetType>
+    <isConfirmationRequired>false</isConfirmationRequired>
+    <isIncludeInProgressIndicator>true</isIncludeInProgressIndicator>
+    <localDeveloperName>SDO_Service_ASA_Get_Addresses</localDeveloperName>
+    <masterLabel>SDO Service - ASA - Get Addresses</masterLabel>
+    <progressIndicatorMessage>Just a moment — checking your address book</progressIndicatorMessage>
+</GenAiFunction>

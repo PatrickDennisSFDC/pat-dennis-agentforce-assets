@@ -1,0 +1,111 @@
+{
+  "unevaluatedProperties" : false,
+  "properties" : {
+    "accountName" : {
+      "title" : "Account Name",
+      "description" : "Account name to resolve to Account__c lookup. Use this when you know the company/organization but not a specific contact. If the user says they met with someone at Acme Corp or had a meeting at General Hospital, you can use accountName even without a contact. The Account will be linked to the meeting. Note: If you provide contactNameOrEmail, the Account is auto-populated from the Contact record so you usually do not need both.",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : false
+    },
+    "aggregateField" : {
+      "title" : "Aggregate Field",
+      "description" : "For aggregate: Field to aggregate. Use \"Id\" for COUNT.",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : false
+    },
+    "aggregateFunction" : {
+      "title" : "Aggregate Function",
+      "description" : "For aggregate: SUM, COUNT, AVG, MIN, MAX. Example: COUNT for \"how many meetings\".",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : false
+    },
+    "confirm" : {
+      "title" : "Confirm",
+      "description" : "For create/update: Set to false to preview only. For delete: Set to true to actually delete.",
+      "lightning:type" : "lightning__booleanType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : false
+    },
+    "contactNameOrEmail" : {
+      "title" : "Contact Name or Email",
+      "description" : "Contact name or email to resolve to Contact__c lookup. IMPORTANT: When a Contact is resolved, their Account is AUTOMATICALLY populated on the Meeting. You do NOT need to separately provide accountName if you have the contact. Example: If user says I met with Joe Dennis, just provide contactNameOrEmail and both Contact and Account will be linked. Only use accountName separately if you ONLY know the company, not a specific person.",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : false
+    },
+    "dateRangeDays" : {
+      "title" : "Date Range Days",
+      "description" : "For aggregate with LAST_N_DAYS or NEXT_N_DAYS.",
+      "lightning:type" : "lightning__integerType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : false
+    },
+    "dateRangeField" : {
+      "title" : "Date Range Field",
+      "description" : "For aggregate: Date field to filter. Use \"Meeting_Date__c\".",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : false
+    },
+    "dateRangePredefined" : {
+      "title" : "Date Range Predefined",
+      "description" : "For aggregate: TODAY, THIS_WEEK, THIS_MONTH, THIS_QUARTER, etc.",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : false
+    },
+    "fieldDataJson" : {
+      "title" : "Field Data JSON",
+      "description" : "JSON string containing Meeting field data. YOUR GOAL: Create meeting records that are genuinely useful to the sales team. A meeting with just a subject and date is almost worthless. A meeting with outcome, next steps, description, and product context is VALUABLE. Every meeting you create should answer: What happened, how did it go, and what needs to happen next? DATE INFERENCE (CRITICAL): If no date mentioned, DEFAULT TO TODAY. Do NOT ask for meeting date - infer it: today/this morning/this afternoon/just now/earlier -> today, yesterday/last night -> yesterday, last week/last Monday -> calculate the date. NEVER block meeting creation just because date is missing - use today as default. MINIMUM VIABLE MEETING - Do NOT create until you have: (1) Contact or Account - required (but proceed if neither found, capture name in description), (2) Meeting Date - default to today if not specified, (3) Subject - required, (4) Meeting Type - required via inference or asking, (5) Meeting Outcome - infer from context or default to Neutral, (6) Next Steps - strongly encouraged and ALWAYS ask if not mentioned, (7) Description - strongly encouraged and synthesize from conversation. SPARSE INPUT RULE: If user message does NOT contain at least TWO of: outcome sentiment, next steps, meeting type context - then STOP and ask follow-up questions. Do not create sparse records. Examples requiring probing: Log a meeting with X, I called X about their ticket. Example ready for inference: Stopped by X office, great chat about renewal, they want proposal next week. MANDATORY DESCRIPTION: Always populate Description__c with a 2-3 sentence narrative capturing: what was discussed, key outcomes or decisions, context that helps colleagues understand this meeting. Never leave Description__c blank. INTELLIGENT INFERENCE FOR MEETING TYPE: lunch/dinner/coffee/office/stopped by/visited -> In-Person Visit, zoom/teams/virtual/video/webex -> Virtual Meeting, called/phone/rang/dialed -> Phone Call, conference/trade show/event/expo -> Conference. INTELLIGENT INFERENCE FOR OUTCOME: great/excellent/amazing/really well/excited/love it -> Very Productive, good/productive/positive/on track/solid -> Productive, fine/okay/standard/routine/uneventful/quick/check-in -> Neutral, tough/challenging/concerns/issues/pushback/worried -> Needs Follow-up, disaster/rejected/not interested/dead end/lost/killed -> Unsuccessful. SAMPLES/MATERIALS: dropped off samples/left samples/gave samples -> Samples_Dropped_Off__c Yes, left brochures/marketing materials/collateral -> Marketing_Materials_Provided__c Yes. FOLLOW-UP DETECTION: follow up/next steps/action items/need to schedule/send proposal/get back to them -> Follow_Up_Required__c true and capture in Next_Steps__c. Use accountName or contactNameOrEmail to resolve lookups. FUZZY MATCHING: Account names use fuzzy matching so Accusage Inc matches Accusage, Inc and variations with different suffixes like Corp, LLC etc are handled automatically. DEMO MODE: This is a demo environment - prioritize creating records over asking clarifying questions. When in doubt, make a reasonable assumption and proceed.",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : false
+    },
+    "filtersJson" : {
+      "title" : "Filters JSON",
+      "description" : "JSON string of exact-match filters for find operations. IMPORTANT: If the user wants to find a meeting but hasn't provided specific filters, ask them for details like account/contact name, meeting date, or meeting type BEFORE calling this action. Do not call find operation without a searchTerm or filtersJson.",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : false
+    },
+    "groupByFieldsJson" : {
+      "title" : "Group By Fields JSON",
+      "description" : "For aggregate: JSON array of fields to group by. Example: [\"Meeting_Type__c\"] for meetings by type.",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : false
+    },
+    "operation" : {
+      "title" : "Operation",
+      "description" : "Explicit operation: \"create\", \"read\", \"update\", \"delete\", \"find\", or \"aggregate\". AGGREGATE for meeting analytics like \"how many meetings this month\", \"meetings by type\".",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : false
+    },
+    "recordId" : {
+      "title" : "Record ID",
+      "description" : "The Salesforce record ID of the Meeting. Required for read/update/delete. Format: 18-character ID.",
+      "lightning:type" : "lightning__recordIdType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : false
+    },
+    "searchLimit" : {
+      "title" : "Search Limit",
+      "description" : "Maximum number of records to return for find operations (default: 5, max: 20).",
+      "lightning:type" : "lightning__integerType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : false
+    },
+    "searchTerm" : {
+      "title" : "Search Term",
+      "description" : "Text to search for in Meeting fields (Subject__c, Description__c, etc.). Used for find operations. IMPORTANT: If the user wants to find a meeting but hasn't provided a search term, ask them for the meeting subject, account/contact name, or other identifying information BEFORE calling this action. Do not call find operation without a searchTerm or filtersJson.",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : false
+    }
+  },
+  "lightning:type" : "lightning__objectType"
+}

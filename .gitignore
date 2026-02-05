@@ -46,3 +46,44 @@ $RECYCLE.BIN/
 **/__pycache__/
 **/.venv/
 **/venv/
+
+# ===========================================
+# EXCLUDED FROM PUBLIC REPOSITORY
+# ===========================================
+
+# Test specifications (org-specific)
+specs/
+
+# Scripts (one-off utilities)
+scripts/
+
+# Temporary/work-in-progress
+tmp/
+
+# Org-specific Salesforce metadata
+force-app/main/default/aiEvaluationDefinitions/
+force-app/main/default/bots/
+force-app/main/default/genAiPlugins/
+force-app/main/default/remoteSiteSettings/
+force-app/main/default/staticresources/
+force-app/main/default/pathAssistants/
+
+# Root-level seed data and scripts
+*.apex
+diagnostic_test_orders_seed_data.csv
+deploy.sh
+
+# Documentation (org-specific content)
+docs/
+
+# Personal working notes
+DEPLOYMENT_CHECKLIST_ProgramCandidate.md
+AGENT_CONTEXT.md
+AGENT_RULES.md
+JUNO_AGENT_INSTRUCTIONS_UPDATE.md
+
+# IDE configuration
+.cursor/
+.cursorrules
+.vscode/
+config/

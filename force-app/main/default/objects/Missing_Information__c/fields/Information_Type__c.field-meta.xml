@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Information_Type__c</fullName>
+    <description>The type of information that is missing or needed from the patient.</description>
+    <externalId>false</externalId>
+    <inlineHelpText>Select the type of document or information needed from the patient.</inlineHelpText>
+    <label>Information Type</label>
+    <required>false</required>
+    <trackHistory>true</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Insurance Card</fullName>
+                <default>false</default>
+                <label>Insurance Card</label>
+            </value>
+            <value>
+                <fullName>Member ID</fullName>
+                <default>false</default>
+                <label>Member ID</label>
+            </value>
+            <value>
+                <fullName>Income Verification</fullName>
+                <default>false</default>
+                <label>Income Verification</label>
+            </value>
+            <value>
+                <fullName>Date of Birth</fullName>
+                <default>false</default>
+                <label>Date of Birth</label>
+            </value>
+            <value>
+                <fullName>Prescription</fullName>
+                <default>false</default>
+                <label>Prescription</label>
+            </value>
+            <value>
+                <fullName>Consent Form</fullName>
+                <default>false</default>
+                <label>Consent Form</label>
+            </value>
+            <value>
+                <fullName>ID Document</fullName>
+                <default>false</default>
+                <label>ID Document</label>
+            </value>
+            <value>
+                <fullName>Address Verification</fullName>
+                <default>false</default>
+                <label>Address Verification</label>
+            </value>
+            <value>
+                <fullName>Contact Information</fullName>
+                <default>false</default>
+                <label>Contact Information</label>
+            </value>
+            <value>
+                <fullName>Other</fullName>
+                <default>false</default>
+                <label>Other</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

@@ -1,0 +1,204 @@
+<template>
+    <div class="daily-brief-container">
+        <!-- Header -->
+        <header class="brief-header">
+            <div class="header-icon">
+                <lightning-icon icon-name="utility:agent_astro" size="medium" alternative-text="Daily Brief"></lightning-icon>
+            </div>
+            <div class="header-content">
+                <h1 class="header-title">Daily Brief</h1>
+                <p class="header-subtitle">AI-powered updates from your Salesforce data</p>
+            </div>
+            <template if:true={showRefreshButton}>
+                <lightning-button-icon 
+                    icon-name="utility:refresh"
+                    variant="bare"
+                    alternative-text="Refresh"
+                    title="Generate new brief"
+                    onclick={handleRefresh}
+                    class="refresh-button">
+                </lightning-button-icon>
+            </template>
+        </header>
+
+        <!-- Configuration Warning -->
+        <template if:true={showConfigWarning}>
+            <div class="config-warning">
+                <lightning-icon icon-name="utility:warning" size="small" variant="warning"></lightning-icon>
+                <div class="warning-content">
+                    <p class="warning-title">Configuration Required</p>
+                    <p class="warning-message">{configWarningMessage}</p>
+                </div>
+            </div>
+        </template>
+
+        <!-- Main Content Area -->
+        <div class="brief-content">
+            <!-- Idle State: Generate Button -->
+            <template if:true={isIdle}>
+                <div class="idle-state">
+                    <div class="idle-icon-container">
+                        <div class="idle-icon-ring"></div>
+                        <div class="idle-icon-ring ring-2"></div>
+                        <lightning-icon icon-name="utility:sparkle" size="large" class="idle-icon"></lightning-icon>
+                    </div>
+                    <h2 class="idle-title">Ready to brief you</h2>
+                    <p class="idle-subtitle">Get a personalized AI-generated summary of your day</p>
+                    <lightning-button 
+                        label="Generate Brief"
+                        variant="brand"
+                        onclick={handleGenerateBrief}
+                        icon-name="utility:play"
+                        class="generate-button">
+                    </lightning-button>
+                </div>
+            </template>
+
+            <!-- Loading State -->
+            <template if:true={isLoading}>
+                <div class="loading-state">
+                    <div class="loading-animation">
+                        <div class="loading-spinner"></div>
+                        <lightning-icon icon-name="utility:sparkle" size="medium" class="loading-icon"></lightning-icon>
+                    </div>
+                    <h2 class="loading-title">{loadingMessage}</h2>
+                    <p class="loading-subtitle">Salesforce AI is preparing your personalized summary...</p>
+                </div>
+            </template>
+
+            <!-- Synthesizing Audio State -->
+            <template if:true={isSynthesizing}>
+                <div class="synthesizing-state">
+                    <div class="audio-wave-animation">
+                        <div class="wave-bar"></div>
+                        <div class="wave-bar"></div>
+                        <div class="wave-bar"></div>
+                        <div class="wave-bar"></div>
+                        <div class="wave-bar"></div>
+                    </div>
+                    <h2 class="loading-title">Preparing Audio</h2>
+                    <p class="loading-subtitle">Converting your brief to natural speech...</p>
+                </div>
+            </template>
+
+            <!-- Loaded State: Media Player -->
+            <template if:true={isLoaded}>
+                <div class="player-container">
+                    <!-- Media Player Card -->
+                    <div class="media-player">
+                        <!-- Progress Bar -->
+                        <div class="progress-container" onclick={handleProgressClick}>
+                            <div class="progress-track">
+                                <div class="progress-fill" style={progressStyle}></div>
+                            </div>
+                            <div class="progress-times">
+                                <span class="time-current">{formattedCurrentTime}</span>
+                                <span class="time-total">{formattedDuration}</span>
+                            </div>
+                        </div>
+
+                        <!-- Playback Controls -->
+                        <div class="playback-controls">
+                            <!-- Speed Selector -->
+                            <div class="speed-control">
+                                <lightning-combobox
+                                    name="speed"
+                                    value={playbackSpeed}
+                                    options={speedOptions}
+                                    onchange={handleSpeedChange}
+                                    variant="label-hidden"
+                                    dropdown-alignment="left"
+                                    class="speed-select">
+                                </lightning-combobox>
+                            </div>
+
+                            <!-- Main Controls -->
+                            <div class="main-controls">
+                                <lightning-button-icon 
+                                    icon-name="utility:jump_to_left"
+                                    variant="bare"
+                                    alternative-text="Skip back 15 seconds"
+                                    title="Skip back 15 seconds"
+                                    onclick={handleSkipBack}
+                                    size="medium"
+                                    class="skip-button">
+                                </lightning-button-icon>
+
+                                <button class="play-pause-button" onclick={handlePlayPause} type="button">
+                                    <template if:true={isPlaying}>
+                                        <lightning-icon icon-name="utility:pause" size="medium" alternative-text="Pause"></lightning-icon>
+                                    </template>
+                                    <template if:false={isPlaying}>
+                                        <lightning-icon icon-name="utility:play" size="medium" alternative-text="Play"></lightning-icon>
+                                    </template>
+                                </button>
+
+                                <lightning-button-icon 
+                                    icon-name="utility:jump_to_right"
+                                    variant="bare"
+                                    alternative-text="Skip forward 15 seconds"
+                                    title="Skip forward 15 seconds"
+                                    onclick={handleSkipForward}
+                                    size="medium"
+                                    class="skip-button">
+                                </lightning-button-icon>
+                            </div>
+
+                            <!-- Voice Selector -->
+                            <div class="voice-control">
+                                <lightning-combobox
+                                    name="voice"
+                                    value={selectedVoiceId}
+                                    options={voiceOptions}
+                                    onchange={handleVoiceChange}
+                                    variant="label-hidden"
+                                    dropdown-alignment="right"
+                                    class="voice-select">
+                                </lightning-combobox>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Transcript Section -->
+                    <div class="transcript-section">
+                        <div class="transcript-header">
+                            <lightning-icon icon-name="utility:text" size="x-small"></lightning-icon>
+                            <span class="transcript-label">Transcript</span>
+                            <template if:true={canShare}>
+                                <lightning-button-icon 
+                                    icon-name="utility:share"
+                                    variant="bare"
+                                    alternative-text="Share audio file"
+                                    title="Share audio file via macOS share sheet"
+                                    onclick={handleShare}
+                                    class="share-button">
+                                </lightning-button-icon>
+                            </template>
+                            <template if:true={generatedAt}>
+                                <span class="generated-time">Generated {formattedGeneratedAt}</span>
+                            </template>
+                        </div>
+                        <div class="transcript-content" lwc:dom="manual"></div>
+                    </div>
+                </div>
+            </template>
+
+            <!-- Error State -->
+            <template if:true={hasError}>
+                <div class="error-state">
+                    <lightning-icon icon-name="utility:error" size="large" variant="error" class="error-icon"></lightning-icon>
+                    <h2 class="error-title">Something went wrong</h2>
+                    <p class="error-message">{errorMessage}</p>
+                    <lightning-button 
+                        label="Try Again"
+                        variant="brand"
+                        onclick={handleGenerateBrief}
+                        icon-name="utility:refresh"
+                        class="retry-button">
+                    </lightning-button>
+                </div>
+            </template>
+        </div>
+    </div>
+</template>
+

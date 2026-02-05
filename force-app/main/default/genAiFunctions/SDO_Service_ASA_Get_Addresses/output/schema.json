@@ -1,0 +1,28 @@
+{
+  "unevaluatedProperties" : false,
+  "properties" : {
+    "addressList" : {
+      "title" : "addressList",
+      "description" : "A list of addresses for the user to select from",
+      "maxItems" : 2000,
+      "items" : {
+        "lightning:type" : "lightning__textType"
+      },
+      "lightning:type" : "lightning__listType",
+      "lightning:isPII" : false,
+      "copilotAction:isDisplayable" : true,
+      "copilotAction:isUsedByPlanner" : true,
+      "copilotAction:useHydratedPrompt" : false
+    },
+    "nextSteps" : {
+      "title" : "nextSteps",
+      "description" : "This is the recommended next step for the user",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isDisplayable" : true,
+      "copilotAction:isUsedByPlanner" : true,
+      "copilotAction:useHydratedPrompt" : false
+    }
+  },
+  "lightning:type" : "lightning__objectType"
+}

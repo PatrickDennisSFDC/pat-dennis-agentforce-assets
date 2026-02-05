@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Test_Name__c</fullName>
+    <label>Test Name</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Comprehensive Genomic Panel</fullName>
+                <default>false</default>
+                <label>Comprehensive Genomic Panel</label>
+            </value>
+            <value>
+                <fullName>Hereditary Cancer Screen</fullName>
+                <default>false</default>
+                <label>Hereditary Cancer Screen</label>
+            </value>
+            <value>
+                <fullName>Cardiovascular Risk Assessment</fullName>
+                <default>false</default>
+                <label>Cardiovascular Risk Assessment</label>
+            </value>
+            <value>
+                <fullName>Pharmacogenomics Profile</fullName>
+                <default>false</default>
+                <label>Pharmacogenomics Profile</label>
+            </value>
+            <value>
+                <fullName>Prenatal Genetic Screen</fullName>
+                <default>false</default>
+                <label>Prenatal Genetic Screen</label>
+            </value>
+            <value>
+                <fullName>Metabolic Panel Plus</fullName>
+                <default>false</default>
+                <label>Metabolic Panel Plus</label>
+            </value>
+            <value>
+                <fullName>Autoimmune Diagnostic Panel</fullName>
+                <default>false</default>
+                <label>Autoimmune Diagnostic Panel</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>
+

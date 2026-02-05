@@ -1,0 +1,18 @@
+{
+  "required" : [ "listOfProducts" ],
+  "unevaluatedProperties" : false,
+  "properties" : {
+    "listOfProducts" : {
+      "title" : "listOfProducts",
+      "description" : "A list of product ids related to the customer's query",
+      "maxItems" : 2000,
+      "items" : {
+        "lightning:type" : "lightning__textType"
+      },
+      "lightning:type" : "lightning__listType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : false
+    }
+  },
+  "lightning:type" : "lightning__objectType"
+}

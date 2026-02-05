@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>MEDDPICC_Metrics_Score__c</fullName>
+    <description>Score for MEDDPICC Metrics qualification criteria. 1=Very Weak (no metrics identified), 5=Very Strong (clear, quantified metrics agreed with customer).</description>
+    <externalId>false</externalId>
+    <inlineHelpText>Rate the strength of identified metrics: 1=Very Weak, 2=Weak, 3=Moderate, 4=Strong, 5=Very Strong</inlineHelpText>
+    <label>MEDDPICC: Metrics Score</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>1 - Very Weak</fullName>
+                <default>false</default>
+                <label>1 - Very Weak</label>
+            </value>
+            <value>
+                <fullName>2 - Weak</fullName>
+                <default>false</default>
+                <label>2 - Weak</label>
+            </value>
+            <value>
+                <fullName>3 - Moderate</fullName>
+                <default>false</default>
+                <label>3 - Moderate</label>
+            </value>
+            <value>
+                <fullName>4 - Strong</fullName>
+                <default>false</default>
+                <label>4 - Strong</label>
+            </value>
+            <value>
+                <fullName>5 - Very Strong</fullName>
+                <default>false</default>
+                <label>5 - Very Strong</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

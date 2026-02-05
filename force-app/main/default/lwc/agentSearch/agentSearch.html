@@ -1,0 +1,274 @@
+<template>
+    <div class={containerClass}>
+        <!-- INITIAL STATE: Centered Search Bar -->
+        <template if:false={hasSearched}>
+            <div class="initial-state">
+                <div class="search-hero">
+                    <!-- Amgen Logo -->
+                    <div class="brand-logo">
+                        <img src={amgenLogoUrl} alt="Amgen" class="amgen-logo">
+                    </div>
+                    <h1 class="hero-title">How can I help you today?</h1>
+                    <p class="hero-subtitle">Search our knowledge base, resources, or ask me anything</p>
+                    
+                    <div class="search-container-initial">
+                        <div class="search-input-wrapper">
+                            <lightning-icon icon-name="utility:search" size="small" class="search-icon"></lightning-icon>
+                            <input 
+                                type="text" 
+                                class="search-input"
+                                placeholder={placeholderText}
+                                value={searchTerm}
+                                onkeydown={handleSearchKeydown}
+                                oninput={handleSearchInput}
+                            >
+                            <template if:true={searchTerm}>
+                                <lightning-button-icon
+                                    icon-name="utility:clear"
+                                    alternative-text="Clear"
+                                    onclick={handleClearSearch}
+                                    class="clear-btn"
+                                ></lightning-button-icon>
+                            </template>
+                        </div>
+                        <lightning-button 
+                            label="Search" 
+                            variant="brand" 
+                            onclick={handleSearch}
+                            disabled={isSearchDisabled}
+                            class="search-btn"
+                        ></lightning-button>
+                    </div>
+                </div>
+            </div>
+        </template>
+
+        <!-- SPLIT VIEW: After Search -->
+        <template if:true={hasSearched}>
+            <!-- Header with back button and Amgen branding -->
+            <header class="split-header">
+                <lightning-button-icon
+                    icon-name="utility:back"
+                    alternative-text="Back to search"
+                    onclick={handleBackToSearch}
+                    class="back-btn"
+                ></lightning-button-icon>
+                <div class="header-title">
+                    <img src={amgenLogoUrl} alt="Amgen" class="header-logo">
+                    <span class="header-divider">|</span>
+                    <span>Employee Portal</span>
+                </div>
+            </header>
+
+            <main class="split-main">
+                <!-- LEFT PANEL: Search Results (Articles + Files) -->
+                <section class="panel panel-left">
+                    <div class="panel-header">
+                        <h2>Resources</h2>
+                        <span class="result-count">{resultCountLabel}</span>
+                    </div>
+                    
+                    <!-- Sub-search bar -->
+                    <div class="sub-search-container">
+                        <div class="sub-search-wrapper">
+                            <lightning-icon icon-name="utility:search" size="x-small" class="sub-search-icon"></lightning-icon>
+                            <input 
+                                type="text" 
+                                class="sub-search-input"
+                                placeholder="Refine search..."
+                                value={searchTerm}
+                                onkeydown={handleSearchKeydown}
+                                oninput={handleSearchInput}
+                            >
+                        </div>
+                    </div>
+                    
+                    <!-- Results list -->
+                    <div class="results-list">
+                        <template if:true={isSearching}>
+                            <!-- Skeleton loaders -->
+                            <div class="skeleton-card">
+                                <div class="skeleton skeleton-title"></div>
+                                <div class="skeleton skeleton-text"></div>
+                                <div class="skeleton skeleton-text"></div>
+                            </div>
+                            <div class="skeleton-card">
+                                <div class="skeleton skeleton-title"></div>
+                                <div class="skeleton skeleton-text"></div>
+                                <div class="skeleton skeleton-text"></div>
+                            </div>
+                            <div class="skeleton-card">
+                                <div class="skeleton skeleton-title"></div>
+                                <div class="skeleton skeleton-text"></div>
+                                <div class="skeleton skeleton-text"></div>
+                            </div>
+                        </template>
+                        
+                        <template if:false={isSearching}>
+                            <template if:true={hasResults}>
+                                <template for:each={searchResults} for:item="result">
+                                    <article key={result.id} class="result-card" onclick={handleResultClick} data-url={result.url}>
+                                        <div class="result-header">
+                                            <lightning-icon icon-name={result.icon} size="small"></lightning-icon>
+                                            <div class="result-title-wrap">
+                                                <h3 class="result-title">{result.title}</h3>
+                                                <span class="result-type-badge">{result.resultType}</span>
+                                            </div>
+                                        </div>
+                                        <template if:true={result.summary}>
+                                            <p class="result-summary">{result.summary}</p>
+                                        </template>
+                                        <div class="result-meta">
+                                            <template if:true={result.articleNumber}>
+                                                <span class="meta-tag">{result.articleNumber}</span>
+                                            </template>
+                                            <template if:true={result.fileType}>
+                                                <span class="meta-tag file-type">{result.fileType}</span>
+                                            </template>
+                                        </div>
+                                    </article>
+                                </template>
+                            </template>
+                            
+                            <template if:false={hasResults}>
+                                <div class="no-results">
+                                    <lightning-icon icon-name="utility:info" size="small"></lightning-icon>
+                                    <p>No results found for "{currentSearchTerm}"</p>
+                                    <p class="no-results-hint">Try different keywords or ask the assistant directly</p>
+                                </div>
+                            </template>
+                        </template>
+                    </div>
+                </section>
+
+                <!-- RIGHT PANEL: Agent Chat -->
+                <section class="panel panel-right">
+                    <div class="panel-header chat-panel-header">
+                        <div class="agent-info">
+                            <div class="agent-avatar-wrapper">
+                                <lightning-icon icon-name="utility:einstein" size="small" variant="inverse" class="agent-avatar"></lightning-icon>
+                            </div>
+                            <div class="agent-details">
+                                <h2>MyAmgen Agent</h2>
+                                <span class="agent-status">Online</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Chat messages -->
+                    <div class="chat-messages" lwc:ref="chatContainer">
+                        <template for:each={messages} for:item="msg">
+                            <div key={msg.id} class={msg.wrapperClass}>
+                                <template if:true={msg.isAgent}>
+                                    <lightning-icon icon-name="utility:einstein" size="small" variant="inverse" class="msg-avatar"></lightning-icon>
+                                </template>
+                                <div class={msg.bubbleClass}>
+                                    <template if:true={msg.isTyping}>
+                                        <div class="typing-indicator">
+                                            <span></span><span></span><span></span>
+                                        </div>
+                                    </template>
+                                    <template if:false={msg.isTyping}>
+                                        {msg.content}
+                                    </template>
+                                </div>
+                            </div>
+                        </template>
+                    </div>
+                    
+                    <!-- Chat input -->
+                    <div class="chat-input">
+                        <div class="input-row">
+                            <textarea 
+                                class="chat-textarea"
+                                placeholder="Ask a follow-up question..."
+                                value={userInput}
+                                onkeydown={handleChatKeydown}
+                                oninput={handleChatInput}
+                                disabled={isProcessing}
+                            ></textarea>
+                            <lightning-button-icon
+                                icon-name="utility:send"
+                                alternative-text="Send"
+                                onclick={handleSend}
+                                variant="brand"
+                                disabled={isSendDisabled}
+                                class="send-btn"
+                            ></lightning-button-icon>
+                        </div>
+                    </div>
+                </section>
+            </main>
+        </template>
+
+        <!-- FEEDBACK MODAL -->
+        <template if:true={showFeedbackModal}>
+            <section class="feedback-overlay" onclick={handleCloseFeedbackModal}>
+                <div class="feedback-modal" onclick={stopPropagation}>
+                    <header class="feedback-header">
+                        <h2>How was your conversation?</h2>
+                        <p class="feedback-subtitle">with MyAmgen Agent</p>
+                        <lightning-button-icon
+                            icon-name="utility:close"
+                            alternative-text="Close"
+                            onclick={handleCloseFeedbackModal}
+                            class="feedback-close-btn"
+                        ></lightning-button-icon>
+                    </header>
+                    
+                    <div class="feedback-body">
+                        <!-- Rating buttons -->
+                        <div class="rating-buttons">
+                            <button class={thumbsUpClass} onclick={handleRatingPositive}>
+                                <div class="rating-icon-wrapper">
+                                    <lightning-icon icon-name="utility:like" size="medium"></lightning-icon>
+                                </div>
+                                <span class="rating-label">Good</span>
+                            </button>
+                            
+                            <button class={thumbsDownClass} onclick={handleRatingNegative}>
+                                <div class="rating-icon-wrapper">
+                                    <lightning-icon icon-name="utility:dislike" size="medium"></lightning-icon>
+                                </div>
+                                <span class="rating-label">Bad</span>
+                            </button>
+                        </div>
+                        
+                        <!-- Comment textarea (shown after rating selected) -->
+                        <template if:true={feedbackRating}>
+                            <div class="feedback-comment-section">
+                                <label class="comment-label">Additional comments (optional)</label>
+                                <textarea
+                                    class="feedback-textarea"
+                                    placeholder="Tell us more about your experience..."
+                                    value={feedbackComment}
+                                    onchange={handleFeedbackCommentChange}
+                                    rows="3"
+                                ></textarea>
+                            </div>
+                        </template>
+                    </div>
+                    
+                    <footer class="feedback-footer">
+                        <template if:true={feedbackRating}>
+                            <lightning-button
+                                label={submitFeedbackLabel}
+                                variant="brand"
+                                onclick={handleSubmitFeedback}
+                                disabled={isSubmittingFeedback}
+                                class="submit-feedback-btn"
+                            ></lightning-button>
+                        </template>
+                        <lightning-button
+                            label="Skip"
+                            variant="base"
+                            onclick={handleSkipFeedback}
+                            disabled={isSubmittingFeedback}
+                            class="skip-feedback-btn"
+                        ></lightning-button>
+                    </footer>
+                </div>
+            </section>
+        </template>
+    </div>
+</template>

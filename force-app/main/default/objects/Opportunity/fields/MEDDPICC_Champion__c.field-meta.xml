@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>MEDDPICC_Champion__c</fullName>
+    <description>MEDDPICC Champion: An internal advocate at the customer who promotes your solution. Document who they are, their influence, motivation, and how they're helping advance the deal.</description>
+    <externalId>false</externalId>
+    <inlineHelpText>Who is your internal advocate? Document their name, role, influence level, personal motivation, and how they're actively supporting your solution.</inlineHelpText>
+    <label>MEDDPICC: Champion</label>
+    <length>32000</length>
+    <trackTrending>false</trackTrending>
+    <type>LongTextArea</type>
+    <visibleLines>4</visibleLines>
+</CustomField>

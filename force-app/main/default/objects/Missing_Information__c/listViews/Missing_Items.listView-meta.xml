@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Missing_Items</fullName>
+    <columns>NAME</columns>
+    <columns>Information_Type__c</columns>
+    <columns>Program_Candidate__c</columns>
+    <columns>Case__c</columns>
+    <columns>CREATED_DATE</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>Status__c</field>
+        <operation>equals</operation>
+        <value>Missing</value>
+    </filters>
+    <label>Missing Items</label>
+</ListView>

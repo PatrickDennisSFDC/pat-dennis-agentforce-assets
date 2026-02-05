@@ -1,0 +1,49 @@
+<template>
+    <div class="launcher-container">
+        <!-- Header -->
+        <header class="launcher-header">
+            <div class="header-icon">
+                <lightning-icon icon-name="utility:agent_astro" size="medium" alternative-text="Deal Review"></lightning-icon>
+            </div>
+            <div class="header-content">
+                <h1 class="header-title">Agentforce Deal Review</h1>
+                <p class="header-subtitle">AI-powered MEDDPICC deal qualification</p>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <div class="launcher-content">
+            <template if:true={hasStats}>
+                <div class="stats-row">
+                    <div class="stat-item">
+                        <div class="stat-icon">
+                            <lightning-icon icon-name="standard:opportunity" size="small"></lightning-icon>
+                        </div>
+                        <div class="stat-info">
+                            <span class="stat-value">{openDeals}</span>
+                            <span class="stat-label">Open Deals</span>
+                        </div>
+                    </div>
+                    <div class="stat-item highlight">
+                        <div class="stat-icon">
+                            <lightning-icon icon-name="utility:warning" size="small"></lightning-icon>
+                        </div>
+                        <div class="stat-info">
+                            <span class="stat-value">{needsReview}</span>
+                            <span class="stat-label">Needs Review</span>
+                        </div>
+                    </div>
+                </div>
+            </template>
+            
+            <lightning-button 
+                label="Start Deal Review"
+                variant="brand"
+                onclick={handleLaunch}
+                icon-name="utility:right"
+                icon-position="right"
+                class="launch-button">
+            </lightning-button>
+        </div>
+    </div>
+</template>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>MEDDPICC_Economic_Buyer__c</fullName>
+    <description>MEDDPICC Economic Buyer: The person with final budget authority for this purchase. Document who controls the budget, their role, and your access level to them.</description>
+    <externalId>false</externalId>
+    <inlineHelpText>Who has the final authority to approve the budget for this deal? Document their name, title, and your relationship/access to them.</inlineHelpText>
+    <label>MEDDPICC: Economic Buyer</label>
+    <length>32000</length>
+    <trackTrending>false</trackTrending>
+    <type>LongTextArea</type>
+    <visibleLines>4</visibleLines>
+</CustomField>

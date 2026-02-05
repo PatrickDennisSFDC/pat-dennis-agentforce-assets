@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GenAiFunction xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description>Updates MEDDPICC qualification fields on an opportunity for deal review. Pass opportunityId and updatesJson with field updates. Format: {"metrics": {"text": "content", "score": 4}, "champion": {"text": "content", "score": 3}}. Dimension keys: metrics, economic_buyer, decision_criteria, decision_process, paper_process, identify_pain, champion, competition. Scores are 1-5 (Very Weak to Very Strong). Returns updated fields and new overall score.</description>
+    <invocationTarget>AFDealReviewAction</invocationTarget>
+    <invocationTargetType>apex</invocationTargetType>
+    <isConfirmationRequired>false</isConfirmationRequired>
+    <masterLabel>Update MEDDPICC Fields</masterLabel>
+</GenAiFunction>

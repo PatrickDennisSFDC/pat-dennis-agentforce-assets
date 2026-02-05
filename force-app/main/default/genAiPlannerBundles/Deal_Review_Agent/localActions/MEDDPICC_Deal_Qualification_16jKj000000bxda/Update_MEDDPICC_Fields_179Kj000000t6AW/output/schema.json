@@ -1,0 +1,154 @@
+{
+  "unevaluatedProperties" : false,
+  "properties" : {
+    "closeDateUpdated" : {
+      "title" : "Close Date Updated",
+      "description" : "True if the close date was changed in this update.",
+      "lightning:type" : "lightning__booleanType",
+      "lightning:isPII" : false,
+      "copilotAction:isDisplayable" : false,
+      "copilotAction:isUsedByPlanner" : true,
+      "copilotAction:useHydratedPrompt" : false
+    },
+    "errorMessage" : {
+      "title" : "Error Message",
+      "description" : "If success is false, contains the error details. Null when successful. Report this to the user if present.",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isDisplayable" : false,
+      "copilotAction:isUsedByPlanner" : true,
+      "copilotAction:useHydratedPrompt" : false
+    },
+    "message" : {
+      "title" : "Message",
+      "description" : "Human-readable summary of what was updated. Example: Updated Champion, Economic Buyer. Scores: Champion (4/5 - strong).",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isDisplayable" : false,
+      "copilotAction:isUsedByPlanner" : true,
+      "copilotAction:useHydratedPrompt" : false
+    },
+    "newCloseDate" : {
+      "title" : "New Close Date",
+      "description" : "If close date was updated, contains the new date in YYYY-MM-DD format.",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isDisplayable" : false,
+      "copilotAction:isUsedByPlanner" : true,
+      "copilotAction:useHydratedPrompt" : false
+    },
+    "newNextStep" : {
+      "title" : "New Next Step",
+      "description" : "If next step was updated, contains the new next step text.",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isDisplayable" : false,
+      "copilotAction:isUsedByPlanner" : true,
+      "copilotAction:useHydratedPrompt" : false
+    },
+    "newOverallScore" : {
+      "title" : "New Overall Score",
+      "description" : "The recalculated overall MEDDPICC score (1.0-5.0 average) after the update. Use this to report deal qualification strength.",
+      "lightning:type" : "lightning__numberType",
+      "lightning:isPII" : false,
+      "copilotAction:isDisplayable" : false,
+      "copilotAction:isUsedByPlanner" : true,
+      "copilotAction:useHydratedPrompt" : false
+    },
+    "newStageName" : {
+      "title" : "New Stage Name",
+      "description" : "If stage was updated, contains the new stage name. Example: \"Negotiation\"",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isDisplayable" : false,
+      "copilotAction:isUsedByPlanner" : true,
+      "copilotAction:useHydratedPrompt" : false
+    },
+    "nextStepUpdated" : {
+      "title" : "Next Step Updated",
+      "description" : "True if the next step was changed in this update.",
+      "lightning:type" : "lightning__booleanType",
+      "lightning:isPII" : false,
+      "copilotAction:isDisplayable" : false,
+      "copilotAction:isUsedByPlanner" : true,
+      "copilotAction:useHydratedPrompt" : false
+    },
+    "opportunityJson" : {
+      "title" : "Opportunity JSON",
+      "description" : "Full JSON of the updated Opportunity record with all MEDDPICC fields. Use for detailed field inspection if needed.",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isDisplayable" : false,
+      "copilotAction:isUsedByPlanner" : true,
+      "copilotAction:useHydratedPrompt" : false
+    },
+    "previousCloseDate" : {
+      "title" : "Previous Close Date",
+      "description" : "If close date was updated, contains the previous date in YYYY-MM-DD format.",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isDisplayable" : false,
+      "copilotAction:isUsedByPlanner" : true,
+      "copilotAction:useHydratedPrompt" : false
+    },
+    "previousNextStep" : {
+      "title" : "Previous Next Step",
+      "description" : "If next step was updated, contains the previous next step for reference.",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isDisplayable" : false,
+      "copilotAction:isUsedByPlanner" : true,
+      "copilotAction:useHydratedPrompt" : false
+    },
+    "previousStageName" : {
+      "title" : "Previous Stage Name",
+      "description" : "If stage was updated, contains the previous stage name for reference.",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isDisplayable" : false,
+      "copilotAction:isUsedByPlanner" : true,
+      "copilotAction:useHydratedPrompt" : false
+    },
+    "stageUpdated" : {
+      "title" : "Stage Updated",
+      "description" : "True if the opportunity stage was changed in this update. Use this to inform the user about stage progression.",
+      "lightning:type" : "lightning__booleanType",
+      "lightning:isPII" : false,
+      "copilotAction:isDisplayable" : false,
+      "copilotAction:isUsedByPlanner" : true,
+      "copilotAction:useHydratedPrompt" : false
+    },
+    "success" : {
+      "title" : "Success",
+      "description" : "Whether the MEDDPICC update completed successfully. True if fields were updated, false if an error occurred.",
+      "lightning:type" : "lightning__booleanType",
+      "lightning:isPII" : false,
+      "copilotAction:isDisplayable" : false,
+      "copilotAction:isUsedByPlanner" : true,
+      "copilotAction:useHydratedPrompt" : false
+    },
+    "updatedFields" : {
+      "title" : "Updated Fields",
+      "description" : "List of MEDDPICC dimension names that had their text content updated. Example: Champion, Economic Buyer, Identify Pain.",
+      "maxItems" : 2000,
+      "items" : {
+        "lightning:type" : "lightning__textType"
+      },
+      "lightning:type" : "lightning__listType",
+      "lightning:isPII" : false,
+      "copilotAction:isDisplayable" : false,
+      "copilotAction:isUsedByPlanner" : true,
+      "copilotAction:useHydratedPrompt" : false
+    },
+    "updatedScoresJson" : {
+      "title" : "Updated Scores JSON",
+      "description" : "JSON map of dimension names to their new numeric scores (1-5). Example: {\"Champion\": 4, \"Economic Buyer\": 3}.",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isDisplayable" : false,
+      "copilotAction:isUsedByPlanner" : true,
+      "copilotAction:useHydratedPrompt" : false
+    }
+  },
+  "lightning:type" : "lightning__objectType"
+}

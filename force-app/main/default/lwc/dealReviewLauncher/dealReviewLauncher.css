@@ -1,0 +1,173 @@
+/* Deal Review Launcher - Matching Daily Brief Styling */
+
+/* CSS Variables matching Daily Brief */
+:host {
+    --launcher-bg-gradient: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 50%, #e2e8f0 100%);
+    --launcher-accent: #0176d3;
+    --launcher-accent-hover: #014486;
+    --launcher-accent-glow: rgba(1, 118, 211, 0.15);
+    --launcher-text-primary: #181818;
+    --launcher-text-secondary: #444444;
+    --launcher-text-muted: #706e6b;
+    --launcher-border: rgba(0, 0, 0, 0.08);
+    --launcher-warning: #fe9339;
+}
+
+/* Main Container */
+.launcher-container {
+    background: var(--launcher-bg-gradient);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+    border: 1px solid var(--launcher-border);
+}
+
+/* Header - matching Daily Brief */
+.launcher-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--launcher-border);
+    background: #ffffff;
+}
+
+.header-icon {
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.header-icon lightning-icon {
+    --lwc-colorTextIconDefault: #0176d3;
+}
+
+.header-content {
+    flex: 1;
+}
+
+.header-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--launcher-text-primary);
+    margin: 0;
+    letter-spacing: -0.01em;
+}
+
+.header-subtitle {
+    font-size: 0.813rem;
+    color: var(--launcher-text-secondary);
+    margin: 2px 0 0 0;
+}
+
+/* Content Area */
+.launcher-content {
+    padding: 24px;
+}
+
+/* Stats Row */
+.stats-row {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 20px;
+}
+
+.stat-item {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 16px;
+    background: rgba(255, 255, 255, 0.95);
+    border: 1px solid var(--launcher-border);
+    border-radius: 10px;
+}
+
+.stat-item.highlight {
+    background: rgba(254, 147, 57, 0.08);
+    border-color: rgba(254, 147, 57, 0.15);
+}
+
+.stat-icon {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--launcher-accent-glow);
+    border-radius: 8px;
+}
+
+.stat-item.highlight .stat-icon {
+    background: rgba(254, 147, 57, 0.15);
+}
+
+.stat-icon lightning-icon {
+    --lwc-colorTextIconDefault: var(--launcher-accent);
+}
+
+.stat-item.highlight .stat-icon lightning-icon {
+    --lwc-colorTextIconDefault: var(--launcher-warning);
+}
+
+.stat-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.stat-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--launcher-text-primary);
+    line-height: 1.2;
+}
+
+.stat-label {
+    font-size: 0.75rem;
+    color: var(--launcher-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+}
+
+/* Launch Button - matching Daily Brief generate button */
+.launch-button {
+    width: 100%;
+}
+
+.launch-button lightning-button {
+    width: 100%;
+}
+
+.launch-button button {
+    width: 100%;
+}
+
+/* Button brand styling */
+:host lightning-button[variant="brand"] {
+    --slds-c-button-brand-color-background: var(--launcher-accent);
+    --slds-c-button-brand-color-border: var(--launcher-accent);
+    --slds-c-button-brand-color-background-hover: var(--launcher-accent-hover);
+    --slds-c-button-brand-color-border-hover: var(--launcher-accent-hover);
+}
+
+/* Responsive */
+@media (max-width: 400px) {
+    .launcher-header {
+        padding: 16px;
+    }
+    
+    .header-title {
+        font-size: 1.125rem;
+    }
+    
+    .launcher-content {
+        padding: 20px 16px;
+    }
+    
+    .stats-row {
+        flex-direction: column;
+        gap: 12px;
+    }
+}

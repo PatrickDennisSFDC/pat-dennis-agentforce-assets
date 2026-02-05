@@ -1,0 +1,424 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GenAiPlannerBundle xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <description>An assistive AI agent for pharma/med-tech sales reps. Helps manage pipeline and deals, log meetings and activities, research accounts, manage CRM data, and handle industry-specific workflows.</description>
+    <localActionLinks>
+        <genAiFunctionName>AnswerQuestionsWithKnowledge_16jKj000000bxTm</genAiFunctionName>
+    </localActionLinks>
+    <localTopicLinks>
+        <genAiPluginName>Account_Research_16jKj000000bxTm</genAiPluginName>
+    </localTopicLinks>
+    <localTopicLinks>
+        <genAiPluginName>Activity_Logging_16jKj000000bxTm</genAiPluginName>
+    </localTopicLinks>
+    <localTopicLinks>
+        <genAiPluginName>CRM_Data_Management_16jKj000000bxTm</genAiPluginName>
+    </localTopicLinks>
+    <localTopicLinks>
+        <genAiPluginName>Cases_and_Support_16jKj000000bxTm</genAiPluginName>
+    </localTopicLinks>
+    <localTopicLinks>
+        <genAiPluginName>Correspondence_16jKj000000bxTm</genAiPluginName>
+    </localTopicLinks>
+    <localTopicLinks>
+        <genAiPluginName>Orders_and_Fulfillment_16jKj000000bxTm</genAiPluginName>
+    </localTopicLinks>
+    <localTopicLinks>
+        <genAiPluginName>Pipeline_and_Deals_16jKj000000bxTm</genAiPluginName>
+    </localTopicLinks>
+    <localTopicLinks>
+        <genAiPluginName>Product_and_SOP_Knowledge_16jKj000000bxTm</genAiPluginName>
+    </localTopicLinks>
+    <localTopics>
+        <fullName>Account_Research_16jKj000000bxTm</fullName>
+        <canEscalate>false</canEscalate>
+        <description>Retrieves pre-gathered research and intelligence about companies from Account_Intel__c records. Also provides comprehensive daily briefings for sales reps. ROUTING CLAIMS - Use this topic when user asks: tell me about [company], what do we know about, background on, brief me before my meeting at, company intel, account research, what is their situation, daily brief, morning briefing, what is the news, catch me up, market update, start my day, what do I need to know today, morning rundown, whats on my plate. For DAILY BRIEF requests use Daily Brief action. For ACCOUNT INTEL requests use Account Intelligence action. ROUTING EXCLUSIONS - Do NOT use for: deal/opportunity/pipeline/stage/amount (use Pipeline and Deals), log/record/meeting/visited/called (use Activity Logging), updating CRM records (use CRM Data Management), products/line items/quote/quantity (use Pipeline and Deals).</description>
+        <developerName>Account_Research_16jKj000000bxTm</developerName>
+        <genAiPluginInstructions>
+            <description>Provide pre-gathered intelligence and research about accounts. This topic has two actions: (1) Account Intelligence - for specific account research and intel, (2) Daily Brief - for a comprehensive morning briefing on market news, company announcements, account updates, and industry trends. Use Account Intelligence for questions about specific companies. Use Daily Brief when reps want their morning briefing or market update.</description>
+            <developerName>instruction_1</developerName>
+            <language xsi:nil="true"/>
+            <masterLabel>Instruction 1</masterLabel>
+            <sortOrder>0</sortOrder>
+        </genAiPluginInstructions>
+        <genAiPluginInstructions>
+            <description>TRIGGER PHRASES that indicate Account Research: &quot;tell me about [company]&quot;, &quot;what do we know about&quot;, &quot;background on&quot;, &quot;brief me on&quot;, &quot;company intel&quot;, &quot;research on&quot;, &quot;what is their situation&quot;, &quot;prepare me for my meeting at&quot;. TRIGGER PHRASES for Daily Brief: &quot;give me my daily brief&quot;, &quot;what is happening today&quot;, &quot;morning briefing&quot;, &quot;market update&quot;, &quot;what is the news&quot;, &quot;catch me up&quot;, &quot;start my day&quot;.</description>
+            <developerName>instruction_2</developerName>
+            <language xsi:nil="true"/>
+            <masterLabel>Instruction 2</masterLabel>
+            <sortOrder>1</sortOrder>
+        </genAiPluginInstructions>
+        <genAiPluginInstructions>
+            <description>CRITICAL EXCLUSIONS - Route elsewhere if user mentions: (1) deal, opportunity, pipeline, stage, amount, forecast, close date, commit, products on deal, line items, whats on the deal -&gt; Pipeline and Deals. (2) log, record, had a meeting, visited, called, met with -&gt; Activity Logging. (3) update contact, create account, modify case -&gt; CRM Data Management. (4) products on [company name], whats on [deal name], show me the products -&gt; Pipeline and Deals (these are opportunity line item requests, NOT company research). This topic is ONLY for retrieving pre-gathered intelligence, not for any CRM operations, activity logging, or deal/product management.</description>
+            <developerName>instruction_3</developerName>
+            <language xsi:nil="true"/>
+            <masterLabel>Instruction 3</masterLabel>
+            <sortOrder>2</sortOrder>
+        </genAiPluginInstructions>
+        <language>en_US</language>
+        <localActionLinks>
+            <functionName>Account_Intelligence_179Kj000000t60A</functionName>
+        </localActionLinks>
+        <localActionLinks>
+            <functionName>Daily_Brief_Agents_Action_179Kj000000t66A</functionName>
+        </localActionLinks>
+        <localActions>
+            <fullName>Daily_Brief_Agents_Action_179Kj000000t66A</fullName>
+            <description>Generates a comprehensive morning briefing for field sales reps. The Daily Brief is an AI-powered podcast-style update covering: (1) Quick Account Updates from CRM, PR Newswire, portal data, and ERP. (2) Inside the House - Company announcements. (3) Market Overview - Healthcare trends. (4) Clinical and Biologic Updates. (5) Med-Surg and Diagnostic Tech news. (6) Corporate and Strategic Moves. TRIGGER PHRASES: &quot;give me my daily brief&quot;, &quot;morning briefing&quot;, &quot;daily brief&quot;, &quot;morning rundown&quot;, &quot;what do I need to know today&quot;, &quot;catch me up&quot;, &quot;market update&quot;, &quot;start my day&quot;, &quot;whats on my plate today&quot;, &quot;what is happening in the industry&quot;. This action generates a comprehensive briefing without requiring specific input.</description>
+            <developerName>Daily_Brief_Agents_Action_179Kj000000t66A</developerName>
+            <invocationTarget>Daily_Brief_Agents</invocationTarget>
+            <invocationTargetType>generatePromptResponse</invocationTargetType>
+            <isConfirmationRequired>false</isConfirmationRequired>
+            <isIncludeInProgressIndicator>true</isIncludeInProgressIndicator>
+            <localDeveloperName>Daily_Brief_Agents_Action</localDeveloperName>
+            <masterLabel>Daily Brief (Agents)</masterLabel>
+            <progressIndicatorMessage>Preparing your daily brief...</progressIndicatorMessage>
+            <source>Daily_Brief_Agents_Action</source>
+        </localActions>
+        <localActions>
+            <fullName>Account_Intelligence_179Kj000000t60A</fullName>
+            <description>Retrieves pre-gathered intelligence and research about accounts from Account_Intel__c records. Use this when a sales rep wants background information, market research, competitive intelligence, or other pre-gathered data about a company BEFORE a meeting or to understand their situation. ROUTING EXCLUSIONS: Do NOT use this action when the user mentions: (1) deal, opportunity, pipeline, stage, amount, forecast, close date, products on deal, line items, whats on the deal -&gt; use Opportunity Action in Pipeline and Deals. (2) log, record, had a meeting, visited, called, met with -&gt; use Meeting Action in Activity Logging. (3) products, line items, whats on [deal/opportunity name] -&gt; use Opportunity Action (these are requests about opportunity products, NOT company research). This action is ONLY for RESEARCHING accounts and retrieving pre-gathered intel, not for logging activities, managing deals, or viewing opportunity products.</description>
+            <developerName>Account_Intelligence_179Kj000000t60A</developerName>
+            <invocationTarget>Account_Intelligence</invocationTarget>
+            <invocationTargetType>generatePromptResponse</invocationTargetType>
+            <isConfirmationRequired>false</isConfirmationRequired>
+            <isIncludeInProgressIndicator>true</isIncludeInProgressIndicator>
+            <localDeveloperName>Account_Intelligence</localDeveloperName>
+            <masterLabel>Account Intelligence</masterLabel>
+            <progressIndicatorMessage>Gathering account intelligence...</progressIndicatorMessage>
+        </localActions>
+        <localDeveloperName>Account_Research</localDeveloperName>
+        <masterLabel>Account Research</masterLabel>
+        <pluginType>Topic</pluginType>
+        <scope>I provide pre-gathered research and intelligence about companies, plus daily briefings on market news and industry trends. I have two actions: Account Intelligence for specific company research, and Daily Brief for comprehensive morning updates covering accounts, announcements, market overview, clinical updates, med-surg tech, and corporate moves. I do NOT handle deal updates (Pipeline and Deals), meeting logging (Activity Logging), or CRM record management (CRM Data Management).</scope>
+    </localTopics>
+    <localTopics>
+        <fullName>Cases_and_Support_16jKj000000bxTm</fullName>
+        <canEscalate>false</canEscalate>
+        <description>Manages support cases and tickets. ROUTING CLAIMS - Use this topic when user mentions: case, ticket, support ticket, customer issue, support issue, escalated, escalation, high priority case, critical case, open cases, close case, update case status, help desk, customer support, case status, check on a case, whats the status of the case, any open tickets, escalated tickets, critical tickets, close the ticket, update the ticket. ROUTING EXCLUSIONS - Do NOT use for: order tickets or shipping tickets (use Orders and Fulfillment), deals or opportunities (use Pipeline and Deals), logging meetings (use Activity Logging), company research (use Account Research). IMPORTANT: ticket and support ticket should ALWAYS route here, NOT to Orders.</description>
+        <developerName>Cases_and_Support_16jKj000000bxTm</developerName>
+        <genAiPluginInstructions>
+            <description>If a user does not have their case number, ask for other identifying details like email or phone number.</description>
+            <developerName>instruction_1</developerName>
+            <language xsi:nil="true"/>
+            <masterLabel>Instruction 1</masterLabel>
+            <sortOrder>0</sortOrder>
+        </genAiPluginInstructions>
+        <language>en_US</language>
+        <localActionLinks>
+            <functionName>Get_Payments_179Kj000000t6Al</functionName>
+        </localActionLinks>
+        <localActionLinks>
+            <functionName>Get_Invoices_179Kj000000t6Al</functionName>
+        </localActionLinks>
+        <localActionLinks>
+            <functionName>Agentforce_Case_Action_179Kj000000t6Al</functionName>
+        </localActionLinks>
+        <localActions>
+            <fullName>Get_Invoices_179Kj000000t6Al</fullName>
+            <description>Use this endpoint to search for and retrieve invoice records. Filter by accountName to find all invoices for a specific account. Filter by status to find invoices in specific states (&apos;draft&apos;, &apos;sent&apos;, &apos;paid&apos;, &apos;overdue&apos;, &apos;cancelled&apos;). Use search to find invoices by invoice number, account name, or description. Use date filters to find invoices within a specific date range. Example: &apos;Show me all overdue invoices for Acme Corporation&apos; → use accountName and status=&apos;overdue&apos; filters.</description>
+            <developerName>Get_Invoices_179Kj000000t6Al</developerName>
+            <invocationTarget>Thespis.getInvoices</invocationTarget>
+            <invocationTargetType>externalService</invocationTargetType>
+            <isConfirmationRequired>false</isConfirmationRequired>
+            <isIncludeInProgressIndicator>false</isIncludeInProgressIndicator>
+            <localDeveloperName>Get_Invoices</localDeveloperName>
+            <masterLabel>Get Invoices</masterLabel>
+        </localActions>
+        <localActions>
+            <fullName>Agentforce_Case_Action_179Kj000000t6Al</fullName>
+            <description>Performs CRUD and summarize operations on Case records. Operations: CREATE, READ, UPDATE, DELETE, FIND, SUMMARIZE. SUMMARIZE OPERATION: Use when user asks to &quot;summarize this case&quot;, &quot;catch me up on the ticket&quot;, &quot;what has been discussed&quot;, &quot;show email history&quot;, &quot;TL;DR this case&quot;, or wants context on case communications. For summarize: provide recordId OR searchTerm (case number, subject, account name). Returns case details + most recent 10 emails in structured format for briefing. The caseSummaryData field contains everything needed to provide: (1) TL;DR - quick summary, (2) Current Status - case state and priority, (3) Communication History - email thread summary, (4) Action Items - suggested next steps. FIND: Requires searchTerm or filtersJson. PICKLIST VALUES: Query availableFieldsJson for valid Status, Priority, Type values. CONTACT/ACCOUNT: Use contactNameOrEmail or accountName parameters for name-based resolution. Supports bulk operations.</description>
+            <developerName>Agentforce_Case_Action_179Kj000000t6Al</developerName>
+            <invocationTarget>AFCaseAction</invocationTarget>
+            <invocationTargetType>apex</invocationTargetType>
+            <isConfirmationRequired>false</isConfirmationRequired>
+            <isIncludeInProgressIndicator>false</isIncludeInProgressIndicator>
+            <localDeveloperName>Agentforce_Case_Action</localDeveloperName>
+            <masterLabel>Agentforce Case Action</masterLabel>
+        </localActions>
+        <localActions>
+            <fullName>Get_Payments_179Kj000000t6Al</fullName>
+            <description>Use this endpoint to search for and retrieve payment records. Filter by accountName to find all payments from a specific account. Filter by status to find payments in specific states (&apos;pending&apos;, &apos;processed&apos;, &apos;failed&apos;, &apos;cancelled&apos;). Filter by paymentMethod to find payments by type (&apos;check&apos;, &apos;wire&apos;, &apos;credit_card&apos;, &apos;ach&apos;, &apos;cash&apos;). Use search to find payments by payment number, account name, or description. Use date filters to find payments within a specific date range. Example: &apos;Show me all processed wire payments for Acme Corporation&apos; → use accountName, status=&apos;processed&apos;, and paymentMethod=&apos;wire&apos; filters.</description>
+            <developerName>Get_Payments_179Kj000000t6Al</developerName>
+            <invocationTarget>Thespis.getPayments</invocationTarget>
+            <invocationTargetType>externalService</invocationTargetType>
+            <isConfirmationRequired>false</isConfirmationRequired>
+            <isIncludeInProgressIndicator>false</isIncludeInProgressIndicator>
+            <localDeveloperName>Get_Payments</localDeveloperName>
+            <masterLabel>Get Payments</masterLabel>
+        </localActions>
+        <localDeveloperName>Cases_and_Support</localDeveloperName>
+        <masterLabel>Cases and Support</masterLabel>
+        <pluginType>Topic</pluginType>
+        <scope>My job is to assist users with managing support cases, including creating new cases, providing updates on existing cases, and escalating issues when necessary. I will not provide responses unrelated to support cases.</scope>
+    </localTopics>
+    <localTopics>
+        <fullName>Activity_Logging_16jKj000000bxTm</fullName>
+        <canEscalate>false</canEscalate>
+        <description>Logs meetings, calls, visits, and creates follow-up tasks. ROUTING CLAIMS - Use this topic when user mentions: log a meeting, record a call, had a meeting, just visited, met with, need to follow up, create a task, set a reminder, schedule follow-up. ROUTING EXCLUSIONS - Do NOT use this topic for: deal/opportunity updates (use Pipeline and Deals), asking about company background (use Account Research), sending emails (use Correspondence).</description>
+        <developerName>Activity_Logging_16jKj000000bxTm</developerName>
+        <genAiPluginInstructions>
+            <description>Help sales reps log their activities and create follow-up tasks. When a rep says they had a meeting, visited a customer, made a call, or needs to track a follow-up, use this topic. Gather rich details: who they met, what was discussed, how it went, and what happens next. Always offer to create a follow-up task when next steps are mentioned.</description>
+            <developerName>instruction_1</developerName>
+            <language xsi:nil="true"/>
+            <masterLabel>Instruction 1</masterLabel>
+            <sortOrder>0</sortOrder>
+        </genAiPluginInstructions>
+        <genAiPluginInstructions>
+            <description>TRIGGER PHRASES that indicate Activity Logging: &quot;log a meeting&quot;, &quot;I just met with&quot;, &quot;had a call with&quot;, &quot;visited&quot;, &quot;stopped by&quot;, &quot;record my meeting&quot;, &quot;create a task&quot;, &quot;remind me to&quot;, &quot;follow up with&quot;, &quot;set a reminder&quot;, &quot;I need to call&quot;, any past-tense description of customer interaction.</description>
+            <developerName>instruction_2</developerName>
+            <language xsi:nil="true"/>
+            <masterLabel>Instruction 2</masterLabel>
+            <sortOrder>1</sortOrder>
+        </genAiPluginInstructions>
+        <genAiPluginInstructions>
+            <description>IMPORTANT: Even if a meeting was difficult, challenging, or had a negative outcome, it should STILL be logged here. Capture the concerns in the description and set appropriate outcome. Do NOT redirect negative meetings to Account Research.</description>
+            <developerName>instruction_3</developerName>
+            <language xsi:nil="true"/>
+            <masterLabel>Instruction 3</masterLabel>
+            <sortOrder>2</sortOrder>
+        </genAiPluginInstructions>
+        <language>en_US</language>
+        <localActionLinks>
+            <functionName>Agentforce_Meeting_Action_179Kj000000t669</functionName>
+        </localActionLinks>
+        <localActionLinks>
+            <functionName>Agentforce_Task_Action_179Kj000000t669</functionName>
+        </localActionLinks>
+        <localActions>
+            <fullName>Agentforce_Meeting_Action_179Kj000000t669</fullName>
+            <description>Performs CRUD operations on Meeting__c records. DEMO MODE: This is a demo environment - prioritize creating records quickly over asking many questions. Make reasonable assumptions and proceed. ROUTING CLAIM: If user says I had a meeting, log a meeting, record a meeting, or any variation mentioning meeting explicitly, this is ALWAYS a meeting logging request regardless of sentiment or topic. Even tough meetings, bad meetings, or meetings with concerns should be logged here - do NOT redirect to Account Intelligence. DATE HANDLING (CRITICAL): If no date mentioned, DEFAULT TO TODAY. Infer dates: today/this morning/this afternoon/just now -&gt; today, yesterday -&gt; yesterday. NEVER ask for meeting date - just use today if unclear. CONVERSATIONAL FLOW: (1) GATHER - Get who and basic context. Date defaults to today. (2) INFER - Extract Meeting_Type__c, Meeting_Outcome__c from context clues. (3) CREATE - Proceed with inferred values. Only ask follow-ups if truly critical info missing (like who they met with). (4) POST-CREATE TASK OFFER - If next steps mentioned, offer task creation. DATA GOAL: Create useful records quickly. MINIMUM: Contact/Account (or capture name in description if lookup fails), Subject, Meeting Type (infer or default to In-Person Visit), Outcome (infer or default to Neutral). GRACEFUL LOOKUP: When contact or account lookup fails, create the meeting anyway with available info. Capture the name in the description. Do NOT block the user. NEGATIVE MEETING HANDLING: Tough/difficult/challenging meetings should STILL be logged here with Outcome as Needs Follow-up or Unsuccessful. OPERATIONS: CREATE needs fieldDataJson, READ needs recordId, UPDATE needs recordId plus fieldDataJson, DELETE needs recordId plus confirm true, FIND needs searchTerm or filtersJson. PICKLIST SAFETY: Query availableFieldsJson for valid values. Supports accountName and contactNameOrEmail for lookup resolution - system uses fuzzy matching so Accusage Inc will match Accusage, Inc.</description>
+            <developerName>Agentforce_Meeting_Action_179Kj000000t669</developerName>
+            <invocationTarget>AFMeetingAction</invocationTarget>
+            <invocationTargetType>apex</invocationTargetType>
+            <isConfirmationRequired>false</isConfirmationRequired>
+            <isIncludeInProgressIndicator>false</isIncludeInProgressIndicator>
+            <localDeveloperName>Agentforce_Meeting_Action</localDeveloperName>
+            <masterLabel>Agentforce Meeting Action</masterLabel>
+        </localActions>
+        <localActions>
+            <fullName>Agentforce_Task_Action_179Kj000000t669</fullName>
+            <description>Performs CRUD operations on Task records. Operation can be explicitly specified (create, read, update, delete, find) or inferred from context. CREATE: Provide fieldDataJson. READ: Provide recordId. UPDATE: Provide recordId + fieldDataJson. DELETE: Provide recordId + confirm=true. FIND: IMPORTANT - Before calling find operation, ensure you have search criteria. If the user asks to &quot;find&quot; or &quot;look up&quot; a task without providing specific details (task subject, related to account/contact, status, due date, etc.), you MUST ask the user for these details FIRST before calling this action. Only call this action with find operation when you have at least a searchTerm (task subject or partial subject) or filtersJson (specific field filters). If the user says &quot;look up a task&quot; or &quot;find a task&quot; without details, respond conversationally: &quot;I&apos;d be happy to help you find a task. Could you provide some details like the task subject, who it&apos;s related to (account or contact), status, or due date?&quot; Do NOT call the action with empty search criteria. PICKLIST VALUES: When the user asks about valid options for picklist fields (Status, Priority, Type, etc.), query availableFieldsJson from a previous read operation instead of asking the user. The availableFieldsJson contains all valid picklist values with their labels. CONTACT/ACCOUNT UPDATES: When the user wants to add or update the Contact or Account on a task, use the contactNameOrEmail or accountName parameters (not WhoId or WhatId in fieldDataJson). These parameters support name-based resolution. Supports bulk operations.</description>
+            <developerName>Agentforce_Task_Action_179Kj000000t669</developerName>
+            <invocationTarget>AFTaskAction</invocationTarget>
+            <invocationTargetType>apex</invocationTargetType>
+            <isConfirmationRequired>false</isConfirmationRequired>
+            <isIncludeInProgressIndicator>false</isIncludeInProgressIndicator>
+            <localDeveloperName>Agentforce_Task_Action</localDeveloperName>
+            <masterLabel>Agentforce Task Action</masterLabel>
+        </localActions>
+        <localDeveloperName>Activity_Logging</localDeveloperName>
+        <masterLabel>Activity Logging</masterLabel>
+        <pluginType>Topic</pluginType>
+        <scope>I log meetings, calls, visits, and create follow-up tasks. I capture what happened, how it went, and what happens next. I do NOT handle deal/opportunity updates (Pipeline and Deals), company research (Account Research), or sending emails (Correspondence).</scope>
+    </localTopics>
+    <localTopics>
+        <fullName>Pipeline_and_Deals_16jKj000000bxTm</fullName>
+        <canEscalate>false</canEscalate>
+        <description>Manages sales opportunities, pipeline, and forecasting. ROUTING CLAIMS - Use this topic when user mentions: deal, opportunity, pipeline, forecast, stage, amount, close date, commit, best case, proposal stage, negotiation, qualification, won, lost, revenue, quota, products on, whats on, line items, products and total, quote, add product, remove product, update quantity, monitors, assays, implants, or any sales deal/product terminology. KEY PATTERN: [Company/Deal name] + products = Pipeline topic. ROUTING EXCLUSIONS - Do NOT use this topic for: logging meetings or calls (use Activity Logging), asking about company background or intel without mentioning products/deals (use Account Research), updating contact or account records (use CRM Data Management).</description>
+        <developerName>Pipeline_and_Deals_16jKj000000bxTm</developerName>
+        <genAiPluginInstructions>
+            <description>Help sales reps manage their deals and pipeline. When a rep mentions a deal, opportunity, or anything related to sales pipeline, use this topic. Common requests include: updating deal stages, changing amounts, moving close dates, updating forecast categories, adding products to deals, and checking pipeline status. Always confirm changes before making them.</description>
+            <developerName>instruction_1</developerName>
+            <language xsi:nil="true"/>
+            <masterLabel>Instruction 1</masterLabel>
+            <sortOrder>0</sortOrder>
+        </genAiPluginInstructions>
+        <genAiPluginInstructions>
+            <description>TRIGGER PHRASES that indicate Pipeline and Deals: &quot;update the deal&quot;, &quot;move to proposal&quot;, &quot;change the amount&quot;, &quot;push the close date&quot;, &quot;this is a commit&quot;, &quot;what is closing this month&quot;, &quot;show my pipeline&quot;, &quot;add products to the opportunity&quot;, &quot;the Memorial deal&quot;, &quot;Accusage opportunity&quot;, any mention of dollar amounts with company names. ALSO ROUTE HERE FOR: &quot;what products are on [deal]&quot;, &quot;whats on the [company] deal&quot;, &quot;show me the products on [opportunity]&quot;, &quot;line items on [deal]&quot;, &quot;build out the [deal]&quot;, &quot;add [product] to [deal]&quot; - these are ALL opportunity line item requests, NOT account research.</description>
+            <developerName>instruction_2</developerName>
+            <language xsi:nil="true"/>
+            <masterLabel>Instruction 2</masterLabel>
+            <sortOrder>1</sortOrder>
+        </genAiPluginInstructions>
+        <language>en_US</language>
+        <localActionLinks>
+            <functionName>Agentforce_Opportunity_Action_179Kj000000t668</functionName>
+        </localActionLinks>
+        <localActions>
+            <fullName>Agentforce_Opportunity_Action_179Kj000000t668</fullName>
+            <description>PIPELINE MANAGEMENT for sales reps. CRITICAL ROUTING: For SUMMARY/TOTAL/COUNT questions, use AGGREGATE operation (not FIND). AGGREGATE TRIGGERS: &quot;total pipeline&quot;, &quot;how many deals&quot;, &quot;how much&quot;, &quot;average deal&quot;, &quot;biggest deal&quot;, &quot;pipeline by stage&quot;, &quot;count&quot;, &quot;sum&quot;, &quot;number of&quot; -&gt; operation=aggregate. AGGREGATE SETUP: aggregateFunction=SUM for totals, COUNT for counts, AVG for averages, MAX for biggest, MIN for smallest. aggregateField=Amount for dollar values, Id for counting records. groupByFieldsJson=[&quot;StageName&quot;] for &quot;by stage&quot;. DATE FILTERING: ALWAYS set dateRangeField=CloseDate when user mentions dates. For &quot;this month/quarter&quot; use dateRangePredefined=THIS_MONTH or THIS_QUARTER. FOR SPECIFIC MONTHS like &quot;March&quot; or &quot;January 2026&quot;: use dateRangeStart and dateRangeEnd with YYYY-MM-DD format. EXAMPLE: &quot;March 2026&quot; -&gt; dateRangeField=CloseDate dateRangeStart=2026-03-01 dateRangeEnd=2026-03-31. &quot;February&quot; -&gt; dateRangeStart=2026-02-01 dateRangeEnd=2026-02-28. AGGREGATE EXAMPLES: &quot;Total pipeline&quot; -&gt; aggregateFunction=SUM aggregateField=Amount. &quot;Pipeline for March&quot; -&gt; aggregateFunction=SUM aggregateField=Amount dateRangeField=CloseDate dateRangeStart=2026-03-01 dateRangeEnd=2026-03-31. &quot;How many deals closing in Q1&quot; -&gt; aggregateFunction=COUNT aggregateField=Id dateRangeField=CloseDate dateRangePredefined=THIS_QUARTER. FIND TRIGGERS (list individual records): &quot;show me deals&quot;, &quot;list opportunities&quot;, &quot;what deals are in...&quot;, &quot;find deals&quot;. OTHER: CREATE new deals, UPDATE changes, DELETE remove. LINE ITEMS: addLineItemsJson to add products.</description>
+            <developerName>Agentforce_Opportunity_Action_179Kj000000t668</developerName>
+            <invocationTarget>AFOpportunityAction</invocationTarget>
+            <invocationTargetType>apex</invocationTargetType>
+            <isConfirmationRequired>false</isConfirmationRequired>
+            <isIncludeInProgressIndicator>false</isIncludeInProgressIndicator>
+            <localDeveloperName>Agentforce_Opportunity_Action</localDeveloperName>
+            <masterLabel>Agentforce Opportunity Action</masterLabel>
+        </localActions>
+        <localDeveloperName>Pipeline_and_Deals</localDeveloperName>
+        <masterLabel>Pipeline and Deals</masterLabel>
+        <pluginType>Topic</pluginType>
+        <scope>I manage sales opportunities, pipeline updates, and forecasting. I handle deal stages, amounts, close dates, forecast categories, and opportunity products. I do NOT handle meeting logging (Activity Logging), company research (Account Research), or general CRM record updates (CRM Data Management).</scope>
+    </localTopics>
+    <localTopics>
+        <fullName>Product_and_SOP_Knowledge_16jKj000000bxTm</fullName>
+        <canEscalate>false</canEscalate>
+        <description>Provides product documentation, specifications, and standard operating procedures from the knowledge base. ROUTING CLAIMS - Use this topic when user asks: how does [product] work, what is [product/drug/device], specifications, features, standard operating procedure, SOP, how do I [process], dosage, administration, side effects, contraindications, user guide, manual, documentation, instructions, compliance, regulatory, FDA, approval status. ROUTING EXCLUSIONS - Do NOT use for: products ON a deal/opportunity (line items) -&gt; Pipeline and Deals, product catalog/pricing for orders -&gt; Orders and Fulfillment, company intel/research about accounts -&gt; Account Research, logging activities -&gt; Activity Logging.</description>
+        <developerName>Product_and_SOP_Knowledge_16jKj000000bxTm</developerName>
+        <genAiPluginInstructions>
+            <description>Provide detailed product information when requested, including specifications and features.</description>
+            <developerName>instruction_1</developerName>
+            <language xsi:nil="true"/>
+            <masterLabel>Instruction 1</masterLabel>
+            <sortOrder>0</sortOrder>
+        </genAiPluginInstructions>
+        <language>en_US</language>
+        <localActionLinks>
+            <functionName>Basic_Questions_and_Answers_179Kj000000t6AR</functionName>
+        </localActionLinks>
+        <localActions>
+            <fullName>Basic_Questions_and_Answers_179Kj000000t6AR</fullName>
+            <description>Retrieves product documentation, specifications, drug information, device manuals, and standard operating procedures from the knowledge base. Use when sales reps need factual information about company products, drugs, medical devices, or internal procedures. This action searches the document repository and returns relevant content. TRIGGER PHRASES: how does [product] work, what are the specs, SOP for, procedure for, dosage information, administration guidelines, user manual, documentation on, what is [drug/device], tell me about [product], specifications, features, side effects, contraindications, compliance requirements. NOT for: opportunity line items (use Pipeline), order placement (use Orders), company research (use Account Research), activity logging.</description>
+            <developerName>Basic_Questions_and_Answers_179Kj000000t6AR</developerName>
+            <invocationTarget>Basic_Questions_and_Answers</invocationTarget>
+            <invocationTargetType>generatePromptResponse</invocationTargetType>
+            <isConfirmationRequired>false</isConfirmationRequired>
+            <isIncludeInProgressIndicator>false</isIncludeInProgressIndicator>
+            <localDeveloperName>Basic_Questions_and_Answers</localDeveloperName>
+            <masterLabel>Basic Questions and Answers</masterLabel>
+        </localActions>
+        <localDeveloperName>Product_and_SOP_Knowledge</localDeveloperName>
+        <masterLabel>Product and SOP Knowledge</masterLabel>
+        <pluginType>Topic</pluginType>
+        <scope>My job is only to provide accurate and relevant product details and explain standard operating procedures based on user inquiries.</scope>
+    </localTopics>
+    <localTopics>
+        <fullName>Orders_and_Fulfillment_16jKj000000bxTm</fullName>
+        <canEscalate>false</canEscalate>
+        <description>Manages customer orders and order line items. ROUTING CLAIMS - Use this topic when user mentions: order, customer order, order status, order line items, samples, fulfillment, shipping, shipment. ROUTING EXCLUSIONS - Do NOT use for: support tickets or cases (use Cases and Support), opportunities/deals (use Pipeline and Deals), meetings (use Activity Logging), company research (use Account Research). IMPORTANT: ticket without order context should route to Cases and Support, NOT here.</description>
+        <developerName>Orders_and_Fulfillment_16jKj000000bxTm</developerName>
+        <genAiPluginInstructions>
+            <description>Help users manage customer orders and their line items. This includes creating orders, checking order status, updating quantities, and managing order fulfillment. Orders are linked to accounts and contacts. IMPORTANT CLARIFICATION: If user says something like &quot;[company] needs 50 units of [product]&quot; WITHOUT explicitly saying &quot;order&quot;, ASK for clarification: &quot;Are you placing a customer order for fulfillment, or adding products to an opportunity/deal?&quot; Orders are for FULFILLED products (shipped to customer). Opportunities are for PROPOSED products (deals in progress). If user mentions &quot;deal&quot;, &quot;opportunity&quot;, &quot;proposal&quot;, or &quot;quote&quot; -&gt; route to Pipeline and Deals instead.</description>
+            <developerName>instruction_1</developerName>
+            <language xsi:nil="true"/>
+            <masterLabel>Instruction 1</masterLabel>
+            <sortOrder>0</sortOrder>
+        </genAiPluginInstructions>
+        <language>en_US</language>
+        <localActionLinks>
+            <functionName>Agentforce_Customer_Order_Action_179Kj000000t66D</functionName>
+        </localActionLinks>
+        <localActions>
+            <fullName>Agentforce_Customer_Order_Action_179Kj000000t66D</fullName>
+            <description>Performs CRUD operations on CustomerOrders__c records. FIND/SEARCH: Use searchTerm to find orders. Searches Order Name, Order Number, Account Name, Contact Name. Flexible matching - &quot;ORD 10003&quot; or &quot;ORD-10003&quot; both work. Examples: &quot;Plasmosis Inc&quot; finds orders for that account. READ: Provide recordId (ORDER ID) to get order details including all line items with their IDs. UPDATE ORDER FIELDS: recordId (ORDER ID) + fieldDataJson. UPDATE LINE ITEMS: recordId must be the ORDER ID (not line item ID!), put line item changes in updateLineItemsJson with line item IDs. Example: recordId=&quot;a2sKj00000ORDER&quot;, updateLineItemsJson=[{&quot;Id&quot;:&quot;a2tKj00000LINEITEM&quot;,&quot;Quantity__c&quot;:150}]. Get line item IDs from a previous read. CREATE: fieldDataJson with order details, optionally lineItemsJson for new line items. DELETE: recordId + confirm=true. ACCOUNT/CONTACT: Use accountName or contactNameOrEmail parameters to link by name.</description>
+            <developerName>Agentforce_Customer_Order_Action_179Kj000000t66D</developerName>
+            <invocationTarget>AFCustomerOrderAction</invocationTarget>
+            <invocationTargetType>apex</invocationTargetType>
+            <isConfirmationRequired>false</isConfirmationRequired>
+            <isIncludeInProgressIndicator>false</isIncludeInProgressIndicator>
+            <localDeveloperName>Agentforce_Customer_Order_Action</localDeveloperName>
+            <masterLabel>Agentforce Customer Order Action</masterLabel>
+        </localActions>
+        <localDeveloperName>Orders_and_Fulfillment</localDeveloperName>
+        <masterLabel>Orders and Fulfillment</masterLabel>
+        <pluginType>Topic</pluginType>
+        <scope>I manage customer orders and order line items. I do NOT handle opportunities/deals (Pipeline and Deals), meetings (Activity Logging), or company research (Account Research).</scope>
+    </localTopics>
+    <localTopics>
+        <fullName>Correspondence_16jKj000000bxTm</fullName>
+        <canEscalate>false</canEscalate>
+        <description>Drafts and sends emails to contacts. ROUTING CLAIMS - Use this topic when user wants to: send an email, draft a message, write to [contact], email [person], compose correspondence. ROUTING EXCLUSIONS - Do NOT use this topic for: deal updates (Pipeline and Deals), meeting logging (Activity Logging), company research (Account Research).</description>
+        <developerName>Correspondence_16jKj000000bxTm</developerName>
+        <genAiPluginInstructions>
+            <description>Help users draft and send professional emails. Gather recipient, subject, and message content. Offer to preview the email before sending. Maintain professional, customer-focused tone. Use second person (you, your) when addressing recipients.</description>
+            <developerName>instruction_1</developerName>
+            <language xsi:nil="true"/>
+            <masterLabel>Instruction 1</masterLabel>
+            <sortOrder>0</sortOrder>
+        </genAiPluginInstructions>
+        <genAiPluginInstructions>
+            <description>Before sending, always offer to show a preview. Ask: Would you like me to show you the email I have prepared? Support both Draft and Sent status.</description>
+            <developerName>instruction_2</developerName>
+            <language xsi:nil="true"/>
+            <masterLabel>Instruction 2</masterLabel>
+            <sortOrder>1</sortOrder>
+        </genAiPluginInstructions>
+        <language>en_US</language>
+        <localActionLinks>
+            <functionName>Agentforce_Email_Message_Action_179Kj000000t4bp</functionName>
+        </localActionLinks>
+        <localActions>
+            <fullName>Agentforce_Email_Message_Action_179Kj000000t4bp</fullName>
+            <description>Creates customer-facing email messages (EmailMessage records) in Salesforce. Maintains professional, courteous, customer-focused tone. Uses second person perspective (you, your) when addressing recipients. Supports preview mode (confirm=false) to show email before creating. Supports Draft and Sent status. HTML formatting supported. Before creating, draft first with confirm=false to show preview. Contact resolution supports ambiguity handling. Email sender is always current user. Email is related to a Contact (required) and optionally their Account.</description>
+            <developerName>Agentforce_Email_Message_Action_179Kj000000t4bp</developerName>
+            <invocationTarget>AFEmailMessageAction</invocationTarget>
+            <invocationTargetType>apex</invocationTargetType>
+            <isConfirmationRequired>false</isConfirmationRequired>
+            <isIncludeInProgressIndicator>true</isIncludeInProgressIndicator>
+            <localDeveloperName>Agentforce_Email_Message_Action</localDeveloperName>
+            <masterLabel>Agentforce Email Message Action</masterLabel>
+            <progressIndicatorMessage>Preparing your email...</progressIndicatorMessage>
+        </localActions>
+        <localDeveloperName>Correspondence</localDeveloperName>
+        <masterLabel>Correspondence</masterLabel>
+        <pluginType>Topic</pluginType>
+        <scope>I draft and send emails to contacts. I do NOT handle deals (Pipeline and Deals), meetings (Activity Logging), or company research (Account Research).</scope>
+    </localTopics>
+    <localTopics>
+        <fullName>CRM_Data_Management_16jKj000000bxTm</fullName>
+        <canEscalate>true</canEscalate>
+        <description>Manages Account, Contact, and Case records. ROUTING CLAIMS - Use this topic when user wants to: create/update/find accounts, create/update/find contacts, create/update/find cases, look up a contact, update account info, add a new contact. ROUTING EXCLUSIONS - Do NOT use this topic for: deal/opportunity management (use Pipeline and Deals), meeting/task logging (use Activity Logging), company research/intel (use Account Research), orders (use Orders and Fulfillment), emails (use Correspondence).</description>
+        <developerName>CRM_Data_Management_16jKj000000bxTm</developerName>
+        <genAiPluginInstructions>
+            <description>Help users manage their CRM records - accounts, contacts, and cases. This topic handles creating, reading, updating, and finding these core CRM objects. Ask for specific details when searching or creating records.</description>
+            <developerName>instruction_1</developerName>
+            <language xsi:nil="true"/>
+            <masterLabel>Instruction 1</masterLabel>
+            <sortOrder>0</sortOrder>
+        </genAiPluginInstructions>
+        <language>en_US</language>
+        <localActionLinks>
+            <functionName>Agentforce_Account_Action_179Kj000000t4XF</functionName>
+        </localActionLinks>
+        <localActionLinks>
+            <functionName>Agentforce_Contact_Action_179Kj000000t4XF</functionName>
+        </localActionLinks>
+        <localActions>
+            <fullName>Agentforce_Account_Action_179Kj000000t4XF</fullName>
+            <description>Performs CRUD operations on Account records. Operation can be explicitly specified (create, read, update, delete, find) or inferred from context. CREATE: Provide fieldDataJson. READ: Provide recordId. UPDATE: Provide recordId + fieldDataJson. DELETE: Provide recordId + confirm=true. FIND: Requires searchTerm (account name) or filtersJson. If user asks to find an account without details, ask for account name, industry, city, state, or phone. PICKLIST VALUES: Query availableFieldsJson for valid Industry, Type values. Supports bulk operations.</description>
+            <developerName>Agentforce_Account_Action_179Kj000000t4XF</developerName>
+            <invocationTarget>AFAccountAction</invocationTarget>
+            <invocationTargetType>apex</invocationTargetType>
+            <isConfirmationRequired>false</isConfirmationRequired>
+            <isIncludeInProgressIndicator>false</isIncludeInProgressIndicator>
+            <localDeveloperName>Agentforce_Account_Action</localDeveloperName>
+            <masterLabel>Agentforce Account Action</masterLabel>
+        </localActions>
+        <localActions>
+            <fullName>Agentforce_Contact_Action_179Kj000000t4XF</fullName>
+            <description>Performs CRUD operations on Contact records. Operation can be explicitly specified (create, read, update, delete, find) or inferred from context. CREATE: Provide fieldDataJson with LastName required. READ: Provide recordId. UPDATE: Provide recordId + fieldDataJson. DELETE: Provide recordId + confirm=true. FIND: Requires searchTerm (name or email) or filtersJson. If user asks to find a contact without details, ask for name, email, account, or phone. Supports accountName parameter to link Contact to Account. Supports bulk operations.</description>
+            <developerName>Agentforce_Contact_Action_179Kj000000t4XF</developerName>
+            <invocationTarget>AFContactAction</invocationTarget>
+            <invocationTargetType>apex</invocationTargetType>
+            <isConfirmationRequired>false</isConfirmationRequired>
+            <isIncludeInProgressIndicator>false</isIncludeInProgressIndicator>
+            <localDeveloperName>Agentforce_Contact_Action</localDeveloperName>
+            <masterLabel>Agentforce Contact Action</masterLabel>
+        </localActions>
+        <localDeveloperName>CRM_Data_Management</localDeveloperName>
+        <masterLabel>CRM Data Management</masterLabel>
+        <pluginType>Topic</pluginType>
+        <scope>I manage Account, Contact, and Case records - creating, reading, updating, and finding them. I do NOT handle deals/opportunities (Pipeline and Deals), meetings/tasks (Activity Logging), company research (Account Research), orders (Orders and Fulfillment), or emails (Correspondence).</scope>
+    </localTopics>
+    <masterLabel>Hank</masterLabel>
+    <plannerActions>
+        <fullName>AnswerQuestionsWithKnowledge_16jKj000000bxTm</fullName>
+        <description>Answers questions about company policies and procedures, troubleshooting steps, or product information. For example: &quot;What is your return policy?&quot; &quot;How do I fix an issue?&quot; or &quot;What features does a product have?&quot;</description>
+        <developerName>AnswerQuestionsWithKnowledge_16jKj000000bxTm</developerName>
+        <invocationTarget>streamKnowledgeSearch</invocationTarget>
+        <invocationTargetType>standardInvocableAction</invocationTargetType>
+        <isConfirmationRequired>false</isConfirmationRequired>
+        <isIncludeInProgressIndicator>true</isIncludeInProgressIndicator>
+        <localDeveloperName>AnswerQuestionsWithKnowledge</localDeveloperName>
+        <masterLabel>Answer Questions with Knowledge</masterLabel>
+        <progressIndicatorMessage>Getting answers</progressIndicatorMessage>
+        <source>EmployeeCopilot__AnswerQuestionsWithKnowledge</source>
+    </plannerActions>
+    <plannerSurfaces>
+        <adaptiveResponseAllowed>true</adaptiveResponseAllowed>
+        <callRecordingAllowed>false</callRecordingAllowed>
+        <surface>SurfaceAction__Messaging</surface>
+        <surfaceType>Messaging</surfaceType>
+    </plannerSurfaces>
+    <plannerType>AiCopilot__ReAct</plannerType>
+</GenAiPlannerBundle>

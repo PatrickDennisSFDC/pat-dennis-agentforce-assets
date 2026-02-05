@@ -1,0 +1,105 @@
+{
+  "unevaluatedProperties" : false,
+  "properties" : {
+    "ambiguousRelationship" : {
+      "title" : "Ambiguous Relationship",
+      "description" : "True if multiple Contacts match the provided name/email. When true, DO NOT create the email. Instead, present the candidates from relationshipCandidatesJson to the user and ask which Contact they meant.",
+      "lightning:type" : "lightning__booleanType",
+      "lightning:isPII" : false,
+      "copilotAction:isDisplayable" : false,
+      "copilotAction:isUsedByPlanner" : true,
+      "copilotAction:useHydratedPrompt" : false
+    },
+    "contactEmail" : {
+      "title" : "Contact Email",
+      "description" : "The email address of the Contact recipient. Useful for user feedback.",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isDisplayable" : false,
+      "copilotAction:isUsedByPlanner" : true,
+      "copilotAction:useHydratedPrompt" : false
+    },
+    "contactId" : {
+      "title" : "Contact ID",
+      "description" : "The Salesforce ID of the Contact record that the email was created for. Useful for follow-up operations.",
+      "lightning:type" : "lightning__recordIdType",
+      "lightning:isPII" : false,
+      "copilotAction:isDisplayable" : false,
+      "copilotAction:isUsedByPlanner" : true,
+      "copilotAction:useHydratedPrompt" : false
+    },
+    "contactName" : {
+      "title" : "Contact Name",
+      "description" : "The name of the Contact recipient. Useful for user feedback.",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isDisplayable" : false,
+      "copilotAction:isUsedByPlanner" : true,
+      "copilotAction:useHydratedPrompt" : false
+    },
+    "errorMessage" : {
+      "title" : "Error Message",
+      "description" : "If success is false, this contains a user-friendly error message to relay directly to the user.",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isDisplayable" : false,
+      "copilotAction:isUsedByPlanner" : true,
+      "copilotAction:useHydratedPrompt" : false
+    },
+    "message" : {
+      "title" : "Message",
+      "description" : "Human-readable message describing the operation result. Use this exact message to inform the user.",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isDisplayable" : false,
+      "copilotAction:isUsedByPlanner" : true,
+      "copilotAction:useHydratedPrompt" : false
+    },
+    "previewData" : {
+      "title" : "Preview Data",
+      "description" : "JSON string representation of what would be created. Contains Subject, Body (plain text), HtmlBody (HTML), To (contact info), Status. Use this to show the user a preview before committing.",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isDisplayable" : false,
+      "copilotAction:isUsedByPlanner" : true,
+      "copilotAction:useHydratedPrompt" : false
+    },
+    "previewOnly" : {
+      "title" : "Preview Only",
+      "description" : "True if this is a preview response (confirm=false). The email has not been created yet.",
+      "lightning:type" : "lightning__booleanType",
+      "lightning:isPII" : false,
+      "copilotAction:isDisplayable" : false,
+      "copilotAction:isUsedByPlanner" : true,
+      "copilotAction:useHydratedPrompt" : false
+    },
+    "recordId" : {
+      "title" : "Record ID",
+      "description" : "The Salesforce ID of the created EmailMessage record (18-character format). Use this ID for subsequent operations.",
+      "lightning:type" : "lightning__recordIdType",
+      "lightning:isPII" : false,
+      "copilotAction:isDisplayable" : false,
+      "copilotAction:isUsedByPlanner" : true,
+      "copilotAction:useHydratedPrompt" : false
+    },
+    "relationshipCandidatesJson" : {
+      "title" : "Relationship Candidates JSON",
+      "description" : "JSON array of candidate Contact records when ambiguousRelationship is true. Each candidate includes disambiguating details (Name, Email, Account Name, etc.). Present these options to the user in a clear, numbered list, then ask them to clarify which one they meant.",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isDisplayable" : false,
+      "copilotAction:isUsedByPlanner" : true,
+      "copilotAction:useHydratedPrompt" : false
+    },
+    "success" : {
+      "title" : "Success",
+      "description" : "True if operation completed successfully, false if an error occurred.",
+      "lightning:type" : "lightning__booleanType",
+      "lightning:isPII" : false,
+      "copilotAction:isDisplayable" : false,
+      "copilotAction:isUsedByPlanner" : true,
+      "copilotAction:useHydratedPrompt" : false
+    }
+  },
+  "lightning:type" : "lightning__objectType"
+}

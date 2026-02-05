@@ -1,0 +1,146 @@
+{
+  "unevaluatedProperties" : false,
+  "properties" : {
+    "accountName" : {
+      "title" : "Account Name",
+      "description" : "Account name to resolve to AccountId. Use when creating opportunities or filtering by account. Fuzzy matching supported - \"Memorial\" will match \"Memorial Regional Hospital\".",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : false
+    },
+    "addLineItemsJson" : {
+      "title" : "Add Line Items JSON",
+      "description" : "JSON array of NEW line items to add to an existing opportunity. Format: [{\"Product2Id\":\"01tXXX...\",\"Quantity\":10,\"UnitPrice\":450.00}]. For product names, use productName parameter or include in JSON. Example with product name: [{\"productName\":\"Cardiomax 100mg\",\"Quantity\":50,\"UnitPrice\":650}].",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : false
+    },
+    "aggregateField" : {
+      "title" : "Aggregate Field",
+      "description" : "For aggregate operation: Field to aggregate. Use \"Amount\" for pipeline totals, \"Id\" for counts. Example: \"Amount\" for SUM pipeline, \"Id\" for COUNT deals.",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : false
+    },
+    "aggregateFunction" : {
+      "title" : "Aggregate Function",
+      "description" : "For aggregate operation: SUM (total pipeline), COUNT (how many deals), AVG (average deal size), MIN, MAX. Example: \"SUM\" for \"what is my total pipeline\", \"COUNT\" for \"how many deals in negotiation\".",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : false
+    },
+    "confirm" : {
+      "title" : "Confirm",
+      "description" : "For create/update: Set to false to preview only. For delete: Set to true to actually delete.",
+      "lightning:type" : "lightning__booleanType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : false
+    },
+    "dateRangeDays" : {
+      "title" : "Date Range Days",
+      "description" : "For aggregate operation with LAST_N_DAYS or NEXT_N_DAYS: Number of days. Example: 30 for \"last 30 days\".",
+      "lightning:type" : "lightning__integerType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : false
+    },
+    "dateRangeEnd" : {
+      "title" : "Date Range End",
+      "description" : "For aggregate operation with SPECIFIC MONTH: End date in YYYY-MM-DD format. Use INSTEAD OF dateRangePredefined for specific months. Example: \"2026-03-31\" for \"opportunities closing in March\". Must be used with dateRangeStart.",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : false
+    },
+    "dateRangeField" : {
+      "title" : "Date Range Field",
+      "description" : "For aggregate operation: Date field to filter on. Use \"CloseDate\" for opportunity close dates. Example: \"CloseDate\" for \"deals closing this month\".",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : false
+    },
+    "dateRangePredefined" : {
+      "title" : "Date Range Predefined",
+      "description" : "For aggregate operation: Predefined date range - TODAY, THIS_WEEK, THIS_MONTH, THIS_QUARTER, THIS_YEAR, LAST_MONTH, LAST_QUARTER, LAST_N_DAYS, NEXT_N_DAYS. Example: \"THIS_MONTH\" for \"closing this month\", \"THIS_QUARTER\" for \"this quarter\".",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : false
+    },
+    "dateRangeStart" : {
+      "title" : "Date Range Start",
+      "description" : "For aggregate operation with SPECIFIC MONTH: Start date in YYYY-MM-DD format. Use INSTEAD OF dateRangePredefined for specific months. Example: \"2026-03-01\" for \"opportunities closing in March\". Must be used with dateRangeEnd.",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : false
+    },
+    "deleteLineItemIds" : {
+      "title" : "Delete Line Item IDs",
+      "description" : "JSON array of line item IDs to remove from the opportunity. Format: [\"00kXXX...\",\"00kYYY...\"]. Use for removing products from a deal.",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : false
+    },
+    "fieldDataJson" : {
+      "title" : "Field Data JSON",
+      "description" : "JSON string containing Opportunity field data. PIPELINE MANAGEMENT FOCUS: This action helps sales reps quickly update their deals. STAGE UPDATES: When user says \"move to proposal\" or \"advance the deal\" or \"we are in negotiation now\", map to StageName. Valid stages typically: Prospecting, Qualification, Needs Analysis, Value Proposition, Id. Decision Makers, Perception Analysis, Proposal/Price Quote, Negotiation/Review, Closed Won, Closed Lost. AMOUNT UPDATES: When user mentions dollar amounts like \"$150K\" or \"deal is now worth 200 thousand\", update Amount field. CLOSE DATE: When user says \"pushing to next quarter\" or \"closing end of month\" or \"slipping to March\", update CloseDate. NEXT STEPS: Capture action items in NextStep field - \"send proposal\", \"schedule demo\", \"get legal review\". FORECAST: ForecastCategoryName values: Pipeline, Best Case, Commit, Omitted, Closed. For create: {\"Name\":\"Memorial Hospital - Cardiology Expansion\",\"StageName\":\"Qualification\",\"CloseDate\":\"2026-03-31\",\"Amount\":150000}. For update: {\"StageName\":\"Proposal/Price Quote\",\"Amount\":175000,\"NextStep\":\"Send final proposal by Friday\"}. IMPORTANT: For picklist fields, query availableFieldsJson from a previous read operation to see valid values.",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : false
+    },
+    "filtersJson" : {
+      "title" : "Filters JSON",
+      "description" : "JSON filters for find operations. PIPELINE USE CASES: {\"StageName\":\"Proposal/Price Quote\"} finds deals in proposal stage. {\"ForecastCategoryName\":\"Commit\"} finds committed deals. {\"IsClosed\":false} finds open deals only. Combine with searchTerm for refined results like \"show me Memorial Hospital deals in negotiation\".",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : false
+    },
+    "groupByFieldsJson" : {
+      "title" : "Group By Fields JSON",
+      "description" : "For aggregate operation: JSON array of fields to group by. Example: [\"StageName\"] for pipeline by stage, [\"StageName\",\"OwnerId\"] for pipeline by stage and owner.",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : false
+    },
+    "lineItemsJson" : {
+      "title" : "Line Items JSON",
+      "description" : "JSON array of line items to create WITH a new opportunity. Format: [{\"Product2Id\":\"01tXXX...\",\"Quantity\":10,\"UnitPrice\":450.00},{\"PricebookEntryId\":\"01uXXX...\",\"Quantity\":5}]. Can use Product2Id or PricebookEntryId. If using Product2Id, system will find the Standard Pricebook entry.",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : false
+    },
+    "operation" : {
+      "title" : "Operation",
+      "description" : "REQUIRED for summaries: \"aggregate\" for ANY question about totals, counts, averages, sums, or grouped data. \"find\" ONLY for listing individual deals. Other: \"create\", \"read\", \"update\", \"delete\". AGGREGATE TRIGGERS: total, sum, how many, count, average, biggest, smallest, by stage, pipeline breakdown. EXAMPLE: \"whats my total pipeline\" -> operation=\"aggregate\" NOT \"find\".",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : false
+    },
+    "recordId" : {
+      "title" : "Record ID",
+      "description" : "The Opportunity ID. Required for read/update/delete operations. When updating line items, this must be the OPPORTUNITY ID (starts with 006), NOT the line item ID. Line item IDs go in updateLineItemsJson.",
+      "lightning:type" : "lightning__recordIdType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : false
+    },
+    "searchLimit" : {
+      "title" : "Search Limit",
+      "description" : "Maximum records to return for find operations (default: 5, max: 20). For pipeline reviews, consider higher limits.",
+      "lightning:type" : "lightning__integerType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : false
+    },
+    "searchTerm" : {
+      "title" : "Search Term",
+      "description" : "Text to search for Opportunities. Searches: Opportunity Name, Account Name, Description. Flexible matching - partial names work. Examples: \"Memorial Hospital\" finds opps for that account, \"Cardiology\" finds opps with that in the name, \"oncology treatment\" finds related deals. For pipeline reviews, combine with filtersJson for stage filtering.",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : false
+    },
+    "updateLineItemsJson" : {
+      "title" : "Update Line Items JSON",
+      "description" : "JSON array of line items to update. Put OPPORTUNITY ID in recordId, LINE ITEM IDs here. Format: [{\"Id\":\"00kXXX...\",\"Quantity\":150},{\"Id\":\"00kYYY...\",\"UnitPrice\":500}]. Get line item IDs from a previous read operation.",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : false
+    }
+  },
+  "lightning:type" : "lightning__objectType"
+}

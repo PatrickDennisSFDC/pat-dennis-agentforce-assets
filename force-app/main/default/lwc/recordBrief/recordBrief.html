@@ -1,0 +1,126 @@
+<template>
+    <lightning-card class={cardClass}>
+        <!-- Card Header -->
+        <div slot="title" class="card-title">
+            <lightning-icon icon-name="utility:sparkles" size="x-small" class="title-icon"></lightning-icon>
+            <span>Record Brief</span>
+        </div>
+        
+        <!-- Card Actions -->
+        <div slot="actions" class="card-actions">
+            <template if:true={showContent}>
+                <lightning-button-icon 
+                    icon-name={copyButtonIcon}
+                    variant="bare"
+                    alternative-text="Copy brief"
+                    title={copyButtonLabel}
+                    onclick={handleCopy}
+                    class="action-button">
+                </lightning-button-icon>
+                <lightning-button-icon 
+                    icon-name={expandCollapseIcon}
+                    variant="bare"
+                    alternative-text={expandCollapseLabel}
+                    title={expandCollapseLabel}
+                    onclick={handleToggleExpand}
+                    class="action-button">
+                </lightning-button-icon>
+            </template>
+            <lightning-button-icon 
+                icon-name="utility:refresh"
+                variant="bare"
+                alternative-text="Regenerate brief"
+                title="Regenerate brief"
+                onclick={handleGenerateBrief}
+                disabled={isLoading}
+                class="action-button">
+            </lightning-button-icon>
+        </div>
+
+        <!-- Card Body -->
+        <div class="card-body">
+            <!-- Idle State -->
+            <template if:true={isIdle}>
+                <div class="idle-state">
+                    <p class="idle-text">AI-powered summary of this record</p>
+                    <lightning-button 
+                        label="Generate"
+                        variant="brand"
+                        onclick={handleGenerateBrief}
+                        icon-name="utility:sparkles"
+                        class="generate-button">
+                    </lightning-button>
+                </div>
+            </template>
+
+            <!-- Loading State with Skeleton -->
+            <template if:true={isLoading}>
+                <div class="loading-state">
+                    <!-- Skeleton Header -->
+                    <div class="skeleton-header">
+                        <div class="skeleton-badge"></div>
+                        <div class="skeleton-title"></div>
+                    </div>
+                    
+                    <!-- Skeleton Content -->
+                    <div class="skeleton-content">
+                        <div class="skeleton-section-title"></div>
+                        <div class="skeleton-line long"></div>
+                        <div class="skeleton-line medium"></div>
+                        
+                        <div class="skeleton-section-title"></div>
+                        <div class="skeleton-line short"></div>
+                        <div class="skeleton-line short"></div>
+                        <div class="skeleton-line medium"></div>
+                    </div>
+                    
+                    <!-- Loading Message -->
+                    <div class="loading-indicator">
+                        <div class="loading-dots">
+                            <span class="dot"></span>
+                            <span class="dot"></span>
+                            <span class="dot"></span>
+                        </div>
+                        <span class="loading-text">{loadingMessage}</span>
+                    </div>
+                </div>
+            </template>
+
+            <!-- Streaming / Loaded State -->
+            <template if:true={showContent}>
+                <div class={briefContentClass}>
+                    <!-- Record Metadata -->
+                    <div class="record-meta">
+                        <span class="meta-badge">{objectLabel}</span>
+                        <span class="meta-name">{recordName}</span>
+                    </div>
+                    
+                    <!-- Brief Content - streams in -->
+                    <div class="brief-text" lwc:dom="manual"></div>
+                    
+                    <!-- Footer with timestamp -->
+                    <template if:true={isLoaded}>
+                        <div class="brief-footer">
+                            <span class="generated-time">Generated {formattedGeneratedAt}</span>
+                        </div>
+                    </template>
+                </div>
+            </template>
+
+            <!-- Error State -->
+            <template if:true={hasError}>
+                <div class="error-state">
+                    <lightning-icon icon-name="utility:error" size="x-small" variant="error"></lightning-icon>
+                    <p class="error-message">{errorMessage}</p>
+                    <lightning-button 
+                        label="Retry"
+                        variant="neutral"
+                        onclick={handleGenerateBrief}
+                        icon-name="utility:refresh"
+                        class="retry-button">
+                    </lightning-button>
+                </div>
+            </template>
+        </div>
+    </lightning-card>
+</template>

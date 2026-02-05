@@ -1,0 +1,14 @@
+{
+  "required" : [ "Input:Input" ],
+  "unevaluatedProperties" : false,
+  "properties" : {
+    "Input:Input" : {
+      "title" : "Input",
+      "description" : "This is the request, or the inquiry, or the input from the end user. An example could be something like, \"Tell me everything you can about company XYZ.\" Or, \"Explain to me information or news about company XYZ.\" ",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : false
+    }
+  },
+  "lightning:type" : "lightning__objectType"
+}
